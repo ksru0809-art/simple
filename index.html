@@ -736,6 +736,144 @@
       font-weight:800;
     }
 
+    .app-shot{
+      background:linear-gradient(180deg, #fffdfa 0%, #fff5ec 100%);
+      border:1px solid #f1ddcd;
+      border-radius:24px;
+      padding:14px;
+      margin-bottom:16px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 10px 20px rgba(0,0,0,.04);
+    }
+
+    .app-shot-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .app-shot-title{
+      font-size:13px;
+      font-weight:900;
+      color:var(--primary-dark);
+    }
+
+    .app-shot-sub{
+      color:var(--sub);
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .app-shot-tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .app-tab{
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      color:#876245;
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .app-tab.active{
+      background:#fff1e3;
+      border-color:#ffcfa8;
+      color:#8f4d1a;
+    }
+
+    .app-shot-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .app-shot-row{
+      background:#fff;
+      border:1px solid #f0e6db;
+      border-radius:18px;
+      padding:12px 13px;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .app-shot-row strong{
+      display:block;
+      margin-bottom:4px;
+      font-size:13px;
+      color:#3e3128;
+    }
+
+    .app-shot-row span{
+      display:block;
+      color:var(--sub);
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .app-shot-meta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .app-shot-pill{
+      padding:5px 8px;
+      border-radius:999px;
+      background:#fff5eb;
+      border:1px solid #ffe1c9;
+      color:#9b6134;
+      font-size:10px;
+      font-weight:800;
+    }
+
+    .app-shot-bottom{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .app-shot-stat{
+      padding:11px 8px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      text-align:center;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .app-shot-stat strong{
+      display:block;
+      color:var(--primary-dark);
+      font-size:14px;
+    }
+
+    .app-shot-stat span{
+      font-size:10px;
+      color:var(--sub);
+      font-weight:700;
+    }
+
+    .app-shot-cta{
+      margin-top:12px;
+      padding:11px 14px;
+      border-radius:16px;
+      background:linear-gradient(90deg, #ff8f2b, #ff6b00);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+      box-shadow:0 10px 18px rgba(255,122,0,.22);
+    }
+
     .mock-list{
       display:grid;
       gap:10px;
@@ -1584,14 +1722,32 @@
         <div class="value-card">
           <div class="icon">⚡</div>
           <h3>빠른 현장성</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>반응 속도</span>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">2호선 실시간</div>
+                <div class="app-shot-sub">지금 막 올라온 제보</div>
+              </div>
               <span class="visual-chip">LIVE</span>
             </div>
-            <div class="value-visual">
-              <div class="value-stat"><strong>18명 반응</strong><span>같은 노선 승객이 즉시 확인</span></div>
-              <div class="value-stat"><strong>3분 내 공유</strong><span>지연과 혼잡 정보를 빠르게 확산</span></div>
+            <div class="app-shot-tabs">
+              <span class="app-tab active">전체</span>
+              <span class="app-tab">지연</span>
+              <span class="app-tab">혼잡</span>
+            </div>
+            <div class="app-shot-list">
+              <div class="app-shot-row">
+                <strong>잠실행 3분 지연</strong>
+                <span>방금 전 · 강남역 앞 신호 대기</span>
+                <div class="app-shot-meta">
+                  <span class="app-shot-pill">반응 18</span>
+                  <span class="app-shot-pill">같은 열차</span>
+                </div>
+              </div>
+              <div class="app-shot-row">
+                <strong>4-2칸 상대적으로 여유</strong>
+                <span>탑승자 제보 · 뒷문 쪽 이동 추천</span>
+              </div>
             </div>
           </div>
           <p>같은 노선을 타는 이용자끼리 가장 빠른 현장 소식을 주고받습니다.</p>
@@ -1599,32 +1755,48 @@
         <div class="value-card">
           <div class="icon">🧭</div>
           <h3>실질적 편의</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>이동 판단 지원</span>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">착석 가이드</div>
+                <div class="app-shot-sub">내 루틴 기준 추천</div>
+              </div>
               <span class="visual-chip">Utility</span>
             </div>
-            <div class="seat-grid">
-              <div class="seat-box"><strong>여유</strong><span>덜 붐비는 칸</span></div>
-              <div class="seat-box"><strong>착석</strong><span>앉기 쉬운 위치</span></div>
-              <div class="seat-box"><strong>루틴</strong><span>자주 타는 경로</span></div>
+            <div class="app-shot-row">
+              <strong>석계역 전 1정거장부터 3-3칸 추천</strong>
+              <span>앉을 확률 높음 · 환승도 무난</span>
             </div>
+            <div class="app-shot-bottom">
+              <div class="app-shot-stat"><strong>3-3</strong><span>착석 높음</span></div>
+              <div class="app-shot-stat"><strong>4-2</strong><span>여유 있음</span></div>
+              <div class="app-shot-stat"><strong>7-1</strong><span>환승 유리</span></div>
+            </div>
+            <div class="app-shot-cta">추천 칸으로 바로 확인하기</div>
           </div>
           <p>자리, 혼잡도, 루틴 정보처럼 실제 이동 판단에 필요한 정보를 모읍니다.</p>
         </div>
         <div class="value-card">
           <div class="icon">🌱</div>
           <h3>쌓일수록 강해짐</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>데이터 축적 구조</span>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">MY 루틴</div>
+                <div class="app-shot-sub">반복 이동이 쌓이는 화면</div>
+              </div>
               <span class="visual-chip">Loop</span>
             </div>
-            <div class="road-visual">
-              <div class="road-node">제보 수집<span>노선별 현장 경험이 쌓임</span></div>
-              <div class="road-node">패턴 분석<span>혼잡, 자리, 민원 흐름 정리</span></div>
-              <div class="road-node">추천 고도화<span>다음 이용자에게 편의로 환원</span></div>
+            <div class="app-shot-row">
+              <strong>창동역 → 신설동역 · 08:10</strong>
+              <span>이번 주 5회 탑승 · 패턴 업데이트됨</span>
             </div>
+            <div class="app-shot-bottom">
+              <div class="app-shot-stat"><strong>40h</strong><span>이동 시간</span></div>
+              <div class="app-shot-stat"><strong>150</strong><span>지나온 역</span></div>
+              <div class="app-shot-stat"><strong>+2</strong><span>새 배지</span></div>
+            </div>
+            <div class="app-shot-cta">이번 주 리포트 보기</div>
           </div>
           <p>사용자 경험이 데이터가 되고, 그 데이터가 다시 서비스 경쟁력이 됩니다.</p>
         </div>
@@ -1644,14 +1816,28 @@
         <div class="road-card">
           <div class="road-step">1 STEP</div>
           <h3>지금 내 노선 상황 확인</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>빠른 진입</span>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">홈 화면</div>
+                <div class="app-shot-sub">들어오자마자 보이는 정보</div>
+              </div>
               <span class="visual-chip">Home</span>
             </div>
-            <div class="road-visual">
-              <div class="road-node">노선 선택<span>자주 타는 노선이나 현재 위치 기준 진입</span></div>
-              <div class="road-node">실시간 확인<span>지연, 혼잡, 자리 정보를 한 번에 체크</span></div>
+            <div class="app-shot-tabs">
+              <span class="app-tab active">2호선</span>
+              <span class="app-tab">1호선</span>
+              <span class="app-tab">9호선</span>
+            </div>
+            <div class="app-shot-list">
+              <div class="app-shot-row">
+                <strong>지금 2호선은 보통</strong>
+                <span>강남역 환승 통로 혼잡 · 4-2칸 여유</span>
+              </div>
+              <div class="app-shot-row">
+                <strong>내 루틴 추천</strong>
+                <span>오늘은 3-3칸 탑승이 유리해요</span>
+              </div>
             </div>
           </div>
           <p>앱을 열자마자 지금 필요한 정보부터 빠르게 확인하는 경험이 핵심입니다.</p>
@@ -1659,29 +1845,46 @@
         <div class="road-card">
           <div class="road-step">2 STEP</div>
           <h3>바로 반응하고 공유</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>즉시 참여</span>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">제보 작성</div>
+                <div class="app-shot-sub">몇 초 안에 남기는 현장 정보</div>
+              </div>
               <span class="visual-chip">Action</span>
             </div>
-            <div class="road-visual">
-              <div class="road-node">제보 남기기<span>같은 칸 승객에게 현장 상황 전달</span></div>
-              <div class="road-node">민원 투표<span>온도, 소음, 혼잡 불편을 바로 표시</span></div>
+            <div class="app-shot-row">
+              <strong>현재 3-2칸 냉방 너무 강해요</strong>
+              <span>2호선 · 을지로입구 방향 · 방금 전</span>
+              <div class="app-shot-meta">
+                <span class="app-shot-pill">온도</span>
+                <span class="app-shot-pill">3-2칸</span>
+              </div>
             </div>
+            <div class="app-shot-cta">제보 올리기</div>
           </div>
           <p>단순 조회에서 끝나는 게 아니라, 바로 공유하고 반응하는 구조를 만듭니다.</p>
         </div>
         <div class="road-card">
           <div class="road-step">3 STEP</div>
           <h3>다음 이동이 더 편해짐</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>재방문 이유</span>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">도착 전 가이드</div>
+                <div class="app-shot-sub">반복 사용 후 더 정교해진 추천</div>
+              </div>
               <span class="visual-chip">Routine</span>
             </div>
-            <div class="road-visual">
-              <div class="road-node">착석 가이드 고도화<span>반복 이동 데이터가 추천 정확도를 높임</span></div>
-              <div class="road-node">루틴 관리<span>자주 타는 시간대와 경로가 더 편하게 정리됨</span></div>
+            <div class="app-shot-list">
+              <div class="app-shot-row">
+                <strong>다음 역에서 3-3칸 이동 추천</strong>
+                <span>지난 2주 패턴 기준 착석 확률 상승</span>
+              </div>
+              <div class="app-shot-row">
+                <strong>출근 루틴 저장됨</strong>
+                <span>08:10 탑승 시 가장 편한 경로 유지</span>
+              </div>
             </div>
           </div>
           <p>쓸수록 내 출퇴근과 통학에 더 맞는 앱이 되는 점이 다시 돌아오게 만듭니다.</p>
@@ -1699,21 +1902,51 @@
             지도앱이 경로를 알려준다면, 이칸저칸은 열차 안에서 실제로 벌어지는 상황까지 보여줍니다.
             그래서 같은 지하철을 타도 더 덜 당황하고, 더 빨리 판단할 수 있습니다.
           </p>
-          <div class="summary-visual">
-            <div class="summary-box"><strong>지도앱</strong><span>빠른 환승과 경로 중심</span></div>
-            <div class="summary-box"><strong>이칸저칸</strong><span>칸 안 상황과 체감 정보까지 반영</span></div>
-            <div class="summary-box"><strong>조회</strong><span>지금 지연과 혼잡을 확인</span></div>
-            <div class="summary-box"><strong>행동</strong><span>더 나은 칸 선택과 빠른 대응</span></div>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">같은 노선 비교</div>
+                <div class="app-shot-sub">경로 정보와 체감 정보의 차이</div>
+              </div>
+              <span class="visual-chip">Compare</span>
+            </div>
+            <div class="app-shot-list">
+              <div class="app-shot-row">
+                <strong>일반 지도앱</strong>
+                <span>빠른 환승, 도착 예정 시간 중심</span>
+              </div>
+              <div class="app-shot-row">
+                <strong>이칸저칸</strong>
+                <span>지연 이유, 칸 혼잡도, 착석 가능성까지 함께 표시</span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="faq-card">
           <h3>이런 순간에 특히 필요합니다</h3>
           <p>출근길처럼 의사결정을 빨리 해야 하는 상황에서 체감 효용이 가장 크게 보입니다.</p>
-          <div class="summary-visual">
-            <div class="summary-box"><strong>갑작스런 지연</strong><span>왜 멈췄는지 바로 확인</span></div>
-            <div class="summary-box"><strong>붐비는 출근길</strong><span>덜 붐비는 칸 빠르게 선택</span></div>
-            <div class="summary-box"><strong>칸 내부 불편</strong><span>혼자 참지 않고 즉시 공유</span></div>
-            <div class="summary-box"><strong>반복 통학·통근</strong><span>루틴이 쌓일수록 더 편리해짐</span></div>
+          <div class="app-shot">
+            <div class="app-shot-top">
+              <div>
+                <div class="app-shot-title">오늘 아침 실제 사용 예시</div>
+                <div class="app-shot-sub">출근길 기준</div>
+              </div>
+              <span class="visual-chip">Scenario</span>
+            </div>
+            <div class="app-shot-list">
+              <div class="app-shot-row">
+                <strong>08:11 열차 정차</strong>
+                <span>앱에서 바로 신호 대기 이슈 확인</span>
+              </div>
+              <div class="app-shot-row">
+                <strong>08:13 혼잡 확인</strong>
+                <span>4-2칸 여유 제보 보고 이동</span>
+              </div>
+              <div class="app-shot-row">
+                <strong>08:25 도착 전 추천</strong>
+                <span>내릴 역 전에 앉기 좋은 칸 안내</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

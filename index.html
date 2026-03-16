@@ -154,8 +154,8 @@
       right:0;
       top:-6px;
       height:144px;
-      pointer-events:none;
       opacity:.98;
+      z-index:2;
     }
 
     .track{
@@ -192,8 +192,9 @@
       display:flex;
       align-items:center;
       gap:12px;
-      animation:ride 16s linear infinite;
+      animation:ride 24s linear infinite;
       filter:drop-shadow(0 16px 24px rgba(161,84,13,.14));
+      pointer-events:none;
     }
 
     .car{
@@ -267,6 +268,7 @@
       display:flex;
       gap:12px;
       margin-left:8px;
+      pointer-events:auto;
     }
 
     .feature-pill{
@@ -281,6 +283,13 @@
       display:flex;
       align-items:center;
       gap:10px;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .feature-pill:hover{
+      transform:translateY(-2px);
+      border-color:#ffc89e;
+      box-shadow:0 18px 30px rgba(181,97,23,.16);
     }
 
     .pill-dot{
@@ -586,7 +595,7 @@
 
     @keyframes ride{
       from{transform:translateX(0)}
-      to{transform:translateX(calc(100vw + 620px))}
+      to{transform:translateX(calc(100vw + 1180px))}
     }
 
     @media (max-width: 1024px){
@@ -628,7 +637,7 @@
       .track.two{top:62px}
       .train{
         top:22px;
-        left:-660px;
+        left:-980px;
       }
       .car{width:74px;height:34px}
       .engine{width:88px}
@@ -666,27 +675,48 @@
         <div class="car"></div>
         <div class="car"></div>
         <div class="feature-pills">
-          <div class="feature-pill">
+          <a class="feature-pill" href="#feature-live">
             <div class="pill-dot"></div>
             <div class="pill-copy">
               <strong>실시간 제보</strong>
               <span>현장 이슈 공유</span>
             </div>
-          </div>
-          <div class="feature-pill">
+          </a>
+          <a class="feature-pill" href="#feature-seat">
             <div class="pill-dot"></div>
             <div class="pill-copy">
               <strong>혼잡도 공유</strong>
               <span>칸별 체감 정보</span>
             </div>
-          </div>
-          <div class="feature-pill">
+          </a>
+          <a class="feature-pill" href="#feature-complaint">
             <div class="pill-dot"></div>
             <div class="pill-copy">
               <strong>착석 확률</strong>
               <span>앉기 좋은 칸 추천</span>
             </div>
-          </div>
+          </a>
+          <a class="feature-pill" href="#feature-community">
+            <div class="pill-dot"></div>
+            <div class="pill-copy">
+              <strong>커뮤니티</strong>
+              <span>노선별 소통 공간</span>
+            </div>
+          </a>
+          <a class="feature-pill" href="#feature-routine">
+            <div class="pill-dot"></div>
+            <div class="pill-copy">
+              <strong>루틴 관리</strong>
+              <span>배지와 이동 리포트</span>
+            </div>
+          </a>
+          <a class="feature-pill" href="#feature-data">
+            <div class="pill-dot"></div>
+            <div class="pill-copy">
+              <strong>데이터 축적</strong>
+              <span>쌓일수록 정교해짐</span>
+            </div>
+          </a>
         </div>
       </div>
     </div>
@@ -817,7 +847,7 @@
       </div>
 
       <div class="feature-grid">
-        <div class="feature-card">
+        <div class="feature-card" id="feature-live">
           <div class="icon">📢</div>
           <h3>실시간 정보 게시판</h3>
           <p>지연, 사고, 혼잡 같은 현장 상황을 같은 노선 이용자들이 빠르게 공유합니다.</p>
@@ -827,7 +857,7 @@
             <li>실시간 체감 정보 축적</li>
           </ul>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" id="feature-seat">
           <div class="icon">💺</div>
           <h3>자리 · 혼잡도 공유</h3>
           <p>어느 칸이 덜 붐비는지, 어디가 앉기 유리한지 이용자 경험 기반으로 공유합니다.</p>
@@ -837,7 +867,7 @@
             <li>착석 확률 가이드</li>
           </ul>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" id="feature-complaint">
           <div class="icon">🗳️</div>
           <h3>민원 투표와 개선</h3>
           <p>온도, 소리, 냄새 같은 칸별 불편 요소를 투표형으로 모아 빠르게 드러냅니다.</p>
@@ -847,7 +877,7 @@
             <li>불편 데이터 축적</li>
           </ul>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" id="feature-community">
           <div class="icon">👥</div>
           <h3>노선 기반 커뮤니티</h3>
           <p>자유 게시판, 스터디 게시판, 건의 게시판으로 사용자 간 연결과 체류 시간을 늘립니다.</p>
@@ -857,7 +887,7 @@
             <li>유저 참여형 개선</li>
           </ul>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" id="feature-routine">
           <div class="icon">🏅</div>
           <h3>루틴 관리와 배지</h3>
           <p>나의 출근 루트, 배지, 월간 리포트로 반복되는 이동을 성취 경험으로 바꿉니다.</p>
@@ -867,7 +897,7 @@
             <li>재방문 유도 요소</li>
           </ul>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" id="feature-data">
           <div class="icon">📈</div>
           <h3>데이터가 쌓이는 서비스</h3>
           <p>이용자가 남긴 정보가 다시 다음 이용자의 편의로 돌아오는 구조를 만듭니다.</p>

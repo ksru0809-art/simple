@@ -19,6 +19,105 @@ background:#ff7a00;
 color:white;
 padding:80px 20px;
 text-align:center;
+position:relative;
+overflow:hidden;
+}
+
+.train-scene{
+position:absolute;
+left:0;
+right:0;
+top:18px;
+height:80px;
+pointer-events:none;
+opacity:0.95;
+}
+
+.track{
+position:absolute;
+left:-5%;
+width:110%;
+height:6px;
+background:rgba(255,255,255,0.35);
+border-radius:999px;
+}
+
+.track.one{
+top:12px;
+transform:rotate(-2deg);
+}
+
+.track.two{
+top:58px;
+transform:rotate(1deg);
+background:rgba(255,255,255,0.22);
+}
+
+.train{
+position:absolute;
+top:0;
+left:-220px;
+display:flex;
+align-items:center;
+gap:6px;
+animation:ride 12s linear infinite;
+}
+
+.car{
+width:64px;
+height:28px;
+background:rgba(255,255,255,0.92);
+border-radius:10px;
+position:relative;
+box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+.car:before{
+content:"";
+position:absolute;
+left:10px;
+right:10px;
+top:8px;
+height:8px;
+background:rgba(255,122,0,0.45);
+border-radius:6px;
+}
+
+.car:after{
+content:"";
+position:absolute;
+left:14px;
+bottom:-6px;
+width:8px;
+height:8px;
+border-radius:50%;
+background:#7c2d12;
+box-shadow:28px 0 0 #7c2d12;
+}
+
+.car.engine{
+width:76px;
+background:#fff7ed;
+}
+
+.car.engine .light{
+position:absolute;
+right:8px;
+top:10px;
+width:8px;
+height:8px;
+border-radius:50%;
+background:#ffd166;
+box-shadow:0 0 12px rgba(255,209,102,0.9);
+}
+
+@keyframes ride{
+from{
+transform:translateX(0);
+}
+to{
+transform:translateX(calc(100vw + 320px));
+}
 }
 
 header h1{
@@ -96,6 +195,16 @@ background:#eee;
 <body>
 
 <header>
+
+<div class="train-scene" aria-hidden="true">
+<div class="track one"></div>
+<div class="track two"></div>
+<div class="train">
+<div class="car engine"><span class="light"></span></div>
+<div class="car"></div>
+<div class="car"></div>
+</div>
+</div>
 
 <h1>이칸저칸</h1>
 

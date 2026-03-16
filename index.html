@@ -1,967 +1,1027 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>이칸저칸 - 지하철 실시간 커뮤니티</title>
-
-<style>
-:root{
-  --bg:#fff8f1;
-  --surface:#ffffff;
-  --surface-soft:#fff1e3;
-  --surface-strong:#23180f;
-  --line:#f1d0b0;
-  --primary:#ff7a00;
-  --primary-dark:#d85f00;
-  --text:#25170c;
-  --muted:#6f6358;
-  --white:#ffffff;
-  --shadow:0 24px 60px rgba(189, 96, 17, 0.14);
-}
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at top right, rgba(255,122,0,.10), transparent 24%),
-    radial-gradient(circle at 10% 30%, rgba(255,184,107,.18), transparent 20%),
-    linear-gradient(180deg, #fff8f1 0%, #fff3e7 100%);
-}
-
-a{text-decoration:none;color:inherit}
-
-.container{
-  width:min(1160px, calc(100% - 40px));
-  margin:0 auto;
-}
-
-header{
-  position:relative;
-  overflow:hidden;
-  color:var(--white);
-  background:
-    radial-gradient(circle at 15% 10%, rgba(255,255,255,.16), transparent 18%),
-    linear-gradient(135deg, #ff8a1f 0%, #ff7a00 45%, #db6404 100%);
-}
-
-.header-shell{
-  padding:28px 0 96px;
-}
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:38px;
-}
-
-.brand{
-  font-size:1.08rem;
-  font-weight:900;
-  letter-spacing:-0.03em;
-}
-
-.brand span{
-  opacity:.72;
-}
-
-.nav{
-  display:flex;
-  gap:20px;
-  color:rgba(255,255,255,.86);
-  font-size:.95rem;
-}
-
-.train-scene{
-  position:absolute;
-  left:0;
-  right:0;
-  top:10px;
-  height:170px;
-  pointer-events:none;
-  opacity:.98;
-  z-index:0;
-}
-
-.track{
-  position:absolute;
-  left:-5%;
-  width:110%;
-  height:8px;
-  border-radius:999px;
-  background:rgba(255,255,255,.32);
-}
-
-.track.one{top:32px;transform:rotate(-1.5deg)}
-.track.two{top:122px;transform:rotate(1deg);background:rgba(255,255,255,.18)}
-
-.train{
-  position:absolute;
-  top:34px;
-  left:-520px;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  animation:ride 16s linear infinite;
-}
-
-.feature-convoy{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-left:10px;
-}
-
-.car{
-  width:94px;
-  height:40px;
-  position:relative;
-  border-radius:16px;
-  background:rgba(255,255,255,.92);
-  box-shadow:0 8px 20px rgba(0,0,0,.12);
-}
-
-.car::before{
-  content:"";
-  position:absolute;
-  left:14px;
-  right:14px;
-  top:11px;
-  height:12px;
-  border-radius:999px;
-  background:rgba(255,122,0,.42);
-}
-
-.car::after{
-  content:"";
-  position:absolute;
-  left:18px;
-  bottom:-8px;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#7c2d12;
-  box-shadow:44px 0 0 #7c2d12;
-}
-
-.engine{
-  width:112px;
-  background:#fff7ed;
-}
-
-.engine .light{
-  position:absolute;
-  right:12px;
-  top:14px;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#ffd166;
-  box-shadow:0 0 12px rgba(255,209,102,.9);
-}
-
-.feature-pill{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:156px;
-  padding:12px 16px;
-  border-radius:16px;
-  background:rgba(35,24,15,.32);
-  border:1px solid rgba(255,255,255,.18);
-  color:#fff8f1;
-  box-shadow:0 12px 28px rgba(118,54,8,.18);
-  backdrop-filter:blur(10px);
-}
-
-.feature-pill strong{
-  display:block;
-  font-size:.92rem;
-  line-height:1.1;
-}
-
-.feature-pill span{
-  display:block;
-  font-size:.75rem;
-  color:rgba(255,248,241,.78);
-}
-
-.pill-dot{
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  flex:0 0 auto;
-  background:#fff4e8;
-  box-shadow:0 0 0 6px rgba(255,255,255,.10);
-}
-
-.hero{
-  display:grid;
-  grid-template-columns:1.02fr .98fr;
-  gap:28px;
-  align-items:end;
-}
-
-.hero-copy{
-  position:relative;
-  z-index:2;
-  padding-top:86px;
-}
-
-.eyebrow{
-  display:inline-block;
-  padding:8px 14px;
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:999px;
-  background:rgba(255,255,255,.12);
-  font-size:.88rem;
-  margin-bottom:16px;
-}
-
-.hero h1{
-  margin:0 0 16px;
-  font-size:clamp(2.9rem, 7vw, 5.6rem);
-  line-height:.96;
-  letter-spacing:-.06em;
-}
-
-.hero p{
-  max-width:560px;
-  margin:0 0 28px;
-  font-size:1.05rem;
-  color:rgba(255,255,255,.84);
-}
-
-.hero-actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
-.btn{
-  display:inline-flex;
-  justify-content:center;
-  align-items:center;
-  padding:14px 20px;
-  min-width:154px;
-  border-radius:14px;
-  font-weight:800;
-}
-
-.btn-primary{
-  color:#cb5700;
-  background:var(--white);
-}
-
-.btn-secondary{
-  color:var(--white);
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-}
-
-.hero-panel{
-  position:relative;
-  min-height:460px;
-  z-index:2;
-}
-
-.metro-board{
-  position:absolute;
-  right:0;
-  bottom:-46px;
-  width:min(100%, 500px);
-  padding:22px;
-  border-radius:30px;
-  background:rgba(255,248,241,.12);
-  border:1px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(12px);
-  box-shadow:var(--shadow);
-}
-
-.board-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
-  font-size:.9rem;
-}
-
-.board-chip{
-  padding:7px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.18);
-}
-
-.board-map{
-  position:relative;
-  height:270px;
-  border-radius:24px;
-  overflow:hidden;
-  background:
-    linear-gradient(155deg, rgba(255,255,255,.18), rgba(255,255,255,.06)),
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,.18), transparent 16%);
-}
-
-.board-grid{
-  position:absolute;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
-  background-size:48px 48px;
-}
-
-.line-svg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-}
-
-.station{
-  position:absolute;
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:#fff7ed;
-  border:4px solid #ff7a00;
-  box-shadow:0 0 0 8px rgba(255,255,255,.08);
-}
-
-.s1{top:18%;left:14%}
-.s2{top:34%;left:32%}
-.s3{top:52%;left:44%}
-.s4{top:24%;left:62%}
-.s5{top:68%;left:76%}
-
-.bubble{
-  position:absolute;
-  padding:8px 11px;
-  border-radius:14px;
-  background:rgba(35,24,15,.72);
-  color:#fff6ee;
-  font-size:.82rem;
-  font-weight:700;
-  box-shadow:var(--shadow);
-}
-
-.b1{top:8%;left:18%}
-.b2{top:46%;left:48%}
-.b3{top:72%;left:52%}
-
-.feed-card{
-  position:absolute;
-  right:18px;
-  bottom:18px;
-  width:192px;
-  padding:14px;
-  border-radius:20px;
-  background:rgba(35,24,15,.78);
-  color:#fff8f1;
-}
-
-.feed-card strong{
-  display:block;
-  margin-bottom:8px;
-  font-size:.98rem;
-}
-
-.feed-card span{
-  display:block;
-  color:rgba(255,248,241,.8);
-  font-size:.85rem;
-  margin-bottom:4px;
-}
-
-main{
-  position:relative;
-  z-index:1;
-  margin-top:-18px;
-}
-
-.section{
-  padding:84px 0 24px;
-}
-
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  align-items:end;
-  margin-bottom:24px;
-}
-
-.section-kicker{
-  color:#cf6d13;
-  font-weight:800;
-  font-size:.88rem;
-  letter-spacing:.03em;
-  text-transform:uppercase;
-}
-
-.section-title{
-  margin:6px 0 0;
-  font-size:2.15rem;
-  letter-spacing:-.04em;
-}
-
-.section-text{
-  max-width:440px;
-  color:var(--muted);
-}
-
-.problem-layout{
-  display:grid;
-  grid-template-columns:.95fr 1.05fr;
-  gap:20px;
-}
-
-.problem-stack{
-  display:grid;
-  gap:16px;
-}
-
-.panel{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:26px;
-  box-shadow:var(--shadow);
-}
-
-.note-panel{
-  padding:26px;
-  background:linear-gradient(180deg, #fff7ef, #fff);
-}
-
-.note-panel h3{
-  margin:0 0 12px;
-  font-size:1.3rem;
-}
-
-.note-panel p{
-  margin:0;
-  color:var(--muted);
-}
-
-.timeline{
-  padding:26px;
-}
-
-.timeline-row{
-  display:grid;
-  grid-template-columns:68px 1fr;
-  gap:16px;
-  padding:18px 0;
-  border-bottom:1px solid #f3e1d1;
-}
-
-.timeline-row:last-child{
-  border-bottom:none;
-}
-
-.time{
-  font-weight:900;
-  color:#d2640a;
-  font-size:.95rem;
-}
-
-.timeline-row strong{
-  display:block;
-  margin-bottom:4px;
-  font-size:1rem;
-}
-
-.timeline-row p{
-  margin:0;
-  color:var(--muted);
-}
-
-.mosaic{
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:18px;
-}
-
-.mosaic-main{
-  padding:28px;
-  min-height:320px;
-  background:
-    linear-gradient(135deg, #fff7ef, #fff0df);
-}
-
-.mosaic-main h3{
-  margin:0 0 12px;
-  font-size:1.55rem;
-}
-
-.mosaic-main p{
-  max-width:420px;
-  color:var(--muted);
-}
-
-.meter{
-  margin-top:26px;
-  display:grid;
-  gap:12px;
-}
-
-.meter-row{
-  display:grid;
-  grid-template-columns:82px 1fr 50px;
-  gap:12px;
-  align-items:center;
-}
-
-.bar{
-  height:12px;
-  background:#ffe1c0;
-  border-radius:999px;
-  overflow:hidden;
-}
-
-.fill{
-  height:100%;
-  border-radius:999px;
-  background:linear-gradient(90deg, #ff7a00, #ffb15e);
-}
-
-.mosaic-side{
-  display:grid;
-  gap:18px;
-}
-
-.mini{
-  padding:22px;
-  min-height:151px;
-}
-
-.mini.dark{
-  background:linear-gradient(160deg, #24170f, #3a2618);
-  color:#fff7ef;
-  border:none;
-}
-
-.mini.dark p{
-  color:rgba(255,247,239,.72);
-}
-
-.mini.soft{
-  background:var(--surface-soft);
-}
-
-.mini h4{
-  margin:0 0 10px;
-  font-size:1.12rem;
-}
-
-.mini p{
-  margin:0;
-  color:var(--muted);
-}
-
-.community{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:18px;
-}
-
-.community-card{
-  padding:24px;
-}
-
-.community-card h3{
-  margin:0 0 10px;
-  font-size:1.2rem;
-}
-
-.community-card p{
-  margin:0;
-  color:var(--muted);
-}
-
-.community-card.orange{
-  background:linear-gradient(180deg, #ff8a1f, #e36403);
-  color:#fff;
-  border:none;
-}
-
-.community-card.orange p{
-  color:rgba(255,255,255,.82);
-}
-
-.cta{
-  padding:26px;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:18px;
-  align-items:center;
-  background:linear-gradient(135deg, #24170f, #3d291c);
-  color:#fff8f1;
-  border:none;
-}
-
-.cta h2{
-  margin:0 0 8px;
-  font-size:2rem;
-  letter-spacing:-.04em;
-}
-
-.cta p{
-  margin:0;
-  color:rgba(255,248,241,.72);
-}
-
-.cta .btn{
-  background:#ff7a00;
-  color:#fff;
-}
-
-footer{
-  padding:40px 20px 50px;
-  text-align:center;
-  color:#7a6d63;
-  font-size:.95rem;
-}
-
-@keyframes ride{
-  from{transform:translateX(0)}
-  to{transform:translateX(calc(100vw + 760px))}
-}
-
-@media (max-width:960px){
-  .hero,
-  .problem-layout,
-  .mosaic,
-  .community,
-  .cta,
-  .section-head{
-    grid-template-columns:1fr;
-  }
-
-  .section-head{
-    display:block;
-  }
-
-  .nav{
-    display:none;
-  }
-
-  .header-shell{
-    padding-bottom:72px;
-  }
-
-  .train-scene{
-    height:128px;
-    top:12px;
-  }
-
-  .track.one{top:26px}
-  .track.two{top:92px}
-
-  .train{
-    top:30px;
-    left:-640px;
-  }
-
-  .car{
-    width:76px;
-    height:34px;
-  }
-
-  .engine{
-    width:92px;
-  }
-
-  .feature-pill{
-    min-width:126px;
-    padding:10px 12px;
-  }
-
-  .hero-copy{
-    padding-top:104px;
-  }
-
-  .metro-board{
-    position:relative;
-    bottom:auto;
-    width:100%;
-    margin-top:24px;
-  }
-
-  .hero-panel{
-    min-height:auto;
-  }
-
-  .feed-card{
-    position:static;
-    width:auto;
-    margin:16px;
-  }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이칸저칸 | 지하철 실시간 커뮤니티 서비스</title>
+  <style>
+    :root{
+      --primary:#ff7a00;
+      --primary-dark:#e56600;
+      --bg:#f8f8f8;
+      --text:#222;
+      --sub:#666;
+      --card:#ffffff;
+      --line:#ececec;
+      --soft:#fff3e8;
+      --soft2:#fff8f2;
+      --shadow:0 10px 30px rgba(0,0,0,0.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    a{text-decoration:none;color:inherit}
+
+    .wrap{
+      width:min(1180px, calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:14px 22px;
+      border-radius:999px;
+      font-weight:700;
+      transition:.2s ease;
+      cursor:pointer;
+      border:none;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+      box-shadow:0 8px 24px rgba(255,122,0,.25);
+    }
+
+    .btn-primary:hover{background:var(--primary-dark); transform:translateY(-1px);}
+    .btn-ghost{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .tag{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #ffd2ad;
+      color:var(--primary-dark);
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .section{
+      padding:90px 0;
+    }
+
+    .section-head{
+      text-align:center;
+      margin-bottom:48px;
+    }
+
+    .section-head h2{
+      margin:12px 0 10px;
+      font-size:clamp(28px, 4vw, 44px);
+      line-height:1.2;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--sub);
+      font-size:17px;
+    }
+
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:30;
+      backdrop-filter: blur(14px);
+      background:rgba(248,248,248,0.82);
+      border-bottom:1px solid rgba(0,0,0,0.05);
+    }
+
+    .nav-inner{
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      font-size:22px;
+      color:var(--primary-dark);
+    }
+
+    .brand-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:linear-gradient(135deg,#ff8f2b,#ff6b00);
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-size:22px;
+      box-shadow:0 8px 24px rgba(255,122,0,.22);
+    }
+
+    .nav-menu{
+      display:flex;
+      gap:22px;
+      color:#444;
+      font-size:15px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-menu a:hover{
+      color:var(--primary-dark);
+    }
+
+    .hero{
+      padding:70px 0 40px;
+      overflow:hidden;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:40px;
+      align-items:center;
+    }
+
+    .hero h1{
+      margin:18px 0 18px;
+      font-size:clamp(38px, 5vw, 68px);
+      line-height:1.08;
+      letter-spacing:-0.03em;
+    }
+
+    .hero p{
+      color:var(--sub);
+      font-size:18px;
+      margin:0 0 28px;
+      max-width:640px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+
+    .hero-points{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:14px;
+      margin-top:28px;
+    }
+
+    .point{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .point strong{
+      display:block;
+      font-size:24px;
+      margin-bottom:4px;
+      color:var(--primary-dark);
+    }
+
+    .point span{
+      color:var(--sub);
+      font-size:14px;
+    }
+
+    .phone-area{
+      display:flex;
+      justify-content:center;
+      position:relative;
+    }
+
+    .glow{
+      position:absolute;
+      width:320px;
+      height:320px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,122,0,.22), transparent 70%);
+      filter:blur(5px);
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+    }
+
+    .phone{
+      width:min(360px, 100%);
+      background:#111;
+      border-radius:42px;
+      padding:14px;
+      box-shadow:0 30px 60px rgba(0,0,0,.18);
+      position:relative;
+    }
+
+    .screen{
+      background:linear-gradient(180deg, #fff8f2 0%, #fff 18%, #fafafa 100%);
+      border-radius:30px;
+      padding:18px;
+      min-height:690px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .notch{
+      width:120px;
+      height:28px;
+      background:#111;
+      border-radius:0 0 18px 18px;
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+    }
+
+    .mini-title{
+      color:var(--primary-dark);
+      font-weight:900;
+      font-size:14px;
+      margin-top:16px;
+      margin-bottom:10px;
+    }
+
+    .ui-card{
+      background:#fff;
+      border:1px solid #f0e6db;
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:12px;
+      box-shadow:0 8px 18px rgba(0,0,0,0.04);
+    }
+
+    .ui-card h4{
+      margin:0 0 8px;
+      font-size:16px;
+    }
+
+    .muted{
+      color:var(--sub);
+      font-size:13px;
+    }
+
+    .route-pill{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--primary-dark);
+      font-size:13px;
+      font-weight:800;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .badge-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .badge{
+      flex:1 1 120px;
+      min-width:120px;
+      background:linear-gradient(180deg,#fff4ea,#fff);
+      border:1px solid #ffd8bb;
+      border-radius:18px;
+      padding:12px;
+      text-align:center;
+      font-size:13px;
+      font-weight:700;
+      color:#8b4b17;
+    }
+
+    .vote{
+      margin-top:10px;
+    }
+
+    .vote-bar{
+      width:100%;
+      height:12px;
+      background:#f2f2f2;
+      border-radius:999px;
+      overflow:hidden;
+      margin:8px 0;
+    }
+
+    .vote-fill{
+      width:70%;
+      height:100%;
+      background:linear-gradient(90deg,#4d8dff,#7ab2ff);
+    }
+
+    .board-list{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .board-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      font-weight:700;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .problem-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:20px;
+    }
+
+    .problem-card, .feature-card, .value-card, .road-card, .biz-card, .faq-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      background:var(--soft);
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      margin-bottom:16px;
+    }
+
+    .problem-card h3,
+    .feature-card h3,
+    .value-card h3,
+    .road-card h3,
+    .biz-card h3,
+    .faq-card h3{
+      margin:0 0 10px;
+      font-size:22px;
+    }
+
+    .problem-card p,
+    .feature-card p,
+    .value-card p,
+    .road-card p,
+    .biz-card p,
+    .faq-card p{
+      margin:0;
+      color:var(--sub);
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:20px;
+    }
+
+    .feature-card ul{
+      margin:14px 0 0;
+      padding-left:18px;
+      color:var(--sub);
+    }
+
+    .value-grid{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:18px;
+    }
+
+    .roadmap{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:22px;
+    }
+
+    .road-step{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--primary-dark);
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:14px;
+    }
+
+    .biz-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:20px;
+    }
+
+    .cta{
+      background:linear-gradient(135deg, #fff0e2, #fff8f2);
+      border:1px solid #ffd8bb;
+      border-radius:32px;
+      padding:44px 28px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    .cta h2{
+      margin:10px 0 12px;
+      font-size:clamp(28px,4vw,42px);
+    }
+
+    .cta p{
+      margin:0 auto 20px;
+      color:var(--sub);
+      max-width:700px;
+    }
+
+    footer{
+      padding:32px 0 50px;
+      text-align:center;
+      color:#777;
+      font-size:14px;
+    }
+
+    @media (max-width: 1024px){
+      .hero-grid,
+      .problem-grid,
+      .feature-grid,
+      .value-grid,
+      .roadmap,
+      .biz-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px){
+      .nav-inner{
+        height:auto;
+        padding:14px 0;
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .nav-menu{
+        gap:14px;
+      }
+
+      .hero-grid,
+      .problem-grid,
+      .feature-grid,
+      .value-grid,
+      .roadmap,
+      .biz-grid,
+      .hero-points{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        padding-top:40px;
+      }
+
+      .screen{
+        min-height:auto;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<header>
-  <div class="train-scene" aria-hidden="true">
-    <div class="track one"></div>
-    <div class="track two"></div>
-    <div class="train">
-      <div class="car engine"><span class="light"></span></div>
-      <div class="car"></div>
-      <div class="car"></div>
-      <div class="feature-convoy">
-        <div class="feature-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <strong>실시간 제보</strong>
-            <span>현장 이슈 공유</span>
-          </div>
-        </div>
-        <div class="feature-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <strong>혼잡도 정보</strong>
-            <span>덜 붐비는 칸 찾기</span>
-          </div>
-        </div>
-        <div class="feature-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <strong>착석 확률</strong>
-            <span>앉을 가능성 추천</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="container header-shell">
-    <div class="topbar">
-      <div class="brand">이칸<span>저칸</span></div>
-      <nav class="nav">
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand">
+        <div class="brand-icon"></div>
+        <span>이칸저칸</span>
+      </div>
+      <div class="nav-menu">
         <a href="#problem">문제</a>
-        <a href="#features">기능</a>
-        <a href="#community">커뮤니티</a>
-      </nav>
+        <a href="#solution">기능</a>
+        <a href="#value">핵심가치</a>
+        <a href="#roadmap">확장전략</a>
+        <a href="#business">비즈니스</a>
+      </div>
     </div>
+  </nav>
 
-    <div class="hero">
-      <div class="hero-copy">
-        <div class="eyebrow">실시간 지하철 커뮤니티</div>
-        <h1>열차 안의 분위기까지<br>제일 먼저 올라오는 곳</h1>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="tag">지하철 실시간 커뮤니티 서비스</span>
+        <h1>
+          더 나은 지하철 이용을 위한<br>
+          <span style="color:var(--primary-dark)">이칸저칸</span>
+        </h1>
         <p>
-          이칸저칸은 지연, 혼잡, 자리 상황, 현장 이슈를 같은 노선 승객끼리 바로 공유하는 지하철 실시간 커뮤니티입니다.
-          지도 앱이 알려주지 않는 실제 체감 정보를 더 빠르게 확인할 수 있습니다.
+          갑작스러운 지연, 내부 혼잡, 자리 정보, 민원 상황까지.
+          같은 노선 이용자들이 직접 만드는 실시간 정보 네트워크로
+          지하철 안의 불편을 더 빠르게 공유하고 해결합니다.
         </p>
+
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#features">기능 보기</a>
-          <a class="btn btn-secondary" href="#join">서비스 체험하기</a>
+          <a class="btn btn-primary" href="#solution">핵심 기능 보기</a>
+          <a class="btn btn-ghost" href="#roadmap">확장 전략 보기</a>
+        </div>
+
+        <div class="hero-points">
+          <div class="point">
+            <strong>실시간</strong>
+            <span>노선별 현장 정보 공유</span>
+          </div>
+          <div class="point">
+            <strong>커뮤니티</strong>
+            <span>같은 노선 승객 간 소통</span>
+          </div>
+          <div class="point">
+            <strong>민원 연계</strong>
+            <span>투표형 불편 접수 구조</span>
+          </div>
         </div>
       </div>
 
-      <div class="hero-panel">
-        <div class="metro-board panel">
-          <div class="board-top">
-            <span class="board-chip">2호선 실시간 피드</span>
-            <span>방금 업데이트</span>
-          </div>
-          <div class="board-map">
-            <div class="board-grid"></div>
-            <svg class="line-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M12 18 C18 18, 23 26, 32 34 S43 49, 44 54 S58 69, 76 68" fill="none" stroke="#fff7ef" stroke-width="2.3" stroke-linecap="round"/>
-              <path d="M32 15 C40 21, 52 24, 62 28 S76 42, 82 50" fill="none" stroke="#ffd09f" stroke-width="1.8" stroke-dasharray="6 5" stroke-linecap="round"/>
-            </svg>
-            <div class="station s1"></div>
-            <div class="station s2"></div>
-            <div class="station s3"></div>
-            <div class="station s4"></div>
-            <div class="station s5"></div>
-            <div class="bubble b1">지연 4분</div>
-            <div class="bubble b2">4-3칸 여유</div>
-            <div class="bubble b3">시위 공지 있음</div>
-            <div class="feed-card">
-              <strong>지금 올라온 피드</strong>
-              <span>서울대입구 방향 3번 칸 쾌적</span>
-              <span>강남역 환승 통로 혼잡</span>
-              <span>잠실행 2분 지연 중</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
+      <div class="phone-area">
+        <div class="glow"></div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="mini-title">이칸저칸 홈</div>
 
-<main>
-  <section class="section" id="problem">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="section-kicker">Why Now</div>
-          <h2 class="section-title">문제는 "정보가 없음"보다<br>"현장감이 없음"에 가깝습니다</h2>
-        </div>
-        <p class="section-text">
-          운행 공지는 늦고, 플랫폼의 분위기와 객실의 체감 혼잡도는 더 늦습니다.
-          이칸저칸은 그 공백을 승객의 실시간 제보로 메웁니다.
-        </p>
-      </div>
+            <div class="ui-card">
+              <h4>오늘도 고생하셨어요, 홍길동님</h4>
+              <div class="muted">반복되는 출퇴근을 가치 있는 정보와 성취로 바꿔보세요.</div>
+            </div>
 
-      <div class="problem-layout">
-        <div class="problem-stack">
-          <div class="panel note-panel">
-            <h3>앱은 경로를 알려줘도, 사람들은 분위기를 궁금해합니다</h3>
-            <p>
-              "왜 멈췄는지", "어느 칸이 덜 붐비는지", "지금 타도 되는지" 같은 질문은 늘 현장에서 생깁니다.
-              기존 서비스는 이 질문에 충분히 답하지 못합니다.
-            </p>
-          </div>
-          <div class="panel note-panel">
-            <h3>같은 노선을 타는 사람끼리 가장 정확한 데이터를 만들 수 있습니다</h3>
-            <p>
-              이칸저칸은 공공 데이터만 소비하지 않고, 승객이 직접 올리는 관찰과 제보를 모아 실시간 커뮤니티를 만듭니다.
-            </p>
-          </div>
-        </div>
+            <div class="ui-card">
+              <h4>나의 출근 루트</h4>
+              <span class="route-pill">1호선 · 창동역</span>
+              <span class="route-pill">2호선 · 신설동역</span>
+              <span class="route-pill">AM 08:10</span>
+            </div>
 
-        <div class="panel timeline">
-          <div class="timeline-row">
-            <div class="time">08:12</div>
-            <div>
-              <strong>열차가 멈췄는데 이유를 모름</strong>
-              <p>안내 방송은 짧고, 승객은 답답합니다.</p>
+            <div class="ui-card">
+              <h4>착석 확률 가이드</h4>
+              <div class="muted">3-3, 7-1 칸에서 탑승하면 석계역에서 앉을 확률이 높아요.</div>
             </div>
-          </div>
-          <div class="timeline-row">
-            <div class="time">08:14</div>
-            <div>
-              <strong>다른 칸은 비었는지 알 수 없음</strong>
-              <p>혼잡도는 체감 정보가 핵심인데 공유 창구가 없습니다.</p>
+
+            <div class="ui-card">
+              <h4>내 배지</h4>
+              <div class="badge-row">
+                <div class="badge">2호선 마스터</div>
+                <div class="badge">환승왕</div>
+              </div>
             </div>
-          </div>
-          <div class="timeline-row">
-            <div class="time">08:17</div>
-            <div>
-              <strong>같은 노선 이용자끼리 빠르게 소통 필요</strong>
-              <p>현장성 있는 피드가 있어야 실제 이동 판단이 쉬워집니다.</p>
+
+            <div class="ui-card">
+              <h4>3월 지하철 이용 리포트</h4>
+              <div class="muted">지하철에서 보낸 시간 40시간 · 지나온 역 150개</div>
             </div>
-          </div>
-          <div class="timeline-row">
-            <div class="time">08:20</div>
-            <div>
-              <strong>이칸저칸이 바로 이 지점을 해결</strong>
-              <p>상황 공유, 혼잡 제보, 착석 팁이 한 피드로 모입니다.</p>
+
+            <div class="mini-title">지금 2호선에서는?</div>
+            <div class="board-list">
+              <div class="board-item"><span>정보 게시판</span><span>→</span></div>
+              <div class="board-item"><span>자리나눔 게시판</span><span>→</span></div>
+              <div class="board-item"><span>스터디 게시판</span><span>→</span></div>
+              <div class="board-item"><span>자유 게시판</span><span>→</span></div>
+              <div class="board-item"><span>건의 게시판</span><span>→</span></div>
             </div>
+
+            <div class="mini-title">민원 투표</div>
+            <div class="ui-card">
+              <h4>오늘 우리 칸의 컨디션은?</h4>
+              <div class="muted">2호선 · 3-2칸 / 온도 · 소리 · 냄새</div>
+              <div class="vote">
+                <div class="muted">투표 현황: 춥다 70% / 덥다 30%</div>
+                <div class="vote-bar">
+                  <div class="vote-fill"></div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="features">
-    <div class="container">
+  <section id="problem" class="section">
+    <div class="wrap">
       <div class="section-head">
-        <div>
-          <div class="section-kicker">Core Features</div>
-          <h2 class="section-title">기능도 카드 나열보다<br>장면처럼 보이게 구성했습니다</h2>
-        </div>
-        <p class="section-text">
-          이 서비스의 매력은 기능 이름보다 사용 순간에 있습니다.
-          그래서 설명도 실제 이용 장면 중심으로 배치했습니다.
+        <span class="tag">Problem</span>
+        <h2>지하철 내부 상황을 바로 알 수 있는 채널이 없습니다</h2>
+        <p>
+          이용객은 늘어나고 있지만, 실제로 열차 안에서 벌어지는 불편과 돌발 상황은
+          같은 열차를 탄 사람들끼리도 즉시 확인하기 어렵습니다.
         </p>
       </div>
 
-      <div class="mosaic">
-        <div class="panel mosaic-main">
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="icon">⏱️</div>
+          <h3>지연과 돌발 상황</h3>
+          <p>
+            열차가 갑자기 멈췄을 때 왜 멈췄는지,
+            언제 다시 출발하는지, 현재 어떤 상황인지 파악하기 어렵습니다.
+          </p>
+        </div>
+
+        <div class="problem-card">
+          <div class="icon"></div>
+          <h3>내부 불편 공유 부재</h3>
+          <p>
+            취객, 소음, 냄새, 바닥 오염, 냉난방 문제처럼
+            열차 내부에서만 체감되는 불편은 공식 앱에서 잘 보이지 않습니다.
+          </p>
+        </div>
+
+        <div class="problem-card">
+          <div class="icon"></div>
+          <h3>실시간 공감·확인 니즈</h3>
+          <p>
+            이용자들은 나만 당황한 게 아닌지, 다른 승객은 어떻게 반응하는지,
+            원인이 무엇인지 실시간으로 알고 싶어합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="solution" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Solution</span>
+        <h2>승객이 직접 만드는 실시간 지하철 커뮤니티</h2>
+        <p>
+          이칸저칸은 정보 공유, 자리 정보, 커뮤니티, 민원 투표,
+          루틴형 가이드까지 담은 지하철 특화 서비스입니다.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>정보 게시판</h3>
+          <p>
+            지연, 사고, 시위, 혼잡 등 같은 노선 이용자들이
+            실시간 현장 상황을 빠르게 공유합니다.
+          </p>
+          <ul>
+            <li>노선별 현황 확인</li>
+            <li>같은 열차 승객 제보</li>
+            <li>실시간 체감 정보 축적</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>자리나눔 게시판</h3>
+          <p>
+            어디 칸이 덜 붐비는지, 어느 위치에서 앉기 유리한지
+            이용자 경험 기반으로 공유합니다.
+          </p>
+          <ul>
+            <li>칸별 체감 혼잡도</li>
+            <li>자리 정보 공유</li>
+            <li>장시간 이용자 편의 강화</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>스터디 게시판</h3>
+          <p>
+            같은 노선을 자주 타는 이용자끼리
+            스터디, 정보 교류, 가벼운 연결이 가능합니다.
+          </p>
+          <ul>
+            <li>통학 이용자 타깃</li>
+            <li>노선 기반 네트워킹</li>
+            <li>커뮤니티 체류시간 확대</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>자유 게시판</h3>
+          <p>
+            지하철 빌런, 노선별 분위기, 환승 팁,
+            공감형 이야기까지 자유롭게 나눌 수 있습니다.
+          </p>
+          <ul>
+            <li>공감형 콘텐츠 확산</li>
+            <li>자발적 참여 유도</li>
+            <li>SNS 바이럴 소재 확보</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>건의 게시판</h3>
+          <p>
+            이용자들이 필요한 게시판이나 기능을 제안하고
+            서비스 방향에 직접 참여할 수 있습니다.
+          </p>
+          <ul>
+            <li>유저 참여형 개선 구조</li>
+            <li>커뮤니티 니즈 반영</li>
+            <li>기능 우선순위 수집</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>민원 투표 탭</h3>
+          <p>
+            온도, 소리, 냄새 등 칸별 불편 요소를 투표형으로 수집해
+            실시간 민원 모니터링 구조를 만듭니다.
+          </p>
+          <ul>
+            <li>지하철 / 칸 선택</li>
+            <li>민원 유형별 투표</li>
+            <li>조치 여부 확인 가능</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
           <h3>착석 확률 가이드</h3>
           <p>
-            대부분의 지도 앱은 빠른 환승만 알려줍니다. 이칸저칸은 실제 이용자 제보를 바탕으로
-            앉을 확률이 높은 칸과 비교적 덜 붐비는 칸을 추천합니다.
+            빠른 환승 중심이 아닌,
+            실제로 앉기 유리한 칸을 추천하는 차별 기능입니다.
           </p>
-          <div class="meter">
-            <div class="meter-row">
-              <strong>2-1칸</strong>
-              <div class="bar"><div class="fill" style="width:38%"></div></div>
-              <span>보통</span>
-            </div>
-            <div class="meter-row">
-              <strong>4-3칸</strong>
-              <div class="bar"><div class="fill" style="width:82%"></div></div>
-              <span>높음</span>
-            </div>
-            <div class="meter-row">
-              <strong>6-2칸</strong>
-              <div class="bar"><div class="fill" style="width:61%"></div></div>
-              <span>양호</span>
-            </div>
-          </div>
+          <ul>
+            <li>내릴 역 이전 역 기준 추천</li>
+            <li>루틴 정보 기반 고도화</li>
+            <li>향후 칸별 데이터 정교화</li>
+          </ul>
         </div>
 
-        <div class="mosaic-side">
-          <div class="panel mini dark">
-            <h4>실시간 정보 게시판</h4>
-            <p>지연, 사고, 시위, 통제 같은 현장 이슈가 같은 노선 사용자 중심으로 빠르게 올라옵니다.</p>
-          </div>
-          <div class="panel mini soft">
-            <h4>자리 / 혼잡도 제보</h4>
-            <p>어느 칸이 덜 붐비는지, 어디쯤 서야 편한지 같은 체감형 정보를 직접 공유할 수 있습니다.</p>
-          </div>
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>지하철 이용 리포트</h3>
+          <p>
+            지하철에서 보낸 시간과 이동 기록을 시각화해
+            반복되는 이동을 하나의 성취 경험으로 전환합니다.
+          </p>
+          <ul>
+            <li>월간 이용 시간 확인</li>
+            <li>지나온 역 수 집계</li>
+            <li>루틴 관리 동기 부여</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon"></div>
+          <h3>배지와 루틴 관리</h3>
+          <p>
+            2호선 마스터, 환승왕 같은 배지 요소와 함께
+            나의 출근 루트를 저장하고 관리할 수 있습니다.
+          </p>
+          <ul>
+            <li>정서적 유대감 형성</li>
+            <li>반복 이용 습관화</li>
+            <li>재방문 유도 요소</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="community">
-    <div class="container">
+  <section id="value" class="section">
+    <div class="wrap">
       <div class="section-head">
-        <div>
-          <div class="section-kicker">Community</div>
-          <h2 class="section-title">이칸저칸은 단순 정보앱이 아니라<br>노선 단위 커뮤니티입니다</h2>
-        </div>
-        <p class="section-text">
-          같은 시간을 반복해서 타는 사람일수록 더 유용합니다.
-          개인 경험이 쌓일수록 서비스의 정확도도 함께 올라갑니다.
+        <span class="tag">Core Value</span>
+        <h2>이칸저칸이 주는 핵심 가치</h2>
+        <p>
+          단순 커뮤니티도 아니고, 단순 교통 앱도 아닙니다.
+          실시간 정보와 사용자 참여가 만나는 지하철 특화 플랫폼입니다.
         </p>
       </div>
 
-      <div class="community">
-        <div class="panel community-card orange">
-          <h3>같은 노선 사람들끼리</h3>
-          <p>출근 시간대가 겹치는 이용자들이 실제 체감 정보를 계속 축적합니다.</p>
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="icon">⚡</div>
+          <h3>실시간 정보 공유</h3>
+          <p>같은 노선을 타는 이용자끼리 가장 빠른 현장 소식을 주고받습니다.</p>
         </div>
-        <div class="panel community-card">
-          <h3>작은 제보가 큰 가치</h3>
-          <p>한 줄 제보 하나가 뒤에 오는 수십 명의 이동 판단을 바꿉니다.</p>
+        <div class="value-card">
+          <div class="icon"></div>
+          <h3>노선 기반 커뮤니티</h3>
+          <p>같은 루틴을 가진 통근·통학 이용자들 사이에 연결을 만듭니다.</p>
         </div>
-        <div class="panel community-card">
-          <h3>지하철판 로컬 피드</h3>
-          <p>열차 안, 플랫폼, 환승 통로라는 좁은 현장을 가장 빨리 반영하는 커뮤니티를 지향합니다.</p>
+        <div class="value-card">
+          <div class="icon"></div>
+          <h3>자리·환승 팁 축적</h3>
+          <p>이용 경험이 데이터가 되고, 그 데이터가 다시 편의로 돌아옵니다.</p>
+        </div>
+        <div class="value-card">
+          <div class="icon"></div>
+          <h3>민원 기반 개선</h3>
+          <p>불편을 혼자 견디는 대신, 함께 드러내고 더 빠르게 해결할 수 있습니다.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="join">
-    <div class="container">
-      <div class="panel cta">
-        <div>
-          <h2>지금 지하철 상황을 확인하세요</h2>
-          <p>승객이 직접 만드는 실시간 지하철 커뮤니티, 이칸저칸</p>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Competitive Edge</span>
+        <h2>커뮤니티와 교통 정보를 동시에</h2>
+        <p>
+          기존 서비스는 커뮤니티만 있거나 교통 정보만 있었습니다.
+          이칸저칸은 두 영역을 결합해 데이터가 쌓일수록 더 강해집니다.
+        </p>
+      </div>
+
+      <div class="biz-grid">
+        <div class="biz-card">
+          <div class="icon"></div>
+          <h3>철도 커뮤니티의 장점</h3>
+          <p>
+            사용자들끼리 체감 정보를 빠르게 나누고 공감대를 형성하는 강점이 있습니다.
+            하지만 정확한 교통 정보 기능은 약합니다.
+          </p>
         </div>
-        <a class="btn" href="#">서비스 체험하기</a>
+
+        <div class="biz-card">
+          <div class="icon">️</div>
+          <h3>교통 앱의 장점</h3>
+          <p>
+            이동 경로와 환승 정보는 잘 제공하지만,
+            같은 열차 승객끼리 소통할 수 있는 구조는 제한적입니다.
+          </p>
+        </div>
+
+        <div class="biz-card">
+          <div class="icon"></div>
+          <h3>이칸저칸의 차별점</h3>
+          <p>
+            커뮤니티 + 교통 정보 + 민원 + 데이터 축적이 결합되어
+            시간이 지날수록 정확도와 효용이 함께 올라가는 구조입니다.
+          </p>
+        </div>
       </div>
     </div>
   </section>
-</main>
 
-<footer>
-  Team 썹 타는 중<br>
-  디지털 하나로 9기 데이터분석 및 서비스기획
-</footer>
+  <section id="roadmap" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Roadmap</span>
+        <h2>대학생에서 직장인, 그리고 모든 이용자로 확장</h2>
+        <p>
+          초기엔 루틴이 분명한 대학생을 중심으로 시작하고,
+          이후 직장인과 전 노선 이용자로 단계적으로 넓혀갑니다.
+        </p>
+      </div>
+
+      <div class="roadmap">
+        <div class="road-card">
+          <div class="road-step">SOM · 초기 시장</div>
+          <h3>지하철로 통학하는 대학생</h3>
+          <p>
+            수도권 대학가 핵심 노선을 중심으로 커뮤니티를 정착시킵니다.
+            실시간 상황 캡처, 공감형 콘텐츠, 대학생 커뮤니티 바이럴이 핵심입니다.
+          </p>
+        </div>
+
+        <div class="road-card">
+          <div class="road-step">SAM · 확장 시장</div>
+          <h3>지하철로 매일 통근하는 직장인</h3>
+          <p>
+            동적 환승 안내, 연착 대응, 착석 확률 고도화처럼
+            효율성과 예측 가능성을 높이는 방향으로 기능을 확장합니다.
+          </p>
+        </div>
+
+        <div class="road-card">
+          <div class="road-step">TAM · 전체 시장</div>
+          <h3>모든 지하철 이용자</h3>
+          <p>
+            배리어프리 안내, 엘리베이터 현황, SOS 구조까지 확장해
+            공익성과 실용성을 동시에 갖춘 도시 이동 인프라로 발전합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="business" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">Business Model</span>
+        <h2>광고, 데이터, 제휴로 수익화</h2>
+        <p>
+          지역 기반 광고와 프리미엄 꾸미기, 공공데이터 활용,
+          교육 플랫폼 제휴까지 다층적인 수익 구조를 설계합니다.
+        </p>
+      </div>
+
+      <div class="biz-grid">
+        <div class="biz-card">
+          <div class="icon"></div>
+          <h3>앱 내 광고</h3>
+          <p>
+            주요 경로 기반으로 역 근처 맛집, 카페 등
+            상권 연계형 광고를 운영할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="biz-card">
+          <div class="icon"></div>
+          <h3>커스텀 아이템</h3>
+          <p>
+            프로필, 배지, 꾸미기 요소를 유료화해
+            참여형 서비스의 재미를 수익으로 연결합니다.
+          </p>
+        </div>
+
+        <div class="biz-card">
+          <div class="icon">️</div>
+          <h3>데이터·제휴 수익</h3>
+          <p>
+            축적된 공공 데이터를 교통·연구기관에 제공하고,
+            시간 맞춤형 학습 구독과도 제휴할 수 있습니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">FAQ</span>
+        <h2>발표 때 자주 나올 질문</h2>
+        <p>랜딩페이지에서도 같이 보여주면 설득력이 올라가는 포인트들입니다.</p>
+      </div>
+
+      <div class="biz-grid">
+        <div class="faq-card">
+          <h3>정보 신뢰성은 어떻게 확보하나요?</h3>
+          <p>
+            다수 제보 중복 확인, 반응 수 기반 노출, 신고 기능, 노선별 누적 데이터로
+            허위 정보 확산을 줄이는 구조를 전제로 합니다.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3>초기 유저는 어떻게 모으나요?</h3>
+          <p>
+            대학가 핵심 노선 중심으로 시작해,
+            검색 유입과 공감형 SNS 콘텐츠, 커뮤니티 확산 전략을 활용합니다.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3>공식 기관과도 연결 가능한가요?</h3>
+          <p>
+            철도공사·교통카드 앱과의 협력 가능성을 열어두고,
+            초기에는 사용자 참여형 데이터 네트워크 구축에 집중합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta">
+        <span class="tag">Team 썹 타는 중 </span>
+        <h2>지하철 이용의 불편을<br>실시간 연결과 데이터로 바꾸다</h2>
+        <p>
+          이칸저칸은 단순한 커뮤니티가 아니라,
+          승객이 직접 만드는 도시 이동 정보 인프라를 목표로 합니다.
+        </p>
+        <div class="hero-actions" style="justify-content:center; margin-bottom:0;">
+          <a class="btn btn-primary" href="#solution">서비스 기능 다시 보기</a>
+          <a class="btn btn-ghost" href="#problem">문제 정의 보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    디지털 하나로 9기 데이터분석 및 서비스기획 · Team 썹 타는 중 <br>
+    이칸저칸 랜딩페이지 샘플
+  </footer>
+
 </body>
 </html>

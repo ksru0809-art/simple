@@ -76,6 +76,43 @@
 
     .section{
       padding:84px 0;
+      position:relative;
+    }
+
+    .section-frame{
+      position:relative;
+      padding:38px;
+      border-radius:34px;
+      background:
+        radial-gradient(circle at top right, rgba(255,122,0,.12), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,248,241,.88));
+      border:1px solid rgba(255,214,186,.85);
+      box-shadow:
+        0 24px 50px rgba(163,85,18,.08),
+        inset 0 1px 0 rgba(255,255,255,.85);
+      overflow:hidden;
+    }
+
+    .section-frame::before{
+      content:"";
+      position:absolute;
+      inset:auto -40px -60px auto;
+      width:200px;
+      height:200px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,122,0,.10), transparent 68%);
+      pointer-events:none;
+    }
+
+    .section-frame::after{
+      content:"";
+      position:absolute;
+      left:24px;
+      right:24px;
+      top:24px;
+      height:1px;
+      background:linear-gradient(90deg, rgba(255,122,0,.18), transparent 70%);
+      pointer-events:none;
     }
 
     .section-head{
@@ -374,6 +411,8 @@
       border:1px solid var(--line);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
     }
 
     .point{
@@ -594,6 +633,21 @@
     .faq-card,
     .summary-card{
       padding:24px;
+    }
+
+    .problem-card::before,
+    .feature-card::before,
+    .value-card::before,
+    .road-card::before,
+    .faq-card::before,
+    .summary-card::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      width:100%;
+      height:5px;
+      background:linear-gradient(90deg, #ff8f2b, rgba(255,143,43,.15));
     }
 
     .feature-card{
@@ -821,6 +875,21 @@
       margin-bottom:16px;
       min-height:188px;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .visual-card::after{
+      content:"";
+      position:absolute;
+      right:-12px;
+      top:-12px;
+      width:110px;
+      height:110px;
+      border-radius:24px;
+      background:
+        radial-gradient(circle at center, rgba(255,122,0,.12), transparent 64%);
+      pointer-events:none;
     }
 
     .visual-title{
@@ -863,6 +932,7 @@
       background:#fff;
       border:1px solid #f0e6db;
       box-shadow:0 6px 14px rgba(0,0,0,0.04);
+      position:relative;
     }
 
     .problem-time{
@@ -897,6 +967,7 @@
       font-size:13px;
       font-weight:800;
       color:#3e3128;
+      position:relative;
     }
 
     .issue-state{
@@ -968,6 +1039,11 @@
       grid-template-columns:repeat(2, 1fr);
       gap:12px;
       margin-top:16px;
+    }
+
+    .summary-box{
+      min-height:92px;
+      background:linear-gradient(180deg, #fffdfb, #fff4ea);
     }
 
     .road-step{
@@ -1054,6 +1130,7 @@
       }
 
       .hero{padding-top:34px}
+      .section-frame{padding:24px 18px}
       .screen{min-height:430px}
       .screen-viewport,
       .screen-panel{height:430px}
@@ -1310,7 +1387,7 @@
   </section>
 
   <section id="problem" class="section">
-    <div class="wrap">
+    <div class="wrap section-frame">
       <div class="section-head">
         <span class="tag">Problem</span>
         <h2>지하철 내부 상황을 바로 알 수 있는 채널이 없습니다</h2>
@@ -1385,7 +1462,7 @@
   </section>
 
   <section id="solution" class="section">
-    <div class="wrap">
+    <div class="wrap section-frame">
       <div class="section-head">
         <span class="tag">Solution</span>
         <h2>핵심 기능을 화면처럼 바로 이해할 수 있게 보여줍니다</h2>
@@ -1496,7 +1573,7 @@
   </section>
 
   <section id="value" class="section">
-    <div class="wrap">
+    <div class="wrap section-frame">
       <div class="section-head">
         <span class="tag">Core Value</span>
         <h2>이칸저칸의 강점은 단순합니다</h2>
@@ -1556,7 +1633,7 @@
   </section>
 
   <section id="roadmap" class="section">
-    <div class="wrap">
+    <div class="wrap section-frame">
       <div class="section-head">
         <span class="tag">Roadmap</span>
         <h2>시장 확장 흐름도 간단하게 정리했습니다</h2>
@@ -1614,7 +1691,7 @@
   </section>
 
   <section class="section">
-    <div class="wrap">
+    <div class="wrap section-frame">
       <div class="summary">
         <div class="summary-card">
           <h3>한 줄로 정리하면</h3>

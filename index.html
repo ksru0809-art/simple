@@ -152,8 +152,8 @@
       position:absolute;
       left:0;
       right:0;
-      top:0;
-      height:120px;
+      top:-6px;
+      height:144px;
       pointer-events:none;
       opacity:.98;
     }
@@ -162,75 +162,152 @@
       position:absolute;
       left:-5%;
       width:110%;
-      height:6px;
+      height:8px;
       border-radius:999px;
-      background:rgba(255,122,0,.18);
+      background:linear-gradient(90deg, rgba(255,122,0,.12), rgba(255,122,0,.28), rgba(255,122,0,.12));
+      box-shadow:0 10px 24px rgba(255,122,0,.10);
     }
 
-    .track.one{top:24px;transform:rotate(-1deg)}
-    .track.two{top:82px;transform:rotate(.7deg);background:rgba(255,122,0,.10)}
+    .track.one{top:28px;transform:rotate(-.8deg)}
+    .track.two{top:94px;transform:rotate(.7deg);opacity:.55}
+
+    .track::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:17px;
+      height:2px;
+      background:repeating-linear-gradient(
+        90deg,
+        rgba(139,75,23,.18) 0 16px,
+        transparent 16px 36px
+      );
+    }
 
     .train{
       position:absolute;
-      top:30px;
-      left:-420px;
+      top:26px;
+      left:-500px;
       display:flex;
       align-items:center;
-      gap:10px;
+      gap:12px;
       animation:ride 16s linear infinite;
+      filter:drop-shadow(0 16px 24px rgba(161,84,13,.14));
     }
 
     .car{
-      width:84px;
-      height:36px;
-      border-radius:14px;
-      background:#fff;
+      width:92px;
+      height:42px;
+      border-radius:16px 16px 12px 12px;
+      background:linear-gradient(180deg, #fffdfa 0%, #fff2e6 100%);
       position:relative;
-      box-shadow:0 10px 24px rgba(0,0,0,.10);
+      border:1px solid rgba(229,102,0,.10);
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
     }
 
     .car::before{
       content:"";
       position:absolute;
-      left:12px;
-      right:12px;
+      left:10px;
+      right:10px;
       top:10px;
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,122,0,.30);
+      height:13px;
+      border-radius:8px;
+      background:
+        linear-gradient(90deg,
+          rgba(255,122,0,.18) 0 18%,
+          rgba(255,255,255,.8) 18% 22%,
+          rgba(255,122,0,.18) 22% 48%,
+          rgba(255,255,255,.8) 48% 52%,
+          rgba(255,122,0,.18) 52% 78%,
+          rgba(255,255,255,.8) 78% 82%,
+          rgba(255,122,0,.18) 82% 100%
+        );
     }
 
     .car::after{
       content:"";
       position:absolute;
-      left:16px;
+      left:18px;
       bottom:-7px;
       width:10px;
       height:10px;
       border-radius:50%;
       background:#8b4b17;
-      box-shadow:38px 0 0 #8b4b17;
+      box-shadow:44px 0 0 #8b4b17;
     }
 
-    .engine{width:100px;background:#fff7f0}
+    .engine{
+      width:116px;
+      background:linear-gradient(180deg, #fff8f1 0%, #ffe7cf 100%);
+    }
+
+    .engine::before{
+      left:12px;
+      right:18px;
+    }
+
+    .engine::after{
+      box-shadow:48px 0 0 #8b4b17;
+    }
+
+    .engine-light{
+      position:absolute;
+      right:10px;
+      top:13px;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#ffd166;
+      box-shadow:0 0 14px rgba(255,209,102,.95);
+    }
 
     .feature-pills{
       display:flex;
-      gap:10px;
-      margin-left:6px;
+      gap:12px;
+      margin-left:8px;
     }
 
     .feature-pill{
-      min-width:142px;
-      padding:10px 14px;
-      border-radius:16px;
-      background:rgba(255,255,255,.88);
-      border:1px solid #ffd9bd;
-      box-shadow:var(--shadow);
+      min-width:162px;
+      padding:11px 14px 11px 16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.92);
+      border:1px solid #ffe1cb;
+      box-shadow:0 14px 26px rgba(181,97,23,.10);
       color:#7a4317;
+      white-space:nowrap;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .pill-dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:linear-gradient(180deg, #ff9a3d, #ff7a00);
+      box-shadow:0 0 0 6px rgba(255,122,0,.08);
+      flex:0 0 auto;
+    }
+
+    .pill-copy{
+      display:flex;
+      flex-direction:column;
+      gap:1px;
+      line-height:1.1;
+    }
+
+    .pill-copy strong{
       font-size:13px;
       font-weight:800;
-      white-space:nowrap;
+      color:#5c3210;
+    }
+
+    .pill-copy span{
+      font-size:11px;
+      color:#9a6a43;
     }
 
     .hero-grid{
@@ -551,14 +628,13 @@
       .track.two{top:62px}
       .train{
         top:22px;
-        left:-580px;
+        left:-660px;
       }
-      .car{width:68px;height:30px}
-      .engine{width:82px}
+      .car{width:74px;height:34px}
+      .engine{width:88px}
       .feature-pill{
-        min-width:118px;
-        font-size:12px;
-        padding:9px 12px;
+        min-width:132px;
+        padding:8px 11px 8px 12px;
       }
       .hero-grid{padding-top:52px}
     }
@@ -586,13 +662,31 @@
       <div class="track one"></div>
       <div class="track two"></div>
       <div class="train">
-        <div class="car engine"></div>
+        <div class="car engine"><span class="engine-light"></span></div>
         <div class="car"></div>
         <div class="car"></div>
         <div class="feature-pills">
-          <div class="feature-pill">실시간 제보</div>
-          <div class="feature-pill">혼잡도 공유</div>
-          <div class="feature-pill">착석 확률</div>
+          <div class="feature-pill">
+            <div class="pill-dot"></div>
+            <div class="pill-copy">
+              <strong>실시간 제보</strong>
+              <span>현장 이슈 공유</span>
+            </div>
+          </div>
+          <div class="feature-pill">
+            <div class="pill-dot"></div>
+            <div class="pill-copy">
+              <strong>혼잡도 공유</strong>
+              <span>칸별 체감 정보</span>
+            </div>
+          </div>
+          <div class="feature-pill">
+            <div class="pill-dot"></div>
+            <div class="pill-copy">
+              <strong>착석 확률</strong>
+              <span>앉기 좋은 칸 추천</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

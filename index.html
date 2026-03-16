@@ -667,13 +667,6 @@
       transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
     }
 
-    .feature-card:target{
-      border-color:#ffbf8a;
-      background:linear-gradient(180deg, #fffaf6, #fff1e5);
-      box-shadow:0 24px 40px rgba(229,102,0,.18);
-      transform:translateY(-4px);
-    }
-
     .feature-card.visual.active{
       border-color:#ffbf8a;
       background:linear-gradient(180deg, #fffaf6, #fff1e5);
@@ -2412,6 +2405,18 @@
       }
     }
 
+    function syncFeatureSelection(feature) {
+      const matchedCard = featureCards.find((card) => card.dataset.feature === feature);
+      activateFeature(feature);
+
+      if (matchedCard) {
+        matchedCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (matchedCard.id) {
+          history.replaceState(null, "", `#${matchedCard.id}`);
+        }
+      }
+    }
+
     if (arrowButton) {
       arrowButton.addEventListener("click", () => {
         currentSlide = (currentSlide + 1) % panels.length;
@@ -2420,20 +2425,21 @@
     }
 
     featurePills.forEach((pill) => {
-      pill.addEventListener("click", () => {
-        activateFeature(pill.dataset.feature);
+      pill.addEventListener("click", (event) => {
+        event.preventDefault();
+        syncFeatureSelection(pill.dataset.feature);
       });
     });
 
     featureCards.forEach((card) => {
       card.addEventListener("click", () => {
-        activateFeature(card.dataset.feature);
+        syncFeatureSelection(card.dataset.feature);
       });
 
       card.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          activateFeature(card.dataset.feature);
+          syncFeatureSelection(card.dataset.feature);
         }
       });
     });

@@ -645,6 +645,174 @@
       color:var(--sub);
     }
 
+    .feature-card.visual{
+      padding:18px;
+    }
+
+    .feature-frame{
+      background:linear-gradient(180deg, #fffaf6 0%, #fff 100%);
+      border:1px solid #f3dfcf;
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:16px;
+      min-height:250px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .frame-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+    }
+
+    .frame-title{
+      font-size:13px;
+      font-weight:900;
+      color:var(--primary-dark);
+    }
+
+    .frame-chip{
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff1e3;
+      border:1px solid #ffd7b7;
+      color:#9a5b24;
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .mock-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .mock-item{
+      padding:12px 13px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+      font-size:13px;
+      font-weight:700;
+      color:#3e3128;
+    }
+
+    .mock-sub{
+      display:block;
+      margin-top:4px;
+      color:var(--sub);
+      font-size:11px;
+      font-weight:600;
+    }
+
+    .seat-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .seat-box{
+      padding:12px 8px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      text-align:center;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .seat-box strong{
+      display:block;
+      font-size:14px;
+      color:var(--primary-dark);
+    }
+
+    .seat-box span{
+      font-size:11px;
+      color:var(--sub);
+    }
+
+    .poll-card{
+      padding:14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .poll-label{
+      font-size:12px;
+      font-weight:800;
+      color:#4b5563;
+      margin-bottom:8px;
+    }
+
+    .poll-bar{
+      height:12px;
+      border-radius:999px;
+      overflow:hidden;
+      background:#eceff3;
+      margin:8px 0;
+    }
+
+    .poll-fill{
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg, #ff8f2b, #ff6b00);
+    }
+
+    .community-bubbles{
+      display:grid;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .bubble-item{
+      max-width:88%;
+      padding:12px 14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+      font-size:12px;
+      font-weight:700;
+      color:#4a3422;
+    }
+
+    .bubble-item.right{
+      margin-left:auto;
+      background:#fff1e3;
+      border-color:#ffd7b7;
+    }
+
+    .stat-strip{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .stat-mini{
+      padding:12px 8px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      text-align:center;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .stat-mini strong{
+      display:block;
+      font-size:14px;
+      color:var(--primary-dark);
+    }
+
+    .stat-mini span{
+      font-size:11px;
+      color:var(--sub);
+    }
+
     .road-step{
       display:inline-block;
       padding:7px 12px;
@@ -1016,73 +1184,108 @@
     <div class="wrap">
       <div class="section-head">
         <span class="tag">Solution</span>
-        <h2>핵심 기능만 남겨 간결하게 정리했습니다</h2>
+        <h2>핵심 기능을 화면처럼 바로 이해할 수 있게 보여줍니다</h2>
         <p>
-          발표용 설명과 제품 소개를 동시에 잡기 위해 기능은 많아 보이되,
-          읽는 흐름은 무겁지 않도록 핵심 묶음만 남겼습니다.
+          글로 길게 설명하기보다, 실제 서비스가 어떻게 보일지 바로 떠오르도록
+          피그마 스타일의 미니 화면 카드로 정리했습니다.
         </p>
       </div>
 
       <div class="feature-grid">
-        <div class="feature-card" id="feature-live">
-          <div class="icon">📢</div>
+        <div class="feature-card visual" id="feature-live">
+          <div class="feature-frame">
+            <div class="frame-top">
+              <div class="frame-title">실시간 정보 게시판</div>
+              <div class="frame-chip">2호선</div>
+            </div>
+            <div class="mock-list">
+              <div class="mock-item">잠실행 3분 지연<span class="mock-sub">방금 전 · 이용자 18명 반응</span></div>
+              <div class="mock-item">강남역 환승 통로 혼잡<span class="mock-sub">실시간 제보 · 동선 우회 추천</span></div>
+              <div class="mock-item">서울대입구 방향 4-2칸 여유<span class="mock-sub">같은 열차 탑승자 공유</span></div>
+            </div>
+          </div>
           <h3>실시간 정보 게시판</h3>
           <p>지연, 사고, 혼잡 같은 현장 상황을 같은 노선 이용자들이 빠르게 공유합니다.</p>
-          <ul>
-            <li>노선별 현황 확인</li>
-            <li>같은 열차 승객 제보</li>
-            <li>실시간 체감 정보 축적</li>
-          </ul>
         </div>
-        <div class="feature-card" id="feature-seat">
-          <div class="icon">💺</div>
+        <div class="feature-card visual" id="feature-seat">
+          <div class="feature-frame">
+            <div class="frame-top">
+              <div class="frame-title">자리 · 혼잡도 가이드</div>
+              <div class="frame-chip">추천 칸</div>
+            </div>
+            <div class="seat-grid">
+              <div class="seat-box"><strong>3-3</strong><span>착석 높음</span></div>
+              <div class="seat-box"><strong>4-2</strong><span>여유 있음</span></div>
+              <div class="seat-box"><strong>7-1</strong><span>환승 유리</span></div>
+            </div>
+            <div class="mock-item" style="margin-top:12px;">석계역 전 1정거장부터 3-3칸 추천<span class="mock-sub">루틴 데이터 기반 가이드</span></div>
+          </div>
           <h3>자리 · 혼잡도 공유</h3>
           <p>어느 칸이 덜 붐비는지, 어디가 앉기 유리한지 이용자 경험 기반으로 공유합니다.</p>
-          <ul>
-            <li>칸별 체감 혼잡도</li>
-            <li>자리 정보 공유</li>
-            <li>착석 확률 가이드</li>
-          </ul>
         </div>
-        <div class="feature-card" id="feature-complaint">
-          <div class="icon">🗳️</div>
+        <div class="feature-card visual" id="feature-complaint">
+          <div class="feature-frame">
+            <div class="frame-top">
+              <div class="frame-title">민원 투표와 개선</div>
+              <div class="frame-chip">3-2칸</div>
+            </div>
+            <div class="poll-card">
+              <div class="poll-label">오늘 우리 칸의 온도는 어떤가요?</div>
+              <div class="muted">춥다 70% · 덥다 30%</div>
+              <div class="poll-bar"><div class="poll-fill" style="width:70%"></div></div>
+            </div>
+            <div class="mock-list" style="margin-top:12px;">
+              <div class="mock-item">소음 민원 12건<span class="mock-sub">출퇴근 시간대 집중</span></div>
+            </div>
+          </div>
           <h3>민원 투표와 개선</h3>
           <p>온도, 소리, 냄새 같은 칸별 불편 요소를 투표형으로 모아 빠르게 드러냅니다.</p>
-          <ul>
-            <li>지하철 / 칸 선택</li>
-            <li>민원 유형별 투표</li>
-            <li>불편 데이터 축적</li>
-          </ul>
         </div>
-        <div class="feature-card" id="feature-community">
-          <div class="icon">👥</div>
+        <div class="feature-card visual" id="feature-community">
+          <div class="feature-frame">
+            <div class="frame-top">
+              <div class="frame-title">노선 기반 커뮤니티</div>
+              <div class="frame-chip">소통</div>
+            </div>
+            <div class="community-bubbles">
+              <div class="bubble-item">오늘 잠실행 엄청 붐빔. 5-1칸은 상대적으로 괜찮아요.</div>
+              <div class="bubble-item right">강남역 환승 줄 길어요. 뒤쪽 계단 추천!</div>
+              <div class="bubble-item">2호선 통학 루틴 비슷한 분들 정보 공유해요.</div>
+            </div>
+          </div>
           <h3>노선 기반 커뮤니티</h3>
           <p>자유 게시판, 스터디 게시판, 건의 게시판으로 사용자 간 연결과 체류 시간을 늘립니다.</p>
-          <ul>
-            <li>공감형 콘텐츠 확산</li>
-            <li>통학 · 통근 루틴 연결</li>
-            <li>유저 참여형 개선</li>
-          </ul>
         </div>
-        <div class="feature-card" id="feature-routine">
-          <div class="icon">🏅</div>
+        <div class="feature-card visual" id="feature-routine">
+          <div class="feature-frame">
+            <div class="frame-top">
+              <div class="frame-title">루틴 관리와 배지</div>
+              <div class="frame-chip">MY</div>
+            </div>
+            <div class="mock-item">나의 출근 루트<span class="mock-sub">창동역 → 신설동역 → 08:10</span></div>
+            <div class="stat-strip">
+              <div class="stat-mini"><strong>40h</strong><span>이용 시간</span></div>
+              <div class="stat-mini"><strong>150</strong><span>지나온 역</span></div>
+              <div class="stat-mini"><strong>2</strong><span>획득 배지</span></div>
+            </div>
+          </div>
           <h3>루틴 관리와 배지</h3>
           <p>나의 출근 루트, 배지, 월간 리포트로 반복되는 이동을 성취 경험으로 바꿉니다.</p>
-          <ul>
-            <li>출근 루트 저장</li>
-            <li>배지와 리포트</li>
-            <li>재방문 유도 요소</li>
-          </ul>
         </div>
-        <div class="feature-card" id="feature-data">
-          <div class="icon">📈</div>
+        <div class="feature-card visual" id="feature-data">
+          <div class="feature-frame">
+            <div class="frame-top">
+              <div class="frame-title">데이터가 쌓이는 구조</div>
+              <div class="frame-chip">INSIGHT</div>
+            </div>
+            <div class="mock-list">
+              <div class="mock-item">이용자 제보 누적<span class="mock-sub">혼잡도 · 지연 · 불편 요소</span></div>
+              <div class="mock-item">루틴 분석 결과<span class="mock-sub">탑승 패턴과 추천 칸 정교화</span></div>
+              <div class="mock-item">추천 품질 향상<span class="mock-sub">쌓일수록 더 정확해지는 구조</span></div>
+            </div>
+          </div>
           <h3>데이터가 쌓이는 서비스</h3>
           <p>이용자가 남긴 정보가 다시 다음 이용자의 편의로 돌아오는 구조를 만듭니다.</p>
-          <ul>
-            <li>루틴 정보 고도화</li>
-            <li>현장 데이터 정교화</li>
-            <li>시간이 갈수록 효용 증가</li>
-          </ul>
         </div>
       </div>
     </div>

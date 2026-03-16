@@ -634,13 +634,13 @@
     }
 
     .problem-grid{grid-template-columns:repeat(3, 1fr)}
-    .feature-grid{grid-template-columns:repeat(3, 1fr)}
+    .feature-grid{grid-template-columns:1fr}
     .value-grid{grid-template-columns:repeat(3, 1fr)}
     .roadmap{grid-template-columns:repeat(3, 1fr)}
 
     .feature-showcase{
       display:grid;
-      grid-template-columns:minmax(0, 1.05fr) minmax(360px, .95fr);
+      grid-template-columns:minmax(320px, .82fr) minmax(0, 1.18fr);
       gap:24px;
       align-items:start;
     }
@@ -676,8 +676,8 @@
 
     .feature-card.visual{
       padding:18px;
-      transform:scale(.94);
-      opacity:.62;
+      transform:scale(.96);
+      opacity:.56;
       filter:saturate(.82);
     }
 
@@ -1444,15 +1444,17 @@
     }
 
     @media (max-width: 1024px){
-      .feature-showcase,
       .hero-grid,
       .problem-grid,
-      .feature-grid,
       .value-grid,
       .roadmap,
       .summary,
       .detail-panel{
         grid-template-columns:1fr 1fr;
+      }
+
+      .feature-showcase{
+        grid-template-columns:1fr;
       }
 
       .feature-detail-shell{
@@ -1470,10 +1472,8 @@
 
       .nav-menu{gap:14px}
 
-      .feature-showcase,
       .hero-grid,
       .problem-grid,
-      .feature-grid,
       .value-grid,
       .roadmap,
       .summary,
@@ -1509,6 +1509,11 @@
         transform:none;
         opacity:1;
         filter:none;
+      }
+
+      .feature-showcase,
+      .feature-grid{
+        grid-template-columns:1fr;
       }
     }
   </style>

@@ -638,6 +638,13 @@
     .value-grid{grid-template-columns:repeat(3, 1fr)}
     .roadmap{grid-template-columns:repeat(3, 1fr)}
 
+    .feature-showcase{
+      display:grid;
+      grid-template-columns:minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap:24px;
+      align-items:start;
+    }
+
     .problem-card,
     .feature-card,
     .value-card,
@@ -667,11 +674,20 @@
       transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
     }
 
+    .feature-card.visual{
+      padding:18px;
+      transform:scale(.94);
+      opacity:.62;
+      filter:saturate(.82);
+    }
+
     .feature-card.visual.active{
       border-color:#ffbf8a;
       background:linear-gradient(180deg, #fffaf6, #fff1e5);
       box-shadow:0 24px 40px rgba(229,102,0,.18);
       transform:translateY(-4px);
+      opacity:1;
+      filter:none;
     }
 
     .icon{
@@ -711,10 +727,6 @@
       color:var(--sub);
     }
 
-    .feature-card.visual{
-      padding:18px;
-    }
-
     .feature-frame{
       background:linear-gradient(180deg, #fffaf6 0%, #fff 100%);
       border:1px solid #f3dfcf;
@@ -723,6 +735,15 @@
       margin-bottom:16px;
       min-height:250px;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .feature-card.visual.active .feature-frame{
+      min-height:278px;
+    }
+
+    .feature-card.visual:not(.active) h3,
+    .feature-card.visual:not(.active) p{
+      opacity:.72;
     }
 
     .frame-top{
@@ -887,7 +908,8 @@
     }
 
     .feature-detail-shell{
-      margin-top:28px;
+      position:sticky;
+      top:96px;
       padding:24px;
       border-radius:28px;
       background:linear-gradient(135deg, #fff7f0, #fffdfb);
@@ -1422,6 +1444,7 @@
     }
 
     @media (max-width: 1024px){
+      .feature-showcase,
       .hero-grid,
       .problem-grid,
       .feature-grid,
@@ -1430,6 +1453,10 @@
       .summary,
       .detail-panel{
         grid-template-columns:1fr 1fr;
+      }
+
+      .feature-detail-shell{
+        position:static;
       }
     }
 
@@ -1443,6 +1470,7 @@
 
       .nav-menu{gap:14px}
 
+      .feature-showcase,
       .hero-grid,
       .problem-grid,
       .feature-grid,
@@ -1476,6 +1504,12 @@
         padding:9px 12px 9px 13px;
       }
       .hero-grid{padding-top:52px}
+
+      .feature-card.visual{
+        transform:none;
+        opacity:1;
+        filter:none;
+      }
     }
   </style>
 </head>
@@ -1802,8 +1836,9 @@
         </p>
       </div>
 
-      <div class="feature-grid">
-        <div class="feature-card visual active" id="feature-live" data-feature="live" tabindex="0">
+      <div class="feature-showcase">
+        <div class="feature-grid">
+          <div class="feature-card visual active" id="feature-live" data-feature="live" tabindex="0">
           <div class="feature-frame">
             <div class="frame-top">
               <div class="frame-title">실시간 정보 게시판</div>
@@ -1818,7 +1853,7 @@
           <h3>실시간 정보 게시판</h3>
           <p>지연, 사고, 혼잡 같은 현장 상황을 같은 노선 이용자들이 빠르게 공유합니다.</p>
         </div>
-        <div class="feature-card visual" id="feature-seat" data-feature="seat" tabindex="0">
+          <div class="feature-card visual" id="feature-seat" data-feature="seat" tabindex="0">
           <div class="feature-frame">
             <div class="frame-top">
               <div class="frame-title">자리 · 혼잡도 가이드</div>
@@ -1834,7 +1869,7 @@
           <h3>자리 · 혼잡도 공유</h3>
           <p>어느 칸이 덜 붐비는지, 어디가 앉기 유리한지 이용자 경험 기반으로 공유합니다.</p>
         </div>
-        <div class="feature-card visual" id="feature-complaint" data-feature="complaint" tabindex="0">
+          <div class="feature-card visual" id="feature-complaint" data-feature="complaint" tabindex="0">
           <div class="feature-frame">
             <div class="frame-top">
               <div class="frame-title">민원 투표와 개선</div>
@@ -1852,7 +1887,7 @@
           <h3>민원 투표와 개선</h3>
           <p>온도, 소리, 냄새 같은 칸별 불편 요소를 투표형으로 모아 빠르게 드러냅니다.</p>
         </div>
-        <div class="feature-card visual" id="feature-community" data-feature="community" tabindex="0">
+          <div class="feature-card visual" id="feature-community" data-feature="community" tabindex="0">
           <div class="feature-frame">
             <div class="frame-top">
               <div class="frame-title">노선 기반 커뮤니티</div>
@@ -1867,7 +1902,7 @@
           <h3>노선 기반 커뮤니티</h3>
           <p>자유 게시판, 스터디 게시판, 건의 게시판으로 사용자 간 연결과 체류 시간을 늘립니다.</p>
         </div>
-        <div class="feature-card visual" id="feature-routine" data-feature="routine" tabindex="0">
+          <div class="feature-card visual" id="feature-routine" data-feature="routine" tabindex="0">
           <div class="feature-frame">
             <div class="frame-top">
               <div class="frame-title">루틴 관리와 배지</div>
@@ -1883,7 +1918,7 @@
           <h3>루틴 관리와 배지</h3>
           <p>나의 출근 루트, 배지, 월간 리포트로 반복되는 이동을 성취 경험으로 바꿉니다.</p>
         </div>
-        <div class="feature-card visual" id="feature-data" data-feature="data" tabindex="0">
+          <div class="feature-card visual" id="feature-data" data-feature="data" tabindex="0">
           <div class="feature-frame">
             <div class="frame-top">
               <div class="frame-title">데이터가 쌓이는 구조</div>
@@ -1898,9 +1933,9 @@
           <h3>데이터가 쌓이는 서비스</h3>
           <p>이용자가 남긴 정보가 다시 다음 이용자의 편의로 돌아오는 구조를 만듭니다.</p>
         </div>
-      </div>
+        </div>
 
-      <div class="feature-detail-shell" id="feature-detail">
+        <div class="feature-detail-shell" id="feature-detail">
         <div class="detail-head">
           <h3 id="detailTitle">실시간 제보는 이렇게 동작합니다</h3>
           <p id="detailSummary">눌렀을 때 유저가 어떤 화면을 보고 어떤 행동을 하게 되는지 단계별로 보여줍니다.</p>
@@ -2064,6 +2099,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

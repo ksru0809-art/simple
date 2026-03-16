@@ -16,7 +16,6 @@
       --soft:#fff3e8;
       --shadow:0 12px 30px rgba(0,0,0,0.08);
       --radius:22px;
-      --convoy-width:1700px;
     }
 
     *{box-sizing:border-box}
@@ -157,6 +156,7 @@
       height:170px;
       opacity:.98;
       z-index:2;
+      overflow:hidden;
     }
 
     .track{
@@ -186,17 +186,24 @@
       );
     }
 
-    .train{
+    .convoy-loop{
       position:absolute;
       top:28px;
       left:0;
       display:flex;
-      align-items:center;
-      gap:14px;
-      animation:ride 32s linear infinite;
+      gap:0;
+      width:max-content;
+      animation:rideLoop 32s linear infinite;
       filter:drop-shadow(0 16px 24px rgba(161,84,13,.14));
       pointer-events:none;
       will-change:transform;
+    }
+
+    .train{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding-right:42px;
     }
 
     .car{
@@ -607,9 +614,9 @@
       font-size:14px;
     }
 
-    @keyframes ride{
-      from{transform:translateX(calc(-1 * var(--convoy-width)))}
-      to{transform:translateX(100vw)}
+    @keyframes rideLoop{
+      from{transform:translateX(0)}
+      to{transform:translateX(-50%)}
     }
 
     @media (max-width: 1024px){
@@ -624,10 +631,6 @@
     }
 
     @media (max-width: 760px){
-      :root{
-        --convoy-width:1360px;
-      }
-
       .nav-inner{
         height:auto;
         padding:14px 0;
@@ -653,10 +656,7 @@
       .train-scene{height:108px}
       .track.one{top:16px}
       .track.two{top:72px}
-      .train{
-        top:22px;
-        left:0;
-      }
+      .convoy-loop{top:22px}
       .car{width:86px;height:38px}
       .engine{width:100px}
       .feature-pill{
@@ -688,53 +688,104 @@
     <div class="train-scene" aria-hidden="true">
       <div class="track one"></div>
       <div class="track two"></div>
-      <div class="train">
-        <div class="car engine"><span class="engine-light"></span></div>
-        <div class="car"></div>
-        <div class="car"></div>
-        <div class="feature-pills">
-          <a class="feature-pill" href="#feature-live">
-            <div class="pill-dot"></div>
-            <div class="pill-copy">
-              <strong>실시간 제보</strong>
-              <span>현장 이슈 공유</span>
-            </div>
-          </a>
-          <a class="feature-pill" href="#feature-seat">
-            <div class="pill-dot"></div>
-            <div class="pill-copy">
-              <strong>혼잡도 공유</strong>
-              <span>칸별 체감 정보</span>
-            </div>
-          </a>
-          <a class="feature-pill" href="#feature-complaint">
-            <div class="pill-dot"></div>
-            <div class="pill-copy">
-              <strong>착석 확률</strong>
-              <span>앉기 좋은 칸 추천</span>
-            </div>
-          </a>
-          <a class="feature-pill" href="#feature-community">
-            <div class="pill-dot"></div>
-            <div class="pill-copy">
-              <strong>커뮤니티</strong>
-              <span>노선별 소통 공간</span>
-            </div>
-          </a>
-          <a class="feature-pill" href="#feature-routine">
-            <div class="pill-dot"></div>
-            <div class="pill-copy">
-              <strong>루틴 관리</strong>
-              <span>배지와 이동 리포트</span>
-            </div>
-          </a>
-          <a class="feature-pill" href="#feature-data">
-            <div class="pill-dot"></div>
-            <div class="pill-copy">
-              <strong>데이터 축적</strong>
-              <span>쌓일수록 정교해짐</span>
-            </div>
-          </a>
+      <div class="convoy-loop">
+        <div class="train">
+          <div class="car engine"><span class="engine-light"></span></div>
+          <div class="car"></div>
+          <div class="car"></div>
+          <div class="feature-pills">
+            <a class="feature-pill" href="#feature-live">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>실시간 제보</strong>
+                <span>현장 이슈 공유</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-seat">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>혼잡도 공유</strong>
+                <span>칸별 체감 정보</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-complaint">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>착석 확률</strong>
+                <span>앉기 좋은 칸 추천</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-community">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>커뮤니티</strong>
+                <span>노선별 소통 공간</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-routine">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>루틴 관리</strong>
+                <span>배지와 이동 리포트</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-data">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>데이터 축적</strong>
+                <span>쌓일수록 정교해짐</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="train">
+          <div class="car engine"><span class="engine-light"></span></div>
+          <div class="car"></div>
+          <div class="car"></div>
+          <div class="feature-pills">
+            <a class="feature-pill" href="#feature-live">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>실시간 제보</strong>
+                <span>현장 이슈 공유</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-seat">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>혼잡도 공유</strong>
+                <span>칸별 체감 정보</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-complaint">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>착석 확률</strong>
+                <span>앉기 좋은 칸 추천</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-community">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>커뮤니티</strong>
+                <span>노선별 소통 공간</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-routine">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>루틴 관리</strong>
+                <span>배지와 이동 리포트</span>
+              </div>
+            </a>
+            <a class="feature-pill" href="#feature-data">
+              <div class="pill-dot"></div>
+              <div class="pill-copy">
+                <strong>데이터 축적</strong>
+                <span>쌓일수록 정교해짐</span>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </div>

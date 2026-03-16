@@ -1,4 +1,330 @@
 <!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>~~~맵 랜딩페이지</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.14);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(34,197,94,0.16), transparent 25%),
+        linear-gradient(135deg, #0f172a, #111827 45%, #1e293b);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: rgba(15, 23, 42, 0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 0.95rem;
+    }
+
+    .hero {
+      padding: 88px 0 64px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.26);
+      border-radius: 999px;
+      color: #bae6fd;
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: 1.12;
+      margin: 0 0 18px;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 0 0 28px;
+      max-width: 640px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #60a5fa);
+      color: #082f49;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .map-preview {
+      position: relative;
+      min-height: 380px;
+      border-radius: 22px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(56,189,248,0.16), rgba(34,197,94,0.08)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.05) 0,
+          rgba(255,255,255,0.05) 1px,
+          transparent 1px,
+          transparent 56px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.05) 0,
+          rgba(255,255,255,0.05) 1px,
+          transparent 1px,
+          transparent 56px
+        );
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .route {
+      position: absolute;
+      inset: 0;
+    }
+
+    .pin {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 8px rgba(56,189,248,0.15);
+    }
+
+    .pin.one { top: 24%; left: 20%; }
+    .pin.two { top: 48%; left: 55%; background: #22c55e; box-shadow: 0 0 0 8px rgba(34,197,94,0.15); }
+    .pin.three { top: 70%; left: 76%; background: #f59e0b; box-shadow: 0 0 0 8px rgba(245,158,11,0.15); }
+
+    .line-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    section {
+      padding: 36px 0 64px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      margin: 0 0 26px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .feature h3 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .final-cta {
+      text-align: center;
+      padding: 42px 24px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(34,197,94,0.1));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    footer {
+      padding: 28px 0 44px;
+      color: #94a3b8;
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .features,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav .links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">~~~<span>맵</span></div>
+      <nav class="links">
+        <a href="#about">소개</a>
+        <a href="#features">기능</a>
+        <a href="#start">시작하기</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge">새로운 지도 경험</div>
+          <h1>~~~맵으로<br />더 빠르고 똑똑하게 찾으세요</h1>
+          <p>
+            ~~~맵은 원하는 장소, 경로, 정보를 한눈에 보여주는 서비스입니다.
+            복잡한 검색 대신 직관적인 지도 경험으로 사용자가 더 빠르게 이동하고,
+            더 쉽게 발견할 수 있도록 돕습니다.
+          </p>
+          <div class="cta-group">
+            <a class="btn btn-primary" href="#start">지금 시작하기</a>
+            <a class="btn btn-secondary" href="#features">기능 보기</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="map-preview" aria-label="지도 미리보기">
+            <svg class="line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M20,24 C28,30 38,34 54,48 C64,56 69,62 76,70" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="7 5" />
+            </svg>
+            <div class="pin one"></div>
+            <div class="pin two"></div>
+            <div class="pin three"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="about">

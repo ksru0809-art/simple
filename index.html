@@ -16,6 +16,7 @@
       --soft:#fff3e8;
       --shadow:0 12px 30px rgba(0,0,0,0.08);
       --radius:22px;
+      --convoy-width:1700px;
     }
 
     *{box-sizing:border-box}
@@ -188,13 +189,14 @@
     .train{
       position:absolute;
       top:28px;
-      left:-760px;
+      left:0;
       display:flex;
       align-items:center;
       gap:14px;
       animation:ride 32s linear infinite;
       filter:drop-shadow(0 16px 24px rgba(161,84,13,.14));
       pointer-events:none;
+      will-change:transform;
     }
 
     .car{
@@ -606,8 +608,8 @@
     }
 
     @keyframes ride{
-      from{transform:translateX(0)}
-      to{transform:translateX(calc(100vw + 1500px))}
+      from{transform:translateX(calc(-1 * var(--convoy-width)))}
+      to{transform:translateX(100vw)}
     }
 
     @media (max-width: 1024px){
@@ -622,6 +624,10 @@
     }
 
     @media (max-width: 760px){
+      :root{
+        --convoy-width:1360px;
+      }
+
       .nav-inner{
         height:auto;
         padding:14px 0;
@@ -649,7 +655,7 @@
       .track.two{top:72px}
       .train{
         top:22px;
-        left:-1200px;
+        left:0;
       }
       .car{width:86px;height:38px}
       .engine{width:100px}

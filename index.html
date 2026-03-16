@@ -6,14 +6,14 @@
   <title>~~~맵 랜딩페이지</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --card: rgba(255,255,255,0.08);
-      --line: rgba(255,255,255,0.14);
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-      --accent: #38bdf8;
+      --bg: #f8fafc;
+      --card: rgba(255,255,255,0.82);
+      --line: rgba(15,23,42,0.1);
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #0ea5e9;
       --accent-2: #22c55e;
-      --shadow: 0 20px 50px rgba(0,0,0,0.25);
+      --shadow: 0 20px 50px rgba(15,23,42,0.08);
     }
 
     * { box-sizing: border-box; }
@@ -23,9 +23,9 @@
       font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(34,197,94,0.16), transparent 25%),
-        linear-gradient(135deg, #0f172a, #111827 45%, #1e293b);
+        radial-gradient(circle at top left, rgba(14,165,233,0.16), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(34,197,94,0.12), transparent 26%),
+        linear-gradient(135deg, #f8fafc, #eef6ff 45%, #f6fdf9);
       line-height: 1.6;
     }
 
@@ -39,8 +39,8 @@
       top: 0;
       z-index: 10;
       backdrop-filter: blur(14px);
-      background: rgba(15, 23, 42, 0.55);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(248, 250, 252, 0.78);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
     }
 
     .nav {
@@ -79,10 +79,10 @@
     .badge {
       display: inline-block;
       padding: 8px 14px;
-      background: rgba(56,189,248,0.12);
-      border: 1px solid rgba(56,189,248,0.26);
+      background: rgba(14,165,233,0.1);
+      border: 1px solid rgba(14,165,233,0.18);
       border-radius: 999px;
-      color: #bae6fd;
+      color: #0369a1;
       font-size: 0.9rem;
       margin-bottom: 18px;
     }
@@ -125,11 +125,11 @@
 
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), #60a5fa);
-      color: #082f49;
+      color: #ffffff;
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.65);
       color: var(--text);
       border: 1px solid var(--line);
     }
@@ -148,22 +148,22 @@
       border-radius: 22px;
       overflow: hidden;
       background:
-        linear-gradient(135deg, rgba(56,189,248,0.16), rgba(34,197,94,0.08)),
+        linear-gradient(135deg, rgba(14,165,233,0.12), rgba(34,197,94,0.08)),
         repeating-linear-gradient(
           90deg,
-          rgba(255,255,255,0.05) 0,
-          rgba(255,255,255,0.05) 1px,
+          rgba(15,23,42,0.05) 0,
+          rgba(15,23,42,0.05) 1px,
           transparent 1px,
           transparent 56px
         ),
         repeating-linear-gradient(
           0deg,
-          rgba(255,255,255,0.05) 0,
-          rgba(255,255,255,0.05) 1px,
+          rgba(15,23,42,0.05) 0,
+          rgba(15,23,42,0.05) 1px,
           transparent 1px,
           transparent 56px
         );
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(15,23,42,0.08);
     }
 
     .route {
@@ -241,7 +241,7 @@
     .stat {
       padding: 22px;
       border-radius: 22px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.7);
       border: 1px solid var(--line);
       text-align: center;
     }
@@ -255,7 +255,7 @@
     .final-cta {
       text-align: center;
       padding: 42px 24px;
-      background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(34,197,94,0.1));
+      background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(34,197,94,0.1));
       border: 1px solid var(--line);
       border-radius: 28px;
       box-shadow: var(--shadow);
@@ -263,7 +263,7 @@
 
     footer {
       padding: 28px 0 44px;
-      color: #94a3b8;
+      color: #64748b;
       text-align: center;
       font-size: 0.92rem;
     }

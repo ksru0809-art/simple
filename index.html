@@ -14,8 +14,7 @@
       --card:#ffffff;
       --line:#ececec;
       --soft:#fff3e8;
-      --soft2:#fff8f2;
-      --shadow:0 10px 30px rgba(0,0,0,0.08);
+      --shadow:0 12px 30px rgba(0,0,0,0.08);
       --radius:22px;
     }
 
@@ -24,7 +23,9 @@
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
-      background:var(--bg);
+      background:
+        radial-gradient(circle at top right, rgba(255,122,0,.10), transparent 22%),
+        linear-gradient(180deg, #fffaf6 0%, #f8f8f8 100%);
       color:var(--text);
       line-height:1.6;
     }
@@ -44,18 +45,18 @@
       padding:14px 22px;
       border-radius:999px;
       font-weight:700;
-      transition:.2s ease;
-      cursor:pointer;
       border:none;
+      transition:.2s ease;
     }
+
+    .btn:hover{transform:translateY(-1px)}
 
     .btn-primary{
       background:var(--primary);
       color:#fff;
-      box-shadow:0 8px 24px rgba(255,122,0,.25);
+      box-shadow:0 10px 24px rgba(255,122,0,.24);
     }
 
-    .btn-primary:hover{background:var(--primary-dark); transform:translateY(-1px);}
     .btn-ghost{
       background:#fff;
       color:var(--text);
@@ -74,22 +75,24 @@
     }
 
     .section{
-      padding:90px 0;
+      padding:84px 0;
     }
 
     .section-head{
       text-align:center;
-      margin-bottom:48px;
+      margin-bottom:40px;
     }
 
     .section-head h2{
       margin:12px 0 10px;
-      font-size:clamp(28px, 4vw, 44px);
+      font-size:clamp(30px, 4vw, 44px);
       line-height:1.2;
+      letter-spacing:-0.03em;
     }
 
     .section-head p{
-      margin:0;
+      margin:0 auto;
+      max-width:720px;
       color:var(--sub);
       font-size:17px;
     }
@@ -99,7 +102,7 @@
       top:0;
       z-index:30;
       backdrop-filter: blur(14px);
-      background:rgba(248,248,248,0.82);
+      background:rgba(248,248,248,0.84);
       border-bottom:1px solid rgba(0,0,0,0.05);
     }
 
@@ -125,10 +128,6 @@
       height:42px;
       border-radius:14px;
       background:linear-gradient(135deg,#ff8f2b,#ff6b00);
-      display:grid;
-      place-items:center;
-      color:#fff;
-      font-size:22px;
       box-shadow:0 8px 24px rgba(255,122,0,.22);
     }
 
@@ -141,34 +140,119 @@
       justify-content:flex-end;
     }
 
-    .nav-menu a:hover{
-      color:var(--primary-dark);
-    }
+    .nav-menu a:hover{color:var(--primary-dark)}
 
     .hero{
-      padding:70px 0 40px;
+      position:relative;
+      padding:56px 0 32px;
       overflow:hidden;
+    }
+
+    .train-scene{
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:120px;
+      pointer-events:none;
+      opacity:.98;
+    }
+
+    .track{
+      position:absolute;
+      left:-5%;
+      width:110%;
+      height:6px;
+      border-radius:999px;
+      background:rgba(255,122,0,.18);
+    }
+
+    .track.one{top:24px;transform:rotate(-1deg)}
+    .track.two{top:82px;transform:rotate(.7deg);background:rgba(255,122,0,.10)}
+
+    .train{
+      position:absolute;
+      top:30px;
+      left:-420px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      animation:ride 16s linear infinite;
+    }
+
+    .car{
+      width:84px;
+      height:36px;
+      border-radius:14px;
+      background:#fff;
+      position:relative;
+      box-shadow:0 10px 24px rgba(0,0,0,.10);
+    }
+
+    .car::before{
+      content:"";
+      position:absolute;
+      left:12px;
+      right:12px;
+      top:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,122,0,.30);
+    }
+
+    .car::after{
+      content:"";
+      position:absolute;
+      left:16px;
+      bottom:-7px;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#8b4b17;
+      box-shadow:38px 0 0 #8b4b17;
+    }
+
+    .engine{width:100px;background:#fff7f0}
+
+    .feature-pills{
+      display:flex;
+      gap:10px;
+      margin-left:6px;
+    }
+
+    .feature-pill{
+      min-width:142px;
+      padding:10px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.88);
+      border:1px solid #ffd9bd;
+      box-shadow:var(--shadow);
+      color:#7a4317;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
     }
 
     .hero-grid{
       display:grid;
-      grid-template-columns:1.1fr .9fr;
+      grid-template-columns:1.05fr .95fr;
       gap:40px;
       align-items:center;
+      padding-top:68px;
     }
 
     .hero h1{
       margin:18px 0 18px;
       font-size:clamp(38px, 5vw, 68px);
-      line-height:1.08;
-      letter-spacing:-0.03em;
+      line-height:1.06;
+      letter-spacing:-0.04em;
     }
 
     .hero p{
       color:var(--sub);
       font-size:18px;
-      margin:0 0 28px;
-      max-width:640px;
+      margin:0 0 24px;
+      max-width:620px;
     }
 
     .hero-actions{
@@ -182,15 +266,23 @@
       display:grid;
       grid-template-columns:repeat(3, 1fr);
       gap:14px;
-      margin-top:28px;
+    }
+
+    .point,
+    .problem-card,
+    .feature-card,
+    .value-card,
+    .road-card,
+    .faq-card,
+    .summary-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
     }
 
     .point{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:20px;
       padding:18px;
-      box-shadow:var(--shadow);
     }
 
     .point strong{
@@ -216,7 +308,7 @@
       width:320px;
       height:320px;
       border-radius:50%;
-      background:radial-gradient(circle, rgba(255,122,0,.22), transparent 70%);
+      background:radial-gradient(circle, rgba(255,122,0,.18), transparent 70%);
       filter:blur(5px);
       top:50%;
       left:50%;
@@ -228,15 +320,15 @@
       background:#111;
       border-radius:42px;
       padding:14px;
-      box-shadow:0 30px 60px rgba(0,0,0,.18);
+      box-shadow:0 30px 60px rgba(0,0,0,.16);
       position:relative;
     }
 
     .screen{
-      background:linear-gradient(180deg, #fff8f2 0%, #fff 18%, #fafafa 100%);
+      background:linear-gradient(180deg, #fff8f2 0%, #fff 22%, #fafafa 100%);
       border-radius:30px;
       padding:18px;
-      min-height:690px;
+      min-height:620px;
       overflow:hidden;
       position:relative;
     }
@@ -269,15 +361,8 @@
       box-shadow:0 8px 18px rgba(0,0,0,0.04);
     }
 
-    .ui-card h4{
-      margin:0 0 8px;
-      font-size:16px;
-    }
-
-    .muted{
-      color:var(--sub);
-      font-size:13px;
-    }
+    .ui-card h4{margin:0 0 8px;font-size:16px}
+    .muted{color:var(--sub);font-size:13px}
 
     .route-pill{
       display:inline-block;
@@ -291,12 +376,7 @@
       margin-bottom:6px;
     }
 
-    .badge-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
+    .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
 
     .badge{
       flex:1 1 120px;
@@ -311,30 +391,7 @@
       color:#8b4b17;
     }
 
-    .vote{
-      margin-top:10px;
-    }
-
-    .vote-bar{
-      width:100%;
-      height:12px;
-      background:#f2f2f2;
-      border-radius:999px;
-      overflow:hidden;
-      margin:8px 0;
-    }
-
-    .vote-fill{
-      width:70%;
-      height:100%;
-      background:linear-gradient(90deg,#4d8dff,#7ab2ff);
-    }
-
-    .board-list{
-      display:grid;
-      gap:10px;
-      margin-top:10px;
-    }
+    .board-list{display:grid;gap:10px;margin-top:10px}
 
     .board-item{
       background:#fff;
@@ -347,18 +404,26 @@
       align-items:center;
     }
 
-    .problem-grid{
+    .problem-grid,
+    .feature-grid,
+    .value-grid,
+    .roadmap{
       display:grid;
-      grid-template-columns:repeat(3, 1fr);
       gap:20px;
     }
 
-    .problem-card, .feature-card, .value-card, .road-card, .biz-card, .faq-card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:26px;
-      box-shadow:var(--shadow);
+    .problem-grid{grid-template-columns:repeat(3, 1fr)}
+    .feature-grid{grid-template-columns:repeat(3, 1fr)}
+    .value-grid{grid-template-columns:repeat(3, 1fr)}
+    .roadmap{grid-template-columns:repeat(3, 1fr)}
+
+    .problem-card,
+    .feature-card,
+    .value-card,
+    .road-card,
+    .faq-card,
+    .summary-card{
+      padding:24px;
     }
 
     .icon{
@@ -376,8 +441,8 @@
     .feature-card h3,
     .value-card h3,
     .road-card h3,
-    .biz-card h3,
-    .faq-card h3{
+    .faq-card h3,
+    .summary-card h3{
       margin:0 0 10px;
       font-size:22px;
     }
@@ -386,34 +451,16 @@
     .feature-card p,
     .value-card p,
     .road-card p,
-    .biz-card p,
-    .faq-card p{
+    .faq-card p,
+    .summary-card p{
       margin:0;
       color:var(--sub);
-    }
-
-    .feature-grid{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:20px;
     }
 
     .feature-card ul{
       margin:14px 0 0;
       padding-left:18px;
       color:var(--sub);
-    }
-
-    .value-grid{
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:18px;
-    }
-
-    .roadmap{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:22px;
     }
 
     .road-step{
@@ -427,9 +474,9 @@
       margin-bottom:14px;
     }
 
-    .biz-grid{
+    .summary{
       display:grid;
-      grid-template-columns:repeat(3, 1fr);
+      grid-template-columns:1.2fr .8fr;
       gap:20px;
     }
 
@@ -460,13 +507,18 @@
       font-size:14px;
     }
 
+    @keyframes ride{
+      from{transform:translateX(0)}
+      to{transform:translateX(calc(100vw + 620px))}
+    }
+
     @media (max-width: 1024px){
       .hero-grid,
       .problem-grid,
       .feature-grid,
       .value-grid,
       .roadmap,
-      .biz-grid{
+      .summary{
         grid-template-columns:1fr 1fr;
       }
     }
@@ -479,27 +531,36 @@
         flex-direction:column;
       }
 
-      .nav-menu{
-        gap:14px;
-      }
+      .nav-menu{gap:14px}
 
       .hero-grid,
       .problem-grid,
       .feature-grid,
       .value-grid,
       .roadmap,
-      .biz-grid,
+      .summary,
       .hero-points{
         grid-template-columns:1fr;
       }
 
-      .hero{
-        padding-top:40px;
-      }
+      .hero{padding-top:34px}
+      .screen{min-height:auto}
 
-      .screen{
-        min-height:auto;
+      .train-scene{height:92px}
+      .track.one{top:16px}
+      .track.two{top:62px}
+      .train{
+        top:22px;
+        left:-580px;
       }
+      .car{width:68px;height:30px}
+      .engine{width:82px}
+      .feature-pill{
+        min-width:118px;
+        font-size:12px;
+        padding:9px 12px;
+      }
+      .hero-grid{padding-top:52px}
     }
   </style>
 </head>
@@ -514,14 +575,28 @@
       <div class="nav-menu">
         <a href="#problem">문제</a>
         <a href="#solution">기능</a>
-        <a href="#value">핵심가치</a>
-        <a href="#roadmap">확장전략</a>
-        <a href="#business">비즈니스</a>
+        <a href="#value">핵심 가치</a>
+        <a href="#roadmap">확장 전략</a>
       </div>
     </div>
   </nav>
 
   <section class="hero">
+    <div class="train-scene" aria-hidden="true">
+      <div class="track one"></div>
+      <div class="track two"></div>
+      <div class="train">
+        <div class="car engine"></div>
+        <div class="car"></div>
+        <div class="car"></div>
+        <div class="feature-pills">
+          <div class="feature-pill">실시간 제보</div>
+          <div class="feature-pill">혼잡도 공유</div>
+          <div class="feature-pill">착석 확률</div>
+        </div>
+      </div>
+    </div>
+
     <div class="wrap hero-grid">
       <div>
         <span class="tag">지하철 실시간 커뮤니티 서비스</span>
@@ -588,32 +663,17 @@
               </div>
             </div>
 
-            <div class="ui-card">
-              <h4>3월 지하철 이용 리포트</h4>
-              <div class="muted">지하철에서 보낸 시간 40시간 · 지나온 역 150개</div>
-            </div>
-
             <div class="mini-title">지금 2호선에서는?</div>
             <div class="board-list">
               <div class="board-item"><span>정보 게시판</span><span>→</span></div>
               <div class="board-item"><span>자리나눔 게시판</span><span>→</span></div>
-              <div class="board-item"><span>스터디 게시판</span><span>→</span></div>
               <div class="board-item"><span>자유 게시판</span><span>→</span></div>
-              <div class="board-item"><span>건의 게시판</span><span>→</span></div>
             </div>
 
-            <div class="mini-title">민원 투표</div>
-            <div class="ui-card">
-              <h4>오늘 우리 칸의 컨디션은?</h4>
+            <div class="ui-card" style="margin-top:14px;">
+              <h4>민원 투표</h4>
               <div class="muted">2호선 · 3-2칸 / 온도 · 소리 · 냄새</div>
-              <div class="vote">
-                <div class="muted">투표 현황: 춥다 70% / 덥다 30%</div>
-                <div class="vote-bar">
-                  <div class="vote-fill"></div>
-                </div>
-              </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -626,8 +686,8 @@
         <span class="tag">Problem</span>
         <h2>지하철 내부 상황을 바로 알 수 있는 채널이 없습니다</h2>
         <p>
-          이용객은 늘어나고 있지만, 실제로 열차 안에서 벌어지는 불편과 돌발 상황은
-          같은 열차를 탄 사람들끼리도 즉시 확인하기 어렵습니다.
+          열차 안에서만 체감되는 불편과 돌발 상황은 공식 앱만으로는 파악하기 어렵습니다.
+          같은 열차를 탄 사람끼리 빠르게 공유할 수 있는 구조가 필요합니다.
         </p>
       </div>
 
@@ -635,28 +695,17 @@
         <div class="problem-card">
           <div class="icon">⏱️</div>
           <h3>지연과 돌발 상황</h3>
-          <p>
-            열차가 갑자기 멈췄을 때 왜 멈췄는지,
-            언제 다시 출발하는지, 현재 어떤 상황인지 파악하기 어렵습니다.
-          </p>
+          <p>왜 멈췄는지, 언제 다시 움직이는지 같은 핵심 정보가 늦게 전달됩니다.</p>
         </div>
-
         <div class="problem-card">
-          <div class="icon"></div>
-          <h3>내부 불편 공유 부재</h3>
-          <p>
-            취객, 소음, 냄새, 바닥 오염, 냉난방 문제처럼
-            열차 내부에서만 체감되는 불편은 공식 앱에서 잘 보이지 않습니다.
-          </p>
+          <div class="icon">🚇</div>
+          <h3>칸 내부 불편</h3>
+          <p>혼잡, 소음, 냄새, 냉난방 문제처럼 현장 체감 정보는 별도로 공유되지 않습니다.</p>
         </div>
-
         <div class="problem-card">
-          <div class="icon"></div>
-          <h3>실시간 공감·확인 니즈</h3>
-          <p>
-            이용자들은 나만 당황한 게 아닌지, 다른 승객은 어떻게 반응하는지,
-            원인이 무엇인지 실시간으로 알고 싶어합니다.
-          </p>
+          <div class="icon">💬</div>
+          <h3>실시간 공감과 확인</h3>
+          <p>나만 겪는 문제인지, 다른 승객도 같은 상황인지 즉시 알고 싶어하는 수요가 큽니다.</p>
         </div>
       </div>
     </div>
@@ -666,137 +715,72 @@
     <div class="wrap">
       <div class="section-head">
         <span class="tag">Solution</span>
-        <h2>승객이 직접 만드는 실시간 지하철 커뮤니티</h2>
+        <h2>핵심 기능만 남겨 간결하게 정리했습니다</h2>
         <p>
-          이칸저칸은 정보 공유, 자리 정보, 커뮤니티, 민원 투표,
-          루틴형 가이드까지 담은 지하철 특화 서비스입니다.
+          발표용 설명과 제품 소개를 동시에 잡기 위해 기능은 많아 보이되,
+          읽는 흐름은 무겁지 않도록 핵심 묶음만 남겼습니다.
         </p>
       </div>
 
       <div class="feature-grid">
         <div class="feature-card">
-          <div class="icon"></div>
-          <h3>정보 게시판</h3>
-          <p>
-            지연, 사고, 시위, 혼잡 등 같은 노선 이용자들이
-            실시간 현장 상황을 빠르게 공유합니다.
-          </p>
+          <div class="icon">📢</div>
+          <h3>실시간 정보 게시판</h3>
+          <p>지연, 사고, 혼잡 같은 현장 상황을 같은 노선 이용자들이 빠르게 공유합니다.</p>
           <ul>
             <li>노선별 현황 확인</li>
             <li>같은 열차 승객 제보</li>
             <li>실시간 체감 정보 축적</li>
           </ul>
         </div>
-
         <div class="feature-card">
-          <div class="icon"></div>
-          <h3>자리나눔 게시판</h3>
-          <p>
-            어디 칸이 덜 붐비는지, 어느 위치에서 앉기 유리한지
-            이용자 경험 기반으로 공유합니다.
-          </p>
+          <div class="icon">💺</div>
+          <h3>자리 · 혼잡도 공유</h3>
+          <p>어느 칸이 덜 붐비는지, 어디가 앉기 유리한지 이용자 경험 기반으로 공유합니다.</p>
           <ul>
             <li>칸별 체감 혼잡도</li>
             <li>자리 정보 공유</li>
-            <li>장시간 이용자 편의 강화</li>
+            <li>착석 확률 가이드</li>
           </ul>
         </div>
-
         <div class="feature-card">
-          <div class="icon"></div>
-          <h3>스터디 게시판</h3>
-          <p>
-            같은 노선을 자주 타는 이용자끼리
-            스터디, 정보 교류, 가벼운 연결이 가능합니다.
-          </p>
-          <ul>
-            <li>통학 이용자 타깃</li>
-            <li>노선 기반 네트워킹</li>
-            <li>커뮤니티 체류시간 확대</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="icon"></div>
-          <h3>자유 게시판</h3>
-          <p>
-            지하철 빌런, 노선별 분위기, 환승 팁,
-            공감형 이야기까지 자유롭게 나눌 수 있습니다.
-          </p>
-          <ul>
-            <li>공감형 콘텐츠 확산</li>
-            <li>자발적 참여 유도</li>
-            <li>SNS 바이럴 소재 확보</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="icon"></div>
-          <h3>건의 게시판</h3>
-          <p>
-            이용자들이 필요한 게시판이나 기능을 제안하고
-            서비스 방향에 직접 참여할 수 있습니다.
-          </p>
-          <ul>
-            <li>유저 참여형 개선 구조</li>
-            <li>커뮤니티 니즈 반영</li>
-            <li>기능 우선순위 수집</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="icon"></div>
-          <h3>민원 투표 탭</h3>
-          <p>
-            온도, 소리, 냄새 등 칸별 불편 요소를 투표형으로 수집해
-            실시간 민원 모니터링 구조를 만듭니다.
-          </p>
+          <div class="icon">🗳️</div>
+          <h3>민원 투표와 개선</h3>
+          <p>온도, 소리, 냄새 같은 칸별 불편 요소를 투표형으로 모아 빠르게 드러냅니다.</p>
           <ul>
             <li>지하철 / 칸 선택</li>
             <li>민원 유형별 투표</li>
-            <li>조치 여부 확인 가능</li>
+            <li>불편 데이터 축적</li>
           </ul>
         </div>
-
         <div class="feature-card">
-          <div class="icon"></div>
-          <h3>착석 확률 가이드</h3>
-          <p>
-            빠른 환승 중심이 아닌,
-            실제로 앉기 유리한 칸을 추천하는 차별 기능입니다.
-          </p>
+          <div class="icon">👥</div>
+          <h3>노선 기반 커뮤니티</h3>
+          <p>자유 게시판, 스터디 게시판, 건의 게시판으로 사용자 간 연결과 체류 시간을 늘립니다.</p>
           <ul>
-            <li>내릴 역 이전 역 기준 추천</li>
-            <li>루틴 정보 기반 고도화</li>
-            <li>향후 칸별 데이터 정교화</li>
+            <li>공감형 콘텐츠 확산</li>
+            <li>통학 · 통근 루틴 연결</li>
+            <li>유저 참여형 개선</li>
           </ul>
         </div>
-
         <div class="feature-card">
-          <div class="icon"></div>
-          <h3>지하철 이용 리포트</h3>
-          <p>
-            지하철에서 보낸 시간과 이동 기록을 시각화해
-            반복되는 이동을 하나의 성취 경험으로 전환합니다.
-          </p>
+          <div class="icon">🏅</div>
+          <h3>루틴 관리와 배지</h3>
+          <p>나의 출근 루트, 배지, 월간 리포트로 반복되는 이동을 성취 경험으로 바꿉니다.</p>
           <ul>
-            <li>월간 이용 시간 확인</li>
-            <li>지나온 역 수 집계</li>
-            <li>루틴 관리 동기 부여</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="icon"></div>
-          <h3>배지와 루틴 관리</h3>
-          <p>
-            2호선 마스터, 환승왕 같은 배지 요소와 함께
-            나의 출근 루트를 저장하고 관리할 수 있습니다.
-          </p>
-          <ul>
-            <li>정서적 유대감 형성</li>
-            <li>반복 이용 습관화</li>
+            <li>출근 루트 저장</li>
+            <li>배지와 리포트</li>
             <li>재방문 유도 요소</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📈</div>
+          <h3>데이터가 쌓이는 서비스</h3>
+          <p>이용자가 남긴 정보가 다시 다음 이용자의 편의로 돌아오는 구조를 만듭니다.</p>
+          <ul>
+            <li>루틴 정보 고도화</li>
+            <li>현장 데이터 정교화</li>
+            <li>시간이 갈수록 효용 증가</li>
           </ul>
         </div>
       </div>
@@ -807,75 +791,25 @@
     <div class="wrap">
       <div class="section-head">
         <span class="tag">Core Value</span>
-        <h2>이칸저칸이 주는 핵심 가치</h2>
-        <p>
-          단순 커뮤니티도 아니고, 단순 교통 앱도 아닙니다.
-          실시간 정보와 사용자 참여가 만나는 지하철 특화 플랫폼입니다.
-        </p>
+        <h2>이칸저칸의 강점은 단순합니다</h2>
+        <p>커뮤니티만 있는 것도, 교통 정보만 있는 것도 아니라 둘을 실용적으로 결합했다는 점입니다.</p>
       </div>
 
       <div class="value-grid">
         <div class="value-card">
           <div class="icon">⚡</div>
-          <h3>실시간 정보 공유</h3>
+          <h3>빠른 현장성</h3>
           <p>같은 노선을 타는 이용자끼리 가장 빠른 현장 소식을 주고받습니다.</p>
         </div>
         <div class="value-card">
-          <div class="icon"></div>
-          <h3>노선 기반 커뮤니티</h3>
-          <p>같은 루틴을 가진 통근·통학 이용자들 사이에 연결을 만듭니다.</p>
+          <div class="icon">🧭</div>
+          <h3>실질적 편의</h3>
+          <p>자리, 혼잡도, 루틴 정보처럼 실제 이동 판단에 필요한 정보를 모읍니다.</p>
         </div>
         <div class="value-card">
-          <div class="icon"></div>
-          <h3>자리·환승 팁 축적</h3>
-          <p>이용 경험이 데이터가 되고, 그 데이터가 다시 편의로 돌아옵니다.</p>
-        </div>
-        <div class="value-card">
-          <div class="icon"></div>
-          <h3>민원 기반 개선</h3>
-          <p>불편을 혼자 견디는 대신, 함께 드러내고 더 빠르게 해결할 수 있습니다.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="tag">Competitive Edge</span>
-        <h2>커뮤니티와 교통 정보를 동시에</h2>
-        <p>
-          기존 서비스는 커뮤니티만 있거나 교통 정보만 있었습니다.
-          이칸저칸은 두 영역을 결합해 데이터가 쌓일수록 더 강해집니다.
-        </p>
-      </div>
-
-      <div class="biz-grid">
-        <div class="biz-card">
-          <div class="icon"></div>
-          <h3>철도 커뮤니티의 장점</h3>
-          <p>
-            사용자들끼리 체감 정보를 빠르게 나누고 공감대를 형성하는 강점이 있습니다.
-            하지만 정확한 교통 정보 기능은 약합니다.
-          </p>
-        </div>
-
-        <div class="biz-card">
-          <div class="icon">️</div>
-          <h3>교통 앱의 장점</h3>
-          <p>
-            이동 경로와 환승 정보는 잘 제공하지만,
-            같은 열차 승객끼리 소통할 수 있는 구조는 제한적입니다.
-          </p>
-        </div>
-
-        <div class="biz-card">
-          <div class="icon"></div>
-          <h3>이칸저칸의 차별점</h3>
-          <p>
-            커뮤니티 + 교통 정보 + 민원 + 데이터 축적이 결합되어
-            시간이 지날수록 정확도와 효용이 함께 올라가는 구조입니다.
-          </p>
+          <div class="icon">🌱</div>
+          <h3>쌓일수록 강해짐</h3>
+          <p>사용자 경험이 데이터가 되고, 그 데이터가 다시 서비스 경쟁력이 됩니다.</p>
         </div>
       </div>
     </div>
@@ -885,81 +819,25 @@
     <div class="wrap">
       <div class="section-head">
         <span class="tag">Roadmap</span>
-        <h2>대학생에서 직장인, 그리고 모든 이용자로 확장</h2>
-        <p>
-          초기엔 루틴이 분명한 대학생을 중심으로 시작하고,
-          이후 직장인과 전 노선 이용자로 단계적으로 넓혀갑니다.
-        </p>
+        <h2>시장 확장 흐름도 간단하게 정리했습니다</h2>
+        <p>초기 타깃은 뚜렷하게, 확장 방향은 단계적으로 보이도록 압축했습니다.</p>
       </div>
 
       <div class="roadmap">
         <div class="road-card">
-          <div class="road-step">SOM · 초기 시장</div>
-          <h3>지하철로 통학하는 대학생</h3>
-          <p>
-            수도권 대학가 핵심 노선을 중심으로 커뮤니티를 정착시킵니다.
-            실시간 상황 캡처, 공감형 콘텐츠, 대학생 커뮤니티 바이럴이 핵심입니다.
-          </p>
+          <div class="road-step">SOM</div>
+          <h3>지하철 통학 대학생</h3>
+          <p>대학가 핵심 노선을 중심으로 공감형 콘텐츠와 실시간 제보 문화를 먼저 만듭니다.</p>
         </div>
-
         <div class="road-card">
-          <div class="road-step">SAM · 확장 시장</div>
-          <h3>지하철로 매일 통근하는 직장인</h3>
-          <p>
-            동적 환승 안내, 연착 대응, 착석 확률 고도화처럼
-            효율성과 예측 가능성을 높이는 방향으로 기능을 확장합니다.
-          </p>
+          <div class="road-step">SAM</div>
+          <h3>매일 통근하는 직장인</h3>
+          <p>연착 대응, 착석 확률, 루틴 정보 고도화로 효율 중심 기능을 강화합니다.</p>
         </div>
-
         <div class="road-card">
-          <div class="road-step">TAM · 전체 시장</div>
+          <div class="road-step">TAM</div>
           <h3>모든 지하철 이용자</h3>
-          <p>
-            배리어프리 안내, 엘리베이터 현황, SOS 구조까지 확장해
-            공익성과 실용성을 동시에 갖춘 도시 이동 인프라로 발전합니다.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="business" class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="tag">Business Model</span>
-        <h2>광고, 데이터, 제휴로 수익화</h2>
-        <p>
-          지역 기반 광고와 프리미엄 꾸미기, 공공데이터 활용,
-          교육 플랫폼 제휴까지 다층적인 수익 구조를 설계합니다.
-        </p>
-      </div>
-
-      <div class="biz-grid">
-        <div class="biz-card">
-          <div class="icon"></div>
-          <h3>앱 내 광고</h3>
-          <p>
-            주요 경로 기반으로 역 근처 맛집, 카페 등
-            상권 연계형 광고를 운영할 수 있습니다.
-          </p>
-        </div>
-
-        <div class="biz-card">
-          <div class="icon"></div>
-          <h3>커스텀 아이템</h3>
-          <p>
-            프로필, 배지, 꾸미기 요소를 유료화해
-            참여형 서비스의 재미를 수익으로 연결합니다.
-          </p>
-        </div>
-
-        <div class="biz-card">
-          <div class="icon">️</div>
-          <h3>데이터·제휴 수익</h3>
-          <p>
-            축적된 공공 데이터를 교통·연구기관에 제공하고,
-            시간 맞춤형 학습 구독과도 제휴할 수 있습니다.
-          </p>
+          <p>배리어프리 안내, 공공 협력, 데이터 연계까지 확장해 도시 이동 인프라로 발전합니다.</p>
         </div>
       </div>
     </div>
@@ -967,35 +845,17 @@
 
   <section class="section">
     <div class="wrap">
-      <div class="section-head">
-        <span class="tag">FAQ</span>
-        <h2>발표 때 자주 나올 질문</h2>
-        <p>랜딩페이지에서도 같이 보여주면 설득력이 올라가는 포인트들입니다.</p>
-      </div>
-
-      <div class="biz-grid">
-        <div class="faq-card">
-          <h3>정보 신뢰성은 어떻게 확보하나요?</h3>
+      <div class="summary">
+        <div class="summary-card">
+          <h3>한 줄로 정리하면</h3>
           <p>
-            다수 제보 중복 확인, 반응 수 기반 노출, 신고 기능, 노선별 누적 데이터로
-            허위 정보 확산을 줄이는 구조를 전제로 합니다.
+            이칸저칸은 지하철 안에서만 알 수 있는 현장 정보를 승객이 직접 공유하고,
+            그 데이터를 다시 편의 기능으로 돌려주는 실시간 커뮤니티 서비스입니다.
           </p>
         </div>
-
         <div class="faq-card">
-          <h3>초기 유저는 어떻게 모으나요?</h3>
-          <p>
-            대학가 핵심 노선 중심으로 시작해,
-            검색 유입과 공감형 SNS 콘텐츠, 커뮤니티 확산 전략을 활용합니다.
-          </p>
-        </div>
-
-        <div class="faq-card">
-          <h3>공식 기관과도 연결 가능한가요?</h3>
-          <p>
-            철도공사·교통카드 앱과의 협력 가능성을 열어두고,
-            초기에는 사용자 참여형 데이터 네트워크 구축에 집중합니다.
-          </p>
+          <h3>수익화 방향</h3>
+          <p>지역 광고, 꾸미기 요소, 데이터 제휴처럼 서비스 성격과 맞는 다층 구조를 가져갈 수 있습니다.</p>
         </div>
       </div>
     </div>
@@ -1004,14 +864,13 @@
   <section class="section">
     <div class="wrap">
       <div class="cta">
-        <span class="tag">Team 썹 타는 중 </span>
+        <span class="tag">Team 썹 타는 중</span>
         <h2>지하철 이용의 불편을<br>실시간 연결과 데이터로 바꾸다</h2>
         <p>
-          이칸저칸은 단순한 커뮤니티가 아니라,
-          승객이 직접 만드는 도시 이동 정보 인프라를 목표로 합니다.
+          너무 길지 않게, 하지만 제품의 방향은 분명하게 보이도록 다시 구성했습니다.
         </p>
         <div class="hero-actions" style="justify-content:center; margin-bottom:0;">
-          <a class="btn btn-primary" href="#solution">서비스 기능 다시 보기</a>
+          <a class="btn btn-primary" href="#solution">서비스 기능 보기</a>
           <a class="btn btn-ghost" href="#problem">문제 정의 보기</a>
         </div>
       </div>
@@ -1019,7 +878,7 @@
   </section>
 
   <footer>
-    디지털 하나로 9기 데이터분석 및 서비스기획 · Team 썹 타는 중 <br>
+    디지털 하나로 9기 데이터분석 및 서비스기획 · Team 썹 타는 중<br>
     이칸저칸 랜딩페이지 샘플
   </footer>
 

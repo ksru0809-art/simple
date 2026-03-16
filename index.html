@@ -411,7 +411,7 @@
     }
 
     .phone{
-      width:min(320px, 100%);
+      width:min(344px, 100%);
       background:#111;
       border-radius:36px;
       padding:12px;
@@ -422,7 +422,7 @@
     .screen{
       background:linear-gradient(180deg, #fff8f2 0%, #fff 22%, #fafafa 100%);
       border-radius:26px;
-      min-height:420px;
+      min-height:500px;
       overflow:hidden;
       position:relative;
     }
@@ -430,7 +430,7 @@
     .screen-viewport{
       position:relative;
       overflow:hidden;
-      height:420px;
+      height:500px;
       border-radius:26px;
     }
 
@@ -442,8 +442,14 @@
     }
 
     .screen-panel{
-      height:420px;
+      height:500px;
       padding:18px 18px 74px;
+      overflow:auto;
+      scrollbar-width:none;
+    }
+
+    .screen-panel::-webkit-scrollbar{
+      display:none;
     }
 
     .notch{
@@ -461,8 +467,8 @@
     .mini-title{
       color:var(--primary-dark);
       font-weight:900;
-      font-size:14px;
-      margin-top:16px;
+      font-size:13px;
+      margin-top:14px;
       margin-bottom:10px;
     }
 
@@ -475,8 +481,8 @@
       box-shadow:0 8px 18px rgba(0,0,0,0.04);
     }
 
-    .ui-card h4{margin:0 0 8px;font-size:16px}
-    .muted{color:var(--sub);font-size:13px}
+    .ui-card h4{margin:0 0 7px;font-size:15px;line-height:1.35}
+    .muted{color:var(--sub);font-size:12px;line-height:1.45}
 
     .route-pill{
       display:inline-block;
@@ -511,8 +517,9 @@
       background:#fff;
       border:1px solid var(--line);
       border-radius:16px;
-      padding:14px;
+      padding:13px;
       font-weight:700;
+      font-size:14px;
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -719,9 +726,9 @@
       }
 
       .hero{padding-top:34px}
-      .screen{min-height:390px}
+      .screen{min-height:430px}
       .screen-viewport,
-      .screen-panel{height:390px}
+      .screen-panel{height:430px}
 
       .train-scene{height:108px}
       .track.one{top:16px}

@@ -1221,6 +1221,56 @@
       max-width:700px;
     }
 
+    .cta-form{
+      max-width:720px;
+      margin:0 auto;
+    }
+
+    .cta-form-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .cta-input{
+      width:100%;
+      height:56px;
+      padding:0 18px;
+      border-radius:18px;
+      border:1px solid #ffd3b0;
+      background:#fff;
+      color:var(--text);
+      font-size:16px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    .cta-input:focus{
+      outline:none;
+      border-color:#ff9a3d;
+      box-shadow:0 0 0 4px rgba(255,122,0,.10);
+    }
+
+    .cta-submit{
+      min-width:168px;
+      height:56px;
+      border:none;
+      border-radius:18px;
+      background:linear-gradient(90deg, #ff8f2b, #ff6b00);
+      color:#fff;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 14px 24px rgba(255,122,0,.20);
+    }
+
+    .cta-note{
+      margin-top:12px;
+      color:#8a5b36;
+      font-size:12px;
+      font-weight:700;
+    }
+
     footer{
       padding:32px 0 50px;
       text-align:center;
@@ -1272,6 +1322,8 @@
       .screen{min-height:430px}
       .screen-viewport,
       .screen-panel{height:430px}
+      .cta-form-row{grid-template-columns:1fr}
+      .cta-submit{width:100%}
 
       .train-scene{height:108px}
       .track.one{top:16px}
@@ -1293,7 +1345,7 @@
     <div class="wrap nav-inner">
       <div class="brand">
         <div class="brand-icon"></div>
-        <span>이칸저칸</span>
+        <span>🚇 이칸저칸</span>
       </div>
       <div class="nav-menu">
         <a href="#problem">문제</a>
@@ -1957,14 +2009,17 @@
     <div class="wrap">
       <div class="cta">
         <span class="tag">Team 썹 타는 중</span>
-        <h2>지하철 이용의 불편을<br>실시간 연결과 데이터로 바꾸다</h2>
+        <h2>서비스 오픈 소식을<br>가장 먼저 받아보세요</h2>
         <p>
-          너무 길지 않게, 하지만 제품의 방향은 분명하게 보이도록 다시 구성했습니다.
+          사전예약 메일을 남겨주시면 베타 오픈 소식과 초기 참여 안내를 먼저 보내드립니다.
         </p>
-        <div class="hero-actions" style="justify-content:center; margin-bottom:0;">
-          <a class="btn btn-primary" href="#solution">서비스 기능 보기</a>
-          <a class="btn btn-ghost" href="#problem">문제 정의 보기</a>
-        </div>
+        <form class="cta-form">
+          <div class="cta-form-row">
+            <input class="cta-input" type="email" name="email" placeholder="이메일 주소를 입력하세요" />
+            <button class="cta-submit" type="submit">사전예약 신청</button>
+          </div>
+          <div class="cta-note">사전예약 신청 시 서비스 안내 메일 수신에 동의한 것으로 간주됩니다.</div>
+        </form>
       </div>
     </div>
   </section>

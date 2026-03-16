@@ -813,6 +813,163 @@
       color:var(--sub);
     }
 
+    .visual-card{
+      background:linear-gradient(180deg, #fffaf6 0%, #fff 100%);
+      border:1px solid #f3dfcf;
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:16px;
+      min-height:188px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .visual-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+      font-size:13px;
+      font-weight:900;
+      color:var(--primary-dark);
+    }
+
+    .visual-chip{
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff1e3;
+      border:1px solid #ffd7b7;
+      color:#9a5b24;
+      font-size:11px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .problem-track,
+    .issue-list,
+    .value-visual,
+    .road-visual{
+      display:grid;
+      gap:10px;
+    }
+
+    .problem-step{
+      display:grid;
+      grid-template-columns:54px 1fr;
+      gap:10px;
+      align-items:start;
+      padding:12px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .problem-time{
+      font-size:12px;
+      font-weight:900;
+      color:var(--primary-dark);
+    }
+
+    .problem-line{
+      font-size:13px;
+      font-weight:800;
+      color:#3e3128;
+    }
+
+    .problem-sub{
+      margin-top:3px;
+      color:var(--sub);
+      font-size:11px;
+      font-weight:600;
+    }
+
+    .issue-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+      font-size:13px;
+      font-weight:800;
+      color:#3e3128;
+    }
+
+    .issue-state{
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff4ea;
+      color:#9a5b24;
+      font-size:11px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .value-stat,
+    .road-node,
+    .summary-box{
+      padding:14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid #f0e6db;
+      box-shadow:0 6px 14px rgba(0,0,0,0.04);
+    }
+
+    .value-stat strong,
+    .summary-box strong{
+      display:block;
+      margin-bottom:5px;
+      font-size:13px;
+      color:var(--primary-dark);
+    }
+
+    .value-stat span,
+    .summary-box span{
+      display:block;
+      color:var(--sub);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .road-node{
+      position:relative;
+      padding-left:20px;
+      font-size:13px;
+      font-weight:800;
+      color:#3e3128;
+    }
+
+    .road-node::before{
+      content:"";
+      position:absolute;
+      left:12px;
+      top:16px;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:linear-gradient(180deg, #ff9a3d, #ff7a00);
+      box-shadow:0 0 0 5px rgba(255,122,0,.10);
+    }
+
+    .road-node span{
+      display:block;
+      margin-top:4px;
+      color:var(--sub);
+      font-size:11px;
+      font-weight:600;
+    }
+
+    .summary-visual{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
     .road-step{
       display:inline-block;
       padding:7px 12px;
@@ -889,6 +1046,9 @@
       .value-grid,
       .roadmap,
       .summary,
+      .summary-visual,
+      .seat-grid,
+      .stat-strip,
       .hero-points{
         grid-template-columns:1fr;
       }
@@ -1164,16 +1324,60 @@
         <div class="problem-card">
           <div class="icon">⏱️</div>
           <h3>지연과 돌발 상황</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>실시간 상황 흐름</span>
+              <span class="visual-chip">2호선</span>
+            </div>
+            <div class="problem-track">
+              <div class="problem-step">
+                <div class="problem-time">08:12</div>
+                <div>
+                  <div class="problem-line">열차 정차</div>
+                  <div class="problem-sub">이유를 모른 채 대기하는 상태</div>
+                </div>
+              </div>
+              <div class="problem-step">
+                <div class="problem-time">08:14</div>
+                <div>
+                  <div class="problem-line">짧은 안내 방송</div>
+                  <div class="problem-sub">정확한 원인과 재출발 시점 파악 어려움</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <p>왜 멈췄는지, 언제 다시 움직이는지 같은 핵심 정보가 늦게 전달됩니다.</p>
         </div>
         <div class="problem-card">
           <div class="icon">🚇</div>
           <h3>칸 내부 불편</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>같은 칸 이슈</span>
+              <span class="visual-chip">3-2칸</span>
+            </div>
+            <div class="issue-list">
+              <div class="issue-row"><span>냉방이 너무 강함</span><span class="issue-state">불편 다수</span></div>
+              <div class="issue-row"><span>출입문 쪽 소음</span><span class="issue-state">체감 큼</span></div>
+              <div class="issue-row"><span>바닥 오염 발생</span><span class="issue-state">빠른 공유 필요</span></div>
+            </div>
+          </div>
           <p>혼잡, 소음, 냄새, 냉난방 문제처럼 현장 체감 정보는 별도로 공유되지 않습니다.</p>
         </div>
         <div class="problem-card">
           <div class="icon">💬</div>
           <h3>실시간 공감과 확인</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>즉시 묻고 확인</span>
+              <span class="visual-chip">현장 대화</span>
+            </div>
+            <div class="community-bubbles">
+              <div class="bubble-item">지금 2호선 멈춘 이유 아는 분 있나요?</div>
+              <div class="bubble-item right">강남역 앞 신호 대기래요.</div>
+              <div class="bubble-item">4-2칸은 상대적으로 덜 붐빕니다.</div>
+            </div>
+          </div>
           <p>나만 겪는 문제인지, 다른 승객도 같은 상황인지 즉시 알고 싶어하는 수요가 큽니다.</p>
         </div>
       </div>
@@ -1303,16 +1507,48 @@
         <div class="value-card">
           <div class="icon">⚡</div>
           <h3>빠른 현장성</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>반응 속도</span>
+              <span class="visual-chip">LIVE</span>
+            </div>
+            <div class="value-visual">
+              <div class="value-stat"><strong>18명 반응</strong><span>같은 노선 승객이 즉시 확인</span></div>
+              <div class="value-stat"><strong>3분 내 공유</strong><span>지연과 혼잡 정보를 빠르게 확산</span></div>
+            </div>
+          </div>
           <p>같은 노선을 타는 이용자끼리 가장 빠른 현장 소식을 주고받습니다.</p>
         </div>
         <div class="value-card">
           <div class="icon">🧭</div>
           <h3>실질적 편의</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>이동 판단 지원</span>
+              <span class="visual-chip">Utility</span>
+            </div>
+            <div class="seat-grid">
+              <div class="seat-box"><strong>여유</strong><span>덜 붐비는 칸</span></div>
+              <div class="seat-box"><strong>착석</strong><span>앉기 쉬운 위치</span></div>
+              <div class="seat-box"><strong>루틴</strong><span>자주 타는 경로</span></div>
+            </div>
+          </div>
           <p>자리, 혼잡도, 루틴 정보처럼 실제 이동 판단에 필요한 정보를 모읍니다.</p>
         </div>
         <div class="value-card">
           <div class="icon">🌱</div>
           <h3>쌓일수록 강해짐</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>데이터 축적 구조</span>
+              <span class="visual-chip">Loop</span>
+            </div>
+            <div class="road-visual">
+              <div class="road-node">제보 수집<span>노선별 현장 경험이 쌓임</span></div>
+              <div class="road-node">패턴 분석<span>혼잡, 자리, 민원 흐름 정리</span></div>
+              <div class="road-node">추천 고도화<span>다음 이용자에게 편의로 환원</span></div>
+            </div>
+          </div>
           <p>사용자 경험이 데이터가 되고, 그 데이터가 다시 서비스 경쟁력이 됩니다.</p>
         </div>
       </div>
@@ -1331,16 +1567,46 @@
         <div class="road-card">
           <div class="road-step">SOM</div>
           <h3>지하철 통학 대학생</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>초기 진입 전략</span>
+              <span class="visual-chip">Campus</span>
+            </div>
+            <div class="road-visual">
+              <div class="road-node">대학가 핵심 노선<span>루틴이 뚜렷한 구간부터 시작</span></div>
+              <div class="road-node">실시간 제보 정착<span>공감형 콘텐츠로 초기 활성화</span></div>
+            </div>
+          </div>
           <p>대학가 핵심 노선을 중심으로 공감형 콘텐츠와 실시간 제보 문화를 먼저 만듭니다.</p>
         </div>
         <div class="road-card">
           <div class="road-step">SAM</div>
           <h3>매일 통근하는 직장인</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>확장 기능</span>
+              <span class="visual-chip">Office</span>
+            </div>
+            <div class="road-visual">
+              <div class="road-node">연착 대응 고도화<span>실시간 경로 판단 보조</span></div>
+              <div class="road-node">착석 확률 강화<span>반복 출근 데이터를 활용</span></div>
+            </div>
+          </div>
           <p>연착 대응, 착석 확률, 루틴 정보 고도화로 효율 중심 기능을 강화합니다.</p>
         </div>
         <div class="road-card">
           <div class="road-step">TAM</div>
           <h3>모든 지하철 이용자</h3>
+          <div class="visual-card">
+            <div class="visual-title">
+              <span>도시 인프라 확장</span>
+              <span class="visual-chip">Public</span>
+            </div>
+            <div class="road-visual">
+              <div class="road-node">배리어프리 안내<span>더 넓은 이용자 편의 제공</span></div>
+              <div class="road-node">공공 데이터 연계<span>도시 이동 정보 인프라로 발전</span></div>
+            </div>
+          </div>
           <p>배리어프리 안내, 공공 협력, 데이터 연계까지 확장해 도시 이동 인프라로 발전합니다.</p>
         </div>
       </div>
@@ -1356,10 +1622,22 @@
             이칸저칸은 지하철 안에서만 알 수 있는 현장 정보를 승객이 직접 공유하고,
             그 데이터를 다시 편의 기능으로 돌려주는 실시간 커뮤니티 서비스입니다.
           </p>
+          <div class="summary-visual">
+            <div class="summary-box"><strong>입력</strong><span>제보, 혼잡도, 민원 투표</span></div>
+            <div class="summary-box"><strong>처리</strong><span>같은 노선 반응과 데이터 축적</span></div>
+            <div class="summary-box"><strong>출력</strong><span>착석 가이드와 실시간 상황판</span></div>
+            <div class="summary-box"><strong>효과</strong><span>더 빠른 판단과 공감 형성</span></div>
+          </div>
         </div>
         <div class="faq-card">
           <h3>수익화 방향</h3>
           <p>지역 광고, 꾸미기 요소, 데이터 제휴처럼 서비스 성격과 맞는 다층 구조를 가져갈 수 있습니다.</p>
+          <div class="summary-visual">
+            <div class="summary-box"><strong>광고</strong><span>역세권 상권 연계</span></div>
+            <div class="summary-box"><strong>꾸미기</strong><span>배지와 프로필 아이템</span></div>
+            <div class="summary-box"><strong>데이터</strong><span>교통 연구·기관 제휴</span></div>
+            <div class="summary-box"><strong>구독</strong><span>루틴형 프리미엄 기능</span></div>
+          </div>
         </div>
       </div>
     </div>

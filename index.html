@@ -1,2523 +1,1294 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이칸저칸 | 지하철 실시간 커뮤니티 서비스</title>
-  <style>
-    :root{
-      --primary:#ff7a00;
-      --primary-dark:#e56600;
-      --bg:#f8f8f8;
-      --text:#222;
-      --sub:#666;
-      --card:#ffffff;
-      --line:#ececec;
-      --soft:#fff3e8;
-      --shadow:0 12px 30px rgba(0,0,0,0.08);
-      --radius:22px;
-    }
-
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(255,122,0,.10), transparent 22%),
-        linear-gradient(180deg, #fffaf6 0%, #f8f8f8 100%);
-      color:var(--text);
-      line-height:1.6;
-    }
-
-    body:not(.page-ready) .hero-copy,
-    body:not(.page-ready) .phone-area,
-    body:not(.page-ready) .hero-points .point,
-    body:not(.page-ready) .feature-card.visual{
-      opacity:0;
-      transform:translateY(26px);
-    }
-
-    body.page-ready .hero-copy{
-      animation:riseIn .7s cubic-bezier(.22,1,.36,1) both;
-    }
-
-    body.page-ready .phone-area{
-      animation:riseIn .8s cubic-bezier(.22,1,.36,1) .12s both;
-    }
-
-    body.page-ready .hero-points .point:nth-child(1){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .2s both;}
-    body.page-ready .hero-points .point:nth-child(2){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .3s both;}
-    body.page-ready .hero-points .point:nth-child(3){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .4s both;}
-    body.page-ready .feature-card.visual:nth-child(1){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .28s both;}
-    body.page-ready .feature-card.visual:nth-child(2){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .36s both;}
-    body.page-ready .feature-card.visual:nth-child(3){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .44s both;}
-    body.page-ready .feature-card.visual:nth-child(4){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .52s both;}
-    body.page-ready .feature-card.visual:nth-child(5){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .60s both;}
-    body.page-ready .feature-card.visual:nth-child(6){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .68s both;}
-
-    a{text-decoration:none;color:inherit}
-
-    .wrap{
-      width:min(1180px, calc(100% - 40px));
-      margin:0 auto;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:14px 22px;
-      border-radius:999px;
-      font-weight:700;
-      border:none;
-      transition:.2s ease;
-    }
-
-    .btn:hover{transform:translateY(-1px)}
-
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      box-shadow:0 10px 24px rgba(255,122,0,.24);
-    }
-
-    .btn-ghost{
-      background:#fff;
-      color:var(--text);
-      border:1px solid var(--line);
-    }
-
-    .tag{
-      display:inline-block;
-      padding:8px 14px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #ffd2ad;
-      color:var(--primary-dark);
-      font-weight:700;
-      font-size:14px;
-    }
-
-    .section{
-      padding:84px 0;
-      position:relative;
-    }
-
-    .section-frame{
-      position:relative;
-      padding:38px;
-      border-radius:34px;
-      background:
-        radial-gradient(circle at top right, rgba(255,122,0,.12), transparent 28%),
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,248,241,.88));
-      border:1px solid rgba(255,214,186,.85);
-      box-shadow:
-        0 24px 50px rgba(163,85,18,.08),
-        inset 0 1px 0 rgba(255,255,255,.85);
-      overflow:hidden;
-    }
-
-    .section-frame::before{
-      content:"";
-      position:absolute;
-      inset:auto -40px -60px auto;
-      width:200px;
-      height:200px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,122,0,.10), transparent 68%);
-      pointer-events:none;
-    }
-
-    .section-frame::after{
-      content:"";
-      position:absolute;
-      left:24px;
-      right:24px;
-      top:24px;
-      height:1px;
-      background:linear-gradient(90deg, rgba(255,122,0,.18), transparent 70%);
-      pointer-events:none;
-    }
-
-    .section-head{
-      text-align:center;
-      margin-bottom:40px;
-    }
-
-    .section-head h2{
-      margin:12px 0 10px;
-      font-size:clamp(30px, 4vw, 44px);
-      line-height:1.2;
-      letter-spacing:-0.03em;
-    }
-
-    .section-head p{
-      margin:0 auto;
-      max-width:720px;
-      color:var(--sub);
-      font-size:17px;
-    }
-
-    .nav{
-      position:sticky;
-      top:0;
-      z-index:30;
-      backdrop-filter: blur(14px);
-      background:rgba(248,248,248,0.84);
-      border-bottom:1px solid rgba(0,0,0,0.05);
-    }
-
-    .nav-inner{
-      height:72px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:900;
-      font-size:22px;
-      color:var(--primary-dark);
-    }
-
-    .brand-icon{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      background:linear-gradient(135deg,#ff8f2b,#ff6b00);
-      display:grid;
-      place-items:center;
-      color:#fff;
-      font-size:22px;
-      line-height:1;
-      box-shadow:0 8px 24px rgba(255,122,0,.22);
-    }
-
-    .nav-menu{
-      display:flex;
-      gap:22px;
-      color:#444;
-      font-size:15px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    .nav-menu a:hover{color:var(--primary-dark)}
-
-    .hero{
-      position:relative;
-      padding:56px 0 32px;
-      overflow:hidden;
-    }
-
-    .train-scene{
-      position:absolute;
-      left:0;
-      right:0;
-      top:-6px;
-      height:170px;
-      opacity:.98;
-      z-index:2;
-      overflow:hidden;
-    }
-
-    .track{
-      position:absolute;
-      left:-5%;
-      width:110%;
-      height:8px;
-      border-radius:999px;
-      background:linear-gradient(90deg, rgba(255,122,0,.12), rgba(255,122,0,.28), rgba(255,122,0,.12));
-      box-shadow:0 10px 24px rgba(255,122,0,.10);
-    }
-
-    .track.one{top:34px;transform:rotate(-.8deg)}
-    .track.two{top:112px;transform:rotate(.7deg);opacity:.55}
-
-    .track::after{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      top:17px;
-      height:2px;
-      background:repeating-linear-gradient(
-        90deg,
-        rgba(139,75,23,.18) 0 16px,
-        transparent 16px 36px
-      );
-    }
-
-    .convoy-loop{
-      position:absolute;
-      top:28px;
-      left:0;
-      display:flex;
-      gap:0;
-      width:max-content;
-      animation:rideLoop 32s linear infinite;
-      filter:drop-shadow(0 16px 24px rgba(161,84,13,.14));
-      pointer-events:none;
-      will-change:transform;
-    }
-
-    .train{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding-right:42px;
-    }
-
-    .car{
-      width:108px;
-      height:50px;
-      border-radius:18px 18px 13px 13px;
-      background:linear-gradient(180deg, #fffdfa 0%, #fff2e6 100%);
-      position:relative;
-      border:1px solid rgba(229,102,0,.10);
-      box-shadow:0 10px 24px rgba(0,0,0,.08);
-    }
-
-    .car::before{
-      content:"";
-      position:absolute;
-      left:12px;
-      right:12px;
-      top:12px;
-      height:15px;
-      border-radius:9px;
-      background:
-        linear-gradient(90deg,
-          rgba(255,122,0,.18) 0 18%,
-          rgba(255,255,255,.8) 18% 22%,
-          rgba(255,122,0,.18) 22% 48%,
-          rgba(255,255,255,.8) 48% 52%,
-          rgba(255,122,0,.18) 52% 78%,
-          rgba(255,255,255,.8) 78% 82%,
-          rgba(255,122,0,.18) 82% 100%
-        );
-    }
-
-    .car::after{
-      content:"";
-      position:absolute;
-      left:22px;
-      bottom:-8px;
-      width:11px;
-      height:11px;
-      border-radius:50%;
-      background:#8b4b17;
-      box-shadow:50px 0 0 #8b4b17;
-    }
-
-    .engine{
-      width:134px;
-      background:linear-gradient(180deg, #fff8f1 0%, #ffe7cf 100%);
-    }
-
-    .engine::before{
-      left:12px;
-      right:18px;
-    }
-
-    .engine::after{
-      box-shadow:48px 0 0 #8b4b17;
-    }
-
-    .engine-light{
-      position:absolute;
-      right:12px;
-      top:16px;
-      width:12px;
-      height:12px;
-      border-radius:50%;
-      background:#ffd166;
-      box-shadow:0 0 14px rgba(255,209,102,.95);
-    }
-
-    .feature-pills{
-      display:flex;
-      gap:14px;
-      margin-left:10px;
-      pointer-events:auto;
-    }
-
-    .feature-pill{
-      min-width:186px;
-      padding:13px 16px 13px 18px;
-      border-radius:20px;
-      background:rgba(255,255,255,.92);
-      border:1px solid #ffe1cb;
-      box-shadow:0 14px 26px rgba(181,97,23,.10);
-      color:#7a4317;
-      white-space:nowrap;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-    }
-
-    .feature-pill:hover{
-      transform:translateY(-2px);
-      border-color:#ffc89e;
-      box-shadow:0 18px 30px rgba(181,97,23,.16);
-    }
-
-    .feature-pill.active{
-      border-color:#ffb777;
-      background:#fff6ee;
-      box-shadow:0 18px 30px rgba(181,97,23,.18);
-      transform:translateY(-2px);
-    }
-
-    .pill-dot{
-      width:13px;
-      height:13px;
-      border-radius:50%;
-      background:linear-gradient(180deg, #ff9a3d, #ff7a00);
-      box-shadow:0 0 0 6px rgba(255,122,0,.08);
-      flex:0 0 auto;
-    }
-
-    .pill-copy{
-      display:flex;
-      flex-direction:column;
-      gap:1px;
-      line-height:1.1;
-    }
-
-    .pill-copy strong{
-      font-size:14px;
-      font-weight:800;
-      color:#5c3210;
-    }
-
-    .pill-copy span{
-      font-size:12px;
-      color:#9a6a43;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:40px;
-      align-items:center;
-      padding-top:68px;
-    }
-
-    .hero h1{
-      margin:18px 0 18px;
-      font-size:clamp(38px, 5vw, 68px);
-      line-height:1.06;
-      letter-spacing:-0.04em;
-    }
-
-    .hero p{
-      color:var(--sub);
-      font-size:18px;
-      margin:0 0 24px;
-      max-width:620px;
-    }
-
-    .hero-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:24px;
-    }
-
-    .hero-points{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:14px;
-    }
-
-    .point,
-    .problem-card,
-    .feature-card,
-    .value-card,
-    .road-card,
-    .faq-card,
-    .summary-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .point{
-      padding:18px;
-    }
-
-    .point strong{
-      display:block;
-      font-size:24px;
-      margin-bottom:4px;
-      color:var(--primary-dark);
-    }
-
-    .point span{
-      color:var(--sub);
-      font-size:14px;
-    }
-
-    .phone-area{
-      display:flex;
-      justify-content:center;
-      position:relative;
-    }
-
-    .glow{
-      position:absolute;
-      width:280px;
-      height:280px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,122,0,.18), transparent 70%);
-      filter:blur(5px);
-      top:50%;
-      left:50%;
-      transform:translate(-50%, -50%);
-    }
-
-    .phone{
-      width:min(344px, 100%);
-      background:#111;
-      border-radius:36px;
-      padding:12px;
-      box-shadow:0 24px 48px rgba(0,0,0,.16);
-      position:relative;
-    }
-
-    .screen{
-      background:linear-gradient(180deg, #fff8f2 0%, #fff 22%, #fafafa 100%);
-      border-radius:26px;
-      min-height:500px;
-      overflow:hidden;
-      position:relative;
-    }
-
-    .screen-viewport{
-      position:relative;
-      overflow:hidden;
-      height:500px;
-      border-radius:26px;
-    }
-
-    .screen-slider{
-      display:flex;
-      flex-direction:column;
-      transform:translateY(0);
-      transition:transform .45s ease;
-    }
-
-    .screen-panel{
-      height:500px;
-      padding:18px 18px 74px;
-      overflow:auto;
-      scrollbar-width:none;
-    }
-
-    .screen-panel::-webkit-scrollbar{
-      display:none;
-    }
-
-    .notch{
-      width:108px;
-      height:24px;
-      background:#111;
-      border-radius:0 0 18px 18px;
-      position:absolute;
-      top:0;
-      left:50%;
-      transform:translateX(-50%);
-      z-index:4;
-    }
-
-    .mini-title{
-      color:var(--primary-dark);
-      font-weight:900;
-      font-size:13px;
-      margin-top:14px;
-      margin-bottom:10px;
-    }
-
-    .ui-card{
-      background:#fff;
-      border:1px solid #f0e6db;
-      border-radius:20px;
-      padding:16px;
-      margin-bottom:12px;
-      box-shadow:0 8px 18px rgba(0,0,0,0.04);
-    }
-
-    .ui-card h4{margin:0 0 7px;font-size:15px;line-height:1.35}
-    .muted{color:var(--sub);font-size:12px;line-height:1.45}
-
-    .route-pill{
-      display:inline-block;
-      padding:7px 12px;
-      border-radius:999px;
-      background:var(--soft);
-      color:var(--primary-dark);
-      font-size:13px;
-      font-weight:800;
-      margin-right:6px;
-      margin-bottom:6px;
-    }
-
-    .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-
-    .badge{
-      flex:1 1 120px;
-      min-width:120px;
-      background:linear-gradient(180deg,#fff4ea,#fff);
-      border:1px solid #ffd8bb;
-      border-radius:18px;
-      padding:12px;
-      text-align:center;
-      font-size:13px;
-      font-weight:700;
-      color:#8b4b17;
-    }
-
-    .board-list{display:grid;gap:10px;margin-top:10px}
-
-    .board-item{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:13px;
-      font-weight:700;
-      font-size:14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-
-    .vote-bar{
-      width:100%;
-      height:12px;
-      background:#f2f2f2;
-      border-radius:999px;
-      overflow:hidden;
-      margin:10px 0 0;
-    }
-
-    .vote-fill{
-      width:70%;
-      height:100%;
-      background:linear-gradient(90deg,#4d8dff,#7ab2ff);
-    }
-
-    .phone-nav{
-      position:absolute;
-      left:50%;
-      bottom:14px;
-      transform:translateX(-50%);
-      display:flex;
-      align-items:center;
-      gap:10px;
-      z-index:3;
-    }
-
-    .phone-arrow{
-      width:44px;
-      height:44px;
-      border:none;
-      border-radius:999px;
-      background:linear-gradient(180deg, #ff8f2b, #ff6b00);
-      color:#fff;
-      font-size:20px;
-      font-weight:900;
-      box-shadow:0 10px 24px rgba(255,122,0,.22);
-      cursor:pointer;
-    }
-
-    .phone-step{
-      padding:7px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.9);
-      border:1px solid #ffd7b7;
-      color:#9a5b24;
-      font-size:12px;
-      font-weight:800;
-    }
-
-    .problem-grid,
-    .feature-grid,
-    .value-grid,
-    .roadmap{
-      display:grid;
-      gap:20px;
-    }
-
-    .problem-grid{grid-template-columns:repeat(3, 1fr)}
-    .feature-grid{grid-template-columns:repeat(3, 1fr)}
-    .value-grid{grid-template-columns:repeat(3, 1fr)}
-    .roadmap{grid-template-columns:repeat(3, 1fr)}
-
-    .feature-showcase{
-      display:grid;
-      gap:28px;
-      align-items:start;
-    }
-
-    .problem-card,
-    .feature-card,
-    .value-card,
-    .road-card,
-    .faq-card,
-    .summary-card{
-      padding:24px;
-    }
-
-    .problem-card::before,
-    .feature-card::before,
-    .value-card::before,
-    .road-card::before,
-    .faq-card::before,
-    .summary-card::before{
-      content:"";
-      position:absolute;
-      left:0;
-      top:0;
-      width:100%;
-      height:5px;
-      background:linear-gradient(90deg, #ff8f2b, rgba(255,143,43,.15));
-    }
-
-    .feature-card{
-      scroll-margin-top:110px;
-      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
-    }
-
-    .feature-card.visual{
-      padding:14px;
-      transform:none;
-      opacity:1;
-      filter:none;
-    }
-
-    .feature-card.visual.active{
-      border-color:#ffbf8a;
-      background:linear-gradient(180deg, #fffaf6, #fff1e5);
-      box-shadow:0 16px 28px rgba(229,102,0,.15);
-      transform:translateY(-2px);
-    }
-
-    .icon{
-      width:52px;
-      height:52px;
-      border-radius:16px;
-      background:var(--soft);
-      display:grid;
-      place-items:center;
-      font-size:24px;
-      margin-bottom:16px;
-    }
-
-    .problem-card h3,
-    .feature-card h3,
-    .value-card h3,
-    .road-card h3,
-    .faq-card h3,
-    .summary-card h3{
-      margin:0 0 10px;
-      font-size:22px;
-    }
-
-    .problem-card p,
-    .feature-card p,
-    .value-card p,
-    .road-card p,
-    .faq-card p,
-    .summary-card p{
-      margin:0;
-      color:var(--sub);
-    }
-
-    .feature-card ul{
-      margin:14px 0 0;
-      padding-left:18px;
-      color:var(--sub);
-    }
-
-    .feature-frame{
-      background:linear-gradient(180deg, #fffaf6 0%, #fff 100%);
-      border:1px solid #f3dfcf;
-      border-radius:18px;
-      padding:13px;
-      margin-bottom:12px;
-      min-height:168px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
-    }
-
-    .feature-card.visual.active .feature-frame{
-      min-height:180px;
-    }
-
-    .feature-card.visual:not(.active) h3,
-    .feature-card.visual:not(.active) p{
-      opacity:.72;
-    }
-
-    .frame-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:10px;
-    }
-
-    .frame-title{
-      font-size:12px;
-      font-weight:900;
-      color:var(--primary-dark);
-    }
-
-    .frame-chip{
-      padding:5px 8px;
-      border-radius:999px;
-      background:#fff1e3;
-      border:1px solid #ffd7b7;
-      color:#9a5b24;
-      font-size:10px;
-      font-weight:800;
-    }
-
-    .app-shot{
-      background:linear-gradient(180deg, #fffdfa 0%, #fff5ec 100%);
-      border:1px solid #f1ddcd;
-      border-radius:24px;
-      padding:14px;
-      margin-bottom:16px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.9),
-        0 10px 20px rgba(0,0,0,.04);
-    }
-
-    .app-shot-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:12px;
-    }
-
-    .app-shot-title{
-      font-size:13px;
-      font-weight:900;
-      color:var(--primary-dark);
-    }
-
-    .app-shot-sub{
-      color:var(--sub);
-      font-size:11px;
-      font-weight:700;
-    }
-
-    .app-shot-tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-
-    .app-tab{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      color:#876245;
-      font-size:11px;
-      font-weight:800;
-    }
-
-    .app-tab.active{
-      background:#fff1e3;
-      border-color:#ffcfa8;
-      color:#8f4d1a;
-    }
-
-    .app-shot-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .app-shot-row{
-      background:#fff;
-      border:1px solid #f0e6db;
-      border-radius:18px;
-      padding:12px 13px;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-    }
-
-    .app-shot-row strong{
-      display:block;
-      margin-bottom:4px;
-      font-size:13px;
-      color:#3e3128;
-    }
-
-    .app-shot-row span{
-      display:block;
-      color:var(--sub);
-      font-size:11px;
-      font-weight:700;
-    }
-
-    .app-shot-meta{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-
-    .app-shot-pill{
-      padding:5px 8px;
-      border-radius:999px;
-      background:#fff5eb;
-      border:1px solid #ffe1c9;
-      color:#9b6134;
-      font-size:10px;
-      font-weight:800;
-    }
-
-    .app-shot-bottom{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .app-shot-stat{
-      padding:11px 8px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      text-align:center;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-    }
-
-    .app-shot-stat strong{
-      display:block;
-      color:var(--primary-dark);
-      font-size:14px;
-    }
-
-    .app-shot-stat span{
-      font-size:10px;
-      color:var(--sub);
-      font-weight:700;
-    }
-
-    .app-shot-cta{
-      margin-top:12px;
-      padding:11px 14px;
-      border-radius:16px;
-      background:linear-gradient(90deg, #ff8f2b, #ff6b00);
-      color:#fff;
-      font-size:12px;
-      font-weight:800;
-      text-align:center;
-      box-shadow:0 10px 18px rgba(255,122,0,.22);
-    }
-
-    .feature-detail-shell{
-      padding:18px;
-      border-radius:24px;
-      background:linear-gradient(135deg, #fff7f0, #fffdfb);
-      border:1px solid #ffd9bb;
-      box-shadow:0 14px 28px rgba(163,85,18,.08);
-    }
-
-    .detail-head{
-      margin-bottom:14px;
-    }
-
-    .detail-head h3{
-      margin:0 0 4px;
-      font-size:22px;
-    }
-
-    .detail-head p{
-      margin:0;
-      color:var(--sub);
-      font-size:14px;
-    }
-
-    .detail-panel{
-      display:none;
-      grid-template-columns:1.05fr .95fr;
-      gap:16px;
-      align-items:start;
-    }
-
-    .detail-panel.active{
-      display:grid;
-    }
-
-    .detail-screen{
-      padding:14px;
-      border-radius:20px;
-      background:linear-gradient(180deg, #fffdfb, #fff2e7);
-      border:1px solid #f1ddcd;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
-    }
-
-    .detail-screen-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:10px;
-    }
-
-    .detail-screen-title{
-      font-size:13px;
-      font-weight:900;
-      color:var(--primary-dark);
-    }
-
-    .detail-flow{
-      display:grid;
-      gap:10px;
-    }
-
-    .detail-step{
-      display:grid;
-      grid-template-columns:34px 1fr;
-      gap:10px;
-      align-items:start;
-      padding:12px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,.04);
-    }
-
-    .detail-step-no{
-      width:34px;
-      height:34px;
-      border-radius:12px;
-      background:#fff1e3;
-      color:var(--primary-dark);
-      display:grid;
-      place-items:center;
-      font-size:13px;
-      font-weight:900;
-    }
-
-    .detail-step strong{
-      display:block;
-      margin-bottom:3px;
-      color:#3e3128;
-      font-size:13px;
-    }
-
-    .detail-step span{
-      display:block;
-      color:var(--sub);
-      font-size:11px;
-      font-weight:700;
-    }
-
-    .detail-outcome{
-      padding:14px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 10px 20px rgba(0,0,0,.04);
-    }
-
-    .detail-outcome h4{
-      margin:0 0 8px;
-      font-size:16px;
-    }
-
-    .detail-outcome-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .detail-outcome-item{
-      padding:10px 11px;
-      border-radius:14px;
-      background:#fff8f1;
-      border:1px solid #ffe0c4;
-      font-size:11px;
-      font-weight:800;
-      color:#6f4524;
-    }
-
-    .mock-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .mock-item{
-      padding:12px 13px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-      font-size:13px;
-      font-weight:700;
-      color:#3e3128;
-    }
-
-    .mock-sub{
-      display:block;
-      margin-top:4px;
-      color:var(--sub);
-      font-size:11px;
-      font-weight:600;
-    }
-
-    .seat-grid{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:10px;
-      margin-top:10px;
-    }
-
-    .seat-box{
-      padding:12px 8px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      text-align:center;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-    }
-
-    .seat-box strong{
-      display:block;
-      font-size:14px;
-      color:var(--primary-dark);
-    }
-
-    .seat-box span{
-      font-size:11px;
-      color:var(--sub);
-    }
-
-    .poll-card{
-      padding:14px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-    }
-
-    .poll-label{
-      font-size:12px;
-      font-weight:800;
-      color:#4b5563;
-      margin-bottom:8px;
-    }
-
-    .poll-bar{
-      height:12px;
-      border-radius:999px;
-      overflow:hidden;
-      background:#eceff3;
-      margin:8px 0;
-    }
-
-    .poll-fill{
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg, #ff8f2b, #ff6b00);
-    }
-
-    .community-bubbles{
-      display:grid;
-      gap:10px;
-      margin-top:8px;
-    }
-
-    .bubble-item{
-      max-width:88%;
-      padding:12px 14px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-      font-size:12px;
-      font-weight:700;
-      color:#4a3422;
-    }
-
-    .bubble-item.right{
-      margin-left:auto;
-      background:#fff1e3;
-      border-color:#ffd7b7;
-    }
-
-    .stat-strip{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .stat-mini{
-      padding:12px 8px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      text-align:center;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-    }
-
-    .stat-mini strong{
-      display:block;
-      font-size:14px;
-      color:var(--primary-dark);
-    }
-
-    .stat-mini span{
-      font-size:11px;
-      color:var(--sub);
-    }
-
-    .visual-card{
-      background:linear-gradient(180deg, #fffaf6 0%, #fff 100%);
-      border:1px solid #f3dfcf;
-      border-radius:20px;
-      padding:16px;
-      margin-bottom:16px;
-      min-height:188px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .visual-card::after{
-      content:"";
-      position:absolute;
-      right:-12px;
-      top:-12px;
-      width:110px;
-      height:110px;
-      border-radius:24px;
-      background:
-        radial-gradient(circle at center, rgba(255,122,0,.12), transparent 64%);
-      pointer-events:none;
-    }
-
-    .visual-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:12px;
-      font-size:13px;
-      font-weight:900;
-      color:var(--primary-dark);
-    }
-
-    .visual-chip{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#fff1e3;
-      border:1px solid #ffd7b7;
-      color:#9a5b24;
-      font-size:11px;
-      font-weight:800;
-      white-space:nowrap;
-    }
-
-    .problem-track,
-    .issue-list,
-    .value-visual,
-    .road-visual{
-      display:grid;
-      gap:10px;
-    }
-
-    .problem-step{
-      display:grid;
-      grid-template-columns:54px 1fr;
-      gap:10px;
-      align-items:start;
-      padding:12px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-      position:relative;
-    }
-
-    .problem-time{
-      font-size:12px;
-      font-weight:900;
-      color:var(--primary-dark);
-    }
-
-    .problem-line{
-      font-size:13px;
-      font-weight:800;
-      color:#3e3128;
-    }
-
-    .problem-sub{
-      margin-top:3px;
-      color:var(--sub);
-      font-size:11px;
-      font-weight:600;
-    }
-
-    .issue-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 14px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-      font-size:13px;
-      font-weight:800;
-      color:#3e3128;
-      position:relative;
-    }
-
-    .issue-state{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#fff4ea;
-      color:#9a5b24;
-      font-size:11px;
-      font-weight:800;
-      white-space:nowrap;
-    }
-
-    .value-stat,
-    .road-node,
-    .summary-box{
-      padding:14px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid #f0e6db;
-      box-shadow:0 6px 14px rgba(0,0,0,0.04);
-    }
-
-    .value-stat strong,
-    .summary-box strong{
-      display:block;
-      margin-bottom:5px;
-      font-size:13px;
-      color:var(--primary-dark);
-    }
-
-    .value-stat span,
-    .summary-box span{
-      display:block;
-      color:var(--sub);
-      font-size:12px;
-      font-weight:700;
-    }
-
-    .road-node{
-      position:relative;
-      padding-left:20px;
-      font-size:13px;
-      font-weight:800;
-      color:#3e3128;
-    }
-
-    .road-node::before{
-      content:"";
-      position:absolute;
-      left:12px;
-      top:16px;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:linear-gradient(180deg, #ff9a3d, #ff7a00);
-      box-shadow:0 0 0 5px rgba(255,122,0,.10);
-    }
-
-    .road-node span{
-      display:block;
-      margin-top:4px;
-      color:var(--sub);
-      font-size:11px;
-      font-weight:600;
-    }
-
-    .summary-visual{
-      display:grid;
-      grid-template-columns:repeat(2, 1fr);
-      gap:12px;
-      margin-top:16px;
-    }
-
-    .summary-box{
-      min-height:92px;
-      background:linear-gradient(180deg, #fffdfb, #fff4ea);
-    }
-
-    .road-step{
-      display:inline-block;
-      padding:7px 12px;
-      border-radius:999px;
-      background:var(--soft);
-      color:var(--primary-dark);
-      font-size:13px;
-      font-weight:800;
-      margin-bottom:14px;
-    }
-
-    .summary{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:20px;
-    }
-
-    .cta{
-      background:linear-gradient(135deg, #fff0e2, #fff8f2);
-      border:1px solid #ffd8bb;
-      border-radius:32px;
-      padding:44px 28px;
-      text-align:center;
-      box-shadow:var(--shadow);
-    }
-
-    .cta h2{
-      margin:10px 0 12px;
-      font-size:clamp(28px,4vw,42px);
-    }
-
-    .cta p{
-      margin:0 auto 20px;
-      color:var(--sub);
-      max-width:700px;
-    }
-
-    .cta-form{
-      max-width:720px;
-      margin:0 auto;
-    }
-
-    .cta-form-row{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:12px;
-      margin-top:20px;
-    }
-
-    .cta-input{
-      width:100%;
-      height:56px;
-      padding:0 18px;
-      border-radius:18px;
-      border:1px solid #ffd3b0;
-      background:#fff;
-      color:var(--text);
-      font-size:16px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
-    }
-
-    .cta-input:focus{
-      outline:none;
-      border-color:#ff9a3d;
-      box-shadow:0 0 0 4px rgba(255,122,0,.10);
-    }
-
-    .cta-submit{
-      min-width:168px;
-      height:56px;
-      border:none;
-      border-radius:18px;
-      background:linear-gradient(90deg, #ff8f2b, #ff6b00);
-      color:#fff;
-      font-size:15px;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:0 14px 24px rgba(255,122,0,.20);
-    }
-
-    .cta-note{
-      margin-top:12px;
-      color:#8a5b36;
-      font-size:12px;
-      font-weight:700;
-    }
-
-    footer{
-      padding:32px 0 50px;
-      text-align:center;
-      color:#777;
-      font-size:14px;
-    }
-
-    @keyframes rideLoop{
-      from{transform:translateX(0)}
-      to{transform:translateX(-50%)}
-    }
-
-    @keyframes riseIn{
-      from{
-        opacity:0;
-        transform:translateY(26px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    @media (max-width: 1024px){
-      .hero-grid,
-      .problem-grid,
-      .value-grid,
-      .roadmap,
-      .summary,
-      .detail-panel{
-        grid-template-columns:1fr 1fr;
-      }
-
-    }
-
-    @media (max-width: 760px){
-      .nav-inner{
-        height:auto;
-        padding:14px 0;
-        align-items:flex-start;
-        flex-direction:column;
-      }
-
-      .nav-menu{gap:14px}
-
-      .hero-grid,
-      .problem-grid,
-      .value-grid,
-      .roadmap,
-      .summary,
-      .detail-panel,
-      .summary-visual,
-      .seat-grid,
-      .stat-strip,
-      .hero-points{
-        grid-template-columns:1fr;
-      }
-
-      .hero{padding-top:34px}
-      .section-frame{padding:24px 18px}
-      .screen{min-height:430px}
-      .screen-viewport,
-      .screen-panel{height:430px}
-      .cta-form-row{grid-template-columns:1fr}
-      .cta-submit{width:100%}
-
-      .train-scene{height:108px}
-      .track.one{top:16px}
-      .track.two{top:72px}
-      .convoy-loop{top:22px}
-      .car{width:86px;height:38px}
-      .engine{width:100px}
-      .feature-pill{
-        min-width:150px;
-        padding:9px 12px 9px 13px;
-      }
-      .hero-grid{padding-top:52px}
-
-      .feature-card.visual{
-        transform:none;
-        opacity:1;
-        filter:none;
-      }
-
-      .feature-grid{
-        grid-template-columns:1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이칸저칸 — 더 나은 지하철 이용을 위한</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF5C1A;
+    --orange-light: #FF7B42;
+    --orange-pale: #FFF0EA;
+    --dark: #1A1208;
+    --mid: #4A3728;
+    --light-text: #8C7B70;
+    --bg: #FAFAF8;
+    --white: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --border: rgba(255,92,26,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,250,248,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 20px; font-weight: 900; color: var(--orange);
+    letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo span { font-size: 22px; }
+  .nav-cta {
+    background: var(--orange); color: white;
+    padding: 10px 24px; border-radius: 100px; font-size: 13px; font-weight: 700;
+    text-decoration: none; letter-spacing: -0.2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(255,92,26,0.35);
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,92,26,0.45); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    background: var(--dark);
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+
+  /* rail background lines */
+  .rail-bg {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 59px,
+      rgba(255,255,255,0.03) 60px
+    );
+  }
+
+  /* big gradient circle */
+  .hero-glow {
+    position: absolute;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,92,26,0.18) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+
+  /* ─── TRAIN ANIMATION ─── */
+  .train-scene {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  /* Rail lines across full width */
+  .rail-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,92,26,0.35) 10%, rgba(255,92,26,0.35) 90%, transparent);
+  }
+  .rail-line.top    { top: calc(50% + 14px); }
+  .rail-line.bottom { top: calc(50% + 24px); }
+
+  /* Sleepers (침목) */
+  .sleepers {
+    position: absolute;
+    left: 0; right: 0;
+    top: calc(50% + 10px);
+    height: 22px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 30px,
+      rgba(255,255,255,0.03) 30px,
+      rgba(255,255,255,0.03) 40px
+    );
+  }
+
+  .train-svg {
+    position: absolute;
+    top: calc(50% - 60px);
+    left: -500px;
+    animation: trainSlide 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+  @keyframes trainSlide {
+    0%    { left: -500px; }
+    /* arrive, slow down */
+    45%   { left: calc(50% - 220px); animation-timing-function: ease-out; }
+    55%   { left: calc(50% - 220px); }
+    /* depart smoothly */
+    100%  { left: 110vw; }
+  }
+
+  /* ─── SERVICE NAME — appears AFTER train exits ─── */
+  .hero-title-wrap {
+    position: absolute;
+    z-index: 6;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -58%);
+    pointer-events: none;
+    /* hidden until train clears */
+    opacity: 0;
+    animation: titleReveal 1.0s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards;
+  }
+
+  @keyframes titleReveal {
+    0%   { opacity: 0; transform: translate(-50%, -58%) scale(0.96); filter: blur(6px); }
+    100% { opacity: 1; transform: translate(-50%, -60%) scale(1);    filter: blur(0px); }
+  }
+
+  .service-eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 5px;
+    color: rgba(255,92,26,0.9); text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+    opacity: 0;
+    animation: textReveal 0.6s ease 3.0s forwards;
+  }
+
+  .service-name {
+    font-family: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+    font-size: clamp(52px, 9vw, 100px);
+    color: white;
+    line-height: 1;
+    letter-spacing: -2px;
+    white-space: nowrap;
+    display: block;
+    /* subtle text shadow for depth */
+    text-shadow: 0 2px 40px rgba(0,0,0,0.4);
+  }
+  .service-name .accent {
+    color: var(--orange);
+  }
+
+  /* Sub text fades in after train departs */
+  .hero-sub-wrap {
+    position: absolute;
+    z-index: 6;
+    text-align: center;
+    top: calc(50% + 110px);
+    left: 0; right: 0;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.8s ease 2.6s forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── HERO TEXT ─── */
+  .hero-text {
+    position: absolute;
+    bottom: 100px;
+    left: 0; right: 0;
+    text-align: center;
+    z-index: 6;
+  }
+  @keyframes textReveal {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* hero-eyebrow: no longer used in hero, kept for other sections */
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 3.5px;
+    color: var(--orange); text-transform: uppercase;
+    margin-bottom: 0;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 140px);
+    color: white; line-height: 0.9;
+    letter-spacing: 2px;
+  }
+  .hero-title .accent { color: var(--orange); }
+
+  .hero-sub {
+    font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.45);
+    letter-spacing: 0.3px; line-height: 1.8;
+    opacity: 0;
+    animation: textReveal 0.7s ease 3.2s forwards;
+    margin-bottom: 28px;
+  }
+
+  .hero-btns {
+    display: flex; gap: 12px; justify-content: center;
+    opacity: 0;
+    animation: textReveal 0.7s ease 3.5s forwards;
+  }
+  .btn-primary {
+    background: var(--orange); color: white;
+    padding: 15px 36px; border-radius: 100px;
+    font-size: 14px; font-weight: 700; text-decoration: none;
+    letter-spacing: -0.3px;
+    transition: all 0.25s;
+    box-shadow: 0 8px 32px rgba(255,92,26,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(255,92,26,0.5); }
+  .btn-ghost {
+    background: transparent; color: rgba(255,255,255,0.6);
+    padding: 15px 36px; border-radius: 100px;
+    font-size: 14px; font-weight: 500; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.25s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.07); color: white; }
+
+  /* scroll indicator */
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    opacity: 0; animation: textReveal 0.6s ease 3.8s forwards;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 7;
+  }
+  .scroll-hint span { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.25); text-transform: uppercase; }
+  .scroll-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--orange);
+    animation: scrollBounce 1.5s ease-in-out infinite 3.8s;
+  }
+  @keyframes scrollBounce {
+    0%,100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  /* subtle dot-grid overlay on hero */
+  #hero::after {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+  @keyframes scrollBounce {
+    0%,100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  /* ─── PROBLEM STRIP ─── */
+  .strip {
+    background: var(--orange);
+    padding: 16px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .strip-inner {
+    display: inline-flex; gap: 64px;
+    animation: marquee 18s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .strip-item {
+    font-size: 13px; font-weight: 700; color: white;
+    letter-spacing: 1px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0;
+  }
+  .strip-item::before {
+    content: '●'; font-size: 8px; opacity: 0.6;
+  }
+
+  /* ─── SECTION BASE ─── */
+  section { padding: 120px 48px; max-width: 1280px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 3px;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(32px, 5vw, 56px); font-weight: 900;
+    line-height: 1.1; letter-spacing: -1.5px; color: var(--dark);
+  }
+  .section-title em { font-style: normal; color: var(--orange); }
+
+  /* ─── FEATURE 1: SEATING GUIDE ─── */
+  #feature-seat {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+
+  .feature-copy { max-width: 480px; }
+  .feature-copy p {
+    margin-top: 20px; font-size: 16px; line-height: 1.75;
+    color: var(--light-text); font-weight: 300;
+  }
+  .feature-tags {
+    margin-top: 28px; display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .tag {
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 12px; font-weight: 600; letter-spacing: -0.2px;
+    background: var(--orange-pale); color: var(--orange);
+    border: 1px solid rgba(255,92,26,0.15);
+  }
+
+  /* ─── PHONE MOCKUP ─── */
+  .phone-wrap {
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+  }
+  .phone-wrap::before {
+    content: '';
+    position: absolute; inset: -40px;
+    background: radial-gradient(circle, rgba(255,92,26,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .phone {
+    width: 260px;
+    background: var(--dark);
+    border-radius: 36px;
+    padding: 12px;
+    box-shadow:
+      0 40px 100px rgba(0,0,0,0.25),
+      0 0 0 1px rgba(255,255,255,0.08);
+    position: relative; z-index: 1;
+  }
+  .phone-inner {
+    background: #F7F2ED;
+    border-radius: 26px;
+    overflow: hidden;
+    min-height: 480px;
+  }
+  .phone-status {
+    background: var(--dark); height: 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+  }
+  .phone-status span { color: white; font-size: 10px; font-weight: 600; }
+  .phone-notch {
+    width: 80px; height: 20px;
+    background: var(--dark); border-radius: 0 0 12px 12px;
+    margin: 0 auto;
+  }
+
+  /* Seat UI mockup */
+  .ui-header {
+    background: white; padding: 14px 16px 10px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #f0ece8;
+  }
+  .ui-logo-sm {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: white; font-weight: 900;
+  }
+  .ui-header-text { font-size: 13px; font-weight: 700; color: var(--dark); }
+
+  .ui-body { padding: 14px; }
+
+  .ui-greeting {
+    background: linear-gradient(135deg, #FF5C1A, #FF8A50);
+    border-radius: 14px; padding: 14px 16px; margin-bottom: 12px;
+    color: white;
+  }
+  .ui-greeting .g-small { font-size: 10px; opacity: 0.8; margin-bottom: 2px; }
+  .ui-greeting .g-big { font-size: 14px; font-weight: 800; line-height: 1.3; }
+
+  .ui-seat-card {
+    background: white; border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .ui-seat-label {
+    font-size: 10px; font-weight: 600; color: var(--orange);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .ui-seat-main {
+    font-size: 13px; font-weight: 800; color: var(--dark); line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .ui-seat-main span { color: var(--orange); }
+
+  /* train diagram */
+  .train-diagram {
+    display: flex; gap: 3px; margin-top: 10px;
+    align-items: center;
+  }
+  .t-car {
+    flex: 1; height: 28px; border-radius: 4px;
+    background: #F0EBE5;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: #999;
+    position: relative;
+  }
+  .t-car.hot {
+    background: var(--orange); color: white;
+    box-shadow: 0 2px 8px rgba(255,92,26,0.4);
+  }
+  .t-car.warm {
+    background: #FFD4BC; color: var(--orange);
+  }
+
+  .ui-route-card {
+    background: white; border-radius: 14px; padding: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .ui-route-label { font-size: 10px; font-weight: 600; color: #AAA; margin-bottom: 10px; }
+  .route-line {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+  .route-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .route-dot.start { background: var(--orange); }
+  .route-dot.end   { background: #333; }
+  .route-bar {
+    width: 1px; height: 16px; background: #DDD; margin-left: 3.5px; margin-bottom: 4px;
+  }
+  .route-text { font-size: 11px; font-weight: 600; color: var(--dark); }
+  .route-time { font-size: 10px; color: #AAA; margin-left: auto; }
+
+  /* badges */
+  .ui-badges {
+    display: flex; gap: 6px; margin-top: 10px;
+  }
+  .badge-item {
+    background: #FFF7F3; border: 1px solid #FFD9C8;
+    border-radius: 8px; padding: 6px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .badge-icon { font-size: 16px; }
+  .badge-name { font-size: 9px; font-weight: 700; color: var(--orange); }
+
+  /* ─── FEATURE 2: COMMUNITY ─── */
+  #feature-community {
+    background: var(--dark);
+    border-radius: 32px;
+    padding: 80px 64px;
+    max-width: 1280px;
+    margin: 0 auto 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  #feature-community .section-title { color: white; }
+  #feature-community .section-label { color: var(--orange-light); }
+  #feature-community p { color: rgba(255,255,255,0.5); font-size: 16px; line-height: 1.75; font-weight: 300; margin-top: 20px; }
+
+  /* community board mockup */
+  .board-mock {
+    background: #F7F2ED;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+  }
+  .board-top {
+    background: white; padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #F0ECE8;
+  }
+  .board-line-badge {
+    background: var(--orange); color: white;
+    font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 100px;
+  }
+  .board-tabs {
+    display: flex; gap: 0;
+    overflow-x: auto;
+    background: white;
+    padding: 0 16px;
+    border-bottom: 1px solid #F0ECE8;
+  }
+  .btab {
+    padding: 10px 14px; font-size: 11px; font-weight: 600;
+    color: #BBB; border-bottom: 2px solid transparent; white-space: nowrap;
+  }
+  .btab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+  .board-posts { padding: 10px; transition: opacity 0.25s ease, transform 0.25s ease; }
+  .btab { cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+  .post-item {
+    background: white; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .post-meta {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+  }
+  .post-tag {
+    background: var(--orange-pale); color: var(--orange);
+    font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px;
+    text-transform: uppercase;
+  }
+  .post-time { font-size: 9px; color: #CCC; margin-left: auto; }
+  .post-title { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+  .post-preview { font-size: 10px; color: #AAA; line-height: 1.5; }
+  .post-stats {
+    display: flex; gap: 10px; margin-top: 8px;
+  }
+  .pstat { font-size: 10px; color: #CCC; display: flex; align-items: center; gap: 3px; }
+  .pstat span { font-size: 11px; }
+
+  /* ─── FEATURE 3: COMPLAINT ─── */
+  #feature-complaint {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+
+  /* complaint mockup */
+  .complaint-mock {
+    background: white; border-radius: 24px; padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  }
+  .cm-title { font-size: 14px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+  .cm-sub { font-size: 10px; color: #AAA; margin-bottom: 16px; }
+
+  .cm-selector {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .cm-sel {
+    flex: 1; padding: 10px; border-radius: 10px;
+    background: #F7F2ED; font-size: 11px; font-weight: 700; color: var(--dark);
+    text-align: center;
+  }
+  .cm-sel.active {
+    background: var(--orange); color: white;
+    box-shadow: 0 4px 16px rgba(255,92,26,0.35);
+  }
+
+  .cm-type-label { font-size: 10px; font-weight: 700; color: #AAA; margin-bottom: 8px; }
+  .cm-types { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .cm-type {
+    padding: 8px 14px; border-radius: 100px; font-size: 11px; font-weight: 600;
+    border: 1.5px solid #E8E2DC; color: #999; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cm-type.sel {
+    background: var(--orange); border-color: var(--orange); color: white;
+  }
+
+  .vote-bar-wrap { background: #F7F2ED; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  .vote-label {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; font-weight: 700; color: var(--dark); margin-bottom: 8px;
+  }
+  .vote-label .pct { color: var(--orange); font-size: 14px; font-weight: 900; }
+  .vote-track { background: #E8E2DC; border-radius: 100px; height: 8px; overflow: hidden; }
+  .vote-fill {
+    height: 100%; border-radius: 100px;
+    background: linear-gradient(90deg, var(--orange), #FF8A50);
+    box-shadow: 0 2px 8px rgba(255,92,26,0.4);
+  }
+  .vote-note { font-size: 9px; color: #AAA; margin-top: 4px; }
+
+  .cm-status {
+    background: #FAFAF8; border-radius: 10px; padding: 10px 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cm-status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4CAF50; flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(76,175,80,0.2);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 3px rgba(76,175,80,0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(76,175,80,0.1); }
+  }
+  .cm-status-text { font-size: 10px; font-weight: 600; color: #4CAF50; }
+
+  /* ─── FEATURE 4: REPORT ─── */
+  .report-section {
+    background: var(--orange-pale);
+    border-radius: 32px;
+    padding: 80px 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+
+  /* report mockup */
+  .report-mock {
+    background: white; border-radius: 24px; padding: 20px;
+    box-shadow: 0 20px 60px rgba(255,92,26,0.12);
+  }
+  .rep-header { margin-bottom: 16px; }
+  .rep-title { font-size: 13px; font-weight: 800; color: var(--dark); }
+  .rep-period { font-size: 10px; color: #AAA; }
+
+  .rep-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;
+  }
+  .rep-stat {
+    background: #F7F2ED; border-radius: 12px; padding: 12px 14px;
+  }
+  .rs-label { font-size: 9px; color: #AAA; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .rs-val { font-size: 20px; font-weight: 900; color: var(--dark); line-height: 1; }
+  .rs-val span { font-size: 10px; font-weight: 500; color: #999; }
+
+  /* ── 세로 바 차트 → SVG 도넛 + 히트맵으로 교체 ── */
+  .rep-chart-v2 { margin-bottom: 16px; }
+  .rc-label {
+    font-size: 10px; font-weight: 700; color: #AAA;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 10px; display: block;
+  }
+
+  /* 히트맵 스타일 요일 그리드 */
+  .heatmap-wrap {
+    display: flex; gap: 4px; align-items: flex-start;
+  }
+  .heatmap-col {
+    flex: 1; display: flex; flex-direction: column; gap: 3px; align-items: center;
+  }
+  .heatmap-day-label {
+    font-size: 9px; font-weight: 800; color: #AAA; margin-bottom: 2px;
+  }
+  .hm-cell {
+    width: 100%;
+    height: 10px;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  /* 도넛 차트 */
+  .donut-wrap {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+  }
+  .donut-svg { flex-shrink: 0; }
+  .donut-legend { display: flex; flex-direction: column; gap: 6px; }
+  .dl-item { display: flex; align-items: center; gap: 6px; }
+  .dl-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dl-text { font-size: 10px; font-weight: 600; color: var(--dark); }
+  .dl-pct  { font-size: 10px; font-weight: 800; margin-left: auto; padding-left: 8px; }
+
+  /* ── 배지 ── */
+  .rep-badges-clean { }
+  .badges-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 4px;
+  }
+  .badge-clean {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    padding: 10px 4px 8px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255,92,26,0.18);
+    background: white;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .badge-clean:not(.badge-locked):hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 10px 24px rgba(255,92,26,0.18);
+  }
+  .badge-locked { border-color: #EEE; background: #FAFAFA; }
+  .badge-emoji { font-size: 30px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(255,92,26,0.25)); }
+  .badge-locked .badge-emoji { filter: grayscale(1); opacity: .3; }
+  .badge-nm { font-size: 9px; font-weight: 800; color: var(--dark); text-align: center; line-height: 1.3; }
+  .badge-locked .badge-nm { color: #CCC; }
+  .badge-dt { font-size: 8px; color: var(--orange); font-weight: 700; }
+  .badge-locked .badge-dt { color: #DDD; }
+  .badge-new {
+    position: absolute; top: -5px; right: -5px;
+    background: var(--orange); color: white;
+    font-size: 7px; font-weight: 900; padding: 2px 5px;
+    border-radius: 100px; letter-spacing: 0.5px;
+  }
+
+  /* ─── STATS ─── */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    max-width: 1280px; margin: 0 auto;
+  }
+  .stat-card {
+    background: var(--dark); padding: 56px 48px;
+    text-align: center;
+  }
+  .stat-card:first-child { border-radius: 24px 0 0 24px; }
+  .stat-card:last-child  { border-radius: 0 24px 24px 0; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px; color: var(--orange); line-height: 1;
+  }
+  .stat-unit { font-size: 32px; }
+  .stat-desc { font-size: 14px; color: rgba(255,255,255,0.4); margin-top: 8px; font-weight: 300; }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    max-width: 1280px; margin: 0 auto;
+    padding: 120px 48px;
+    text-align: center;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--orange); text-transform: uppercase; margin-bottom: 20px; }
+  .cta-title {
+    font-size: clamp(40px, 7vw, 80px); font-weight: 900; line-height: 1.1; letter-spacing: -2px;
+    color: var(--dark); margin-bottom: 20px;
+  }
+  .cta-sub { font-size: 17px; color: var(--light-text); font-weight: 300; line-height: 1.7; max-width: 480px; margin: 0 auto 40px; }
+
+  .email-form {
+    display: flex; gap: 8px; max-width: 420px; margin: 0 auto;
+    background: white; border-radius: 100px; padding: 6px 6px 6px 24px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+  }
+  .email-form input {
+    flex: 1; border: none; outline: none; font-family: inherit;
+    font-size: 14px; color: var(--dark);
+    background: transparent;
+  }
+  .email-form input::placeholder { color: #CCC; }
+  .email-form button {
+    background: var(--orange); color: white;
+    border: none; border-radius: 100px; padding: 12px 28px;
+    font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .email-form button:hover { background: var(--orange-light); transform: scale(1.02); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark); padding: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo { font-size: 18px; font-weight: 900; color: var(--orange); }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    section { padding: 80px 24px; }
+    #feature-seat, #feature-community, #feature-complaint, .report-section {
+      grid-template-columns: 1fr; gap: 48px;
+    }
+    #feature-community, .report-section { padding: 48px 32px; }
+    .stats-row { grid-template-columns: 1fr; }
+    .stat-card:first-child, .stat-card:last-child { border-radius: 0; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .email-form { flex-direction: column; border-radius: 16px; padding: 16px; }
+    .email-form input { padding: 8px 0; }
+    .email-form button { border-radius: 100px; }
+    .hero-title { font-size: 64px; }
+  }
+</style>
 </head>
 <body>
 
-  <nav class="nav">
-    <div class="wrap nav-inner">
-      <div class="brand">
-        <div class="brand-icon">🚇</div>
-        <span>이칸저칸</span>
-      </div>
-      <div class="nav-menu">
-        <a href="#problem">문제</a>
-        <a href="#solution">기능</a>
-        <a href="#value">핵심 가치</a>
-        <a href="#flow">사용 흐름</a>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>🚇</span> 이칸저칸</div>
+  <a href="#cta" class="nav-cta">출시 알림 받기</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="padding:0; max-width:100%; width:100%; overflow:hidden;">
+  <div class="rail-bg"></div>
+  <div class="hero-glow"></div>
+
+  <!-- Train scene: full-section layer -->
+  <div class="train-scene">
+    <div class="sleepers"></div>
+    <div class="rail-line top"></div>
+    <div class="rail-line bottom"></div>
+
+    <svg class="train-svg" width="440" height="100" viewBox="0 0 440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- wheels -->
+      <circle cx="72"  cy="88" r="10" fill="#2A2A2A" stroke="#555" stroke-width="2"/>
+      <circle cx="72"  cy="88" r="4"  fill="#444"/>
+      <circle cx="160" cy="88" r="10" fill="#2A2A2A" stroke="#555" stroke-width="2"/>
+      <circle cx="160" cy="88" r="4"  fill="#444"/>
+      <circle cx="268" cy="88" r="10" fill="#2A2A2A" stroke="#555" stroke-width="2"/>
+      <circle cx="268" cy="88" r="4"  fill="#444"/>
+      <circle cx="376" cy="88" r="10" fill="#2A2A2A" stroke="#555" stroke-width="2"/>
+      <circle cx="376" cy="88" r="4"  fill="#444"/>
+      <!-- axles -->
+      <rect x="60"  y="77" width="24" height="4" rx="2" fill="#3A3A3A"/>
+      <rect x="148" y="77" width="24" height="4" rx="2" fill="#3A3A3A"/>
+      <rect x="256" y="77" width="24" height="4" rx="2" fill="#3A3A3A"/>
+      <rect x="364" y="77" width="24" height="4" rx="2" fill="#3A3A3A"/>
+      <!-- undercarriage -->
+      <rect x="40" y="68" width="360" height="11" rx="4" fill="#2E2E2E"/>
+      <!-- car body 1 -->
+      <rect x="42" y="16" width="168" height="56" rx="8" fill="#E8E4E0"/>
+      <!-- car body 2 -->
+      <rect x="220" y="16" width="178" height="56" rx="8" fill="#E8E4E0"/>
+      <!-- coupler -->
+      <rect x="208" y="40" width="14" height="8" rx="3" fill="#BBBBB5"/>
+      <!-- orange stripe car 1 -->
+      <rect x="42" y="16" width="168" height="9" rx="4" fill="#FF5C1A"/>
+      <rect x="42" y="21" width="168" height="4" fill="#FF5C1A"/>
+      <!-- orange stripe car 2 -->
+      <rect x="220" y="16" width="178" height="9" rx="4" fill="#FF5C1A"/>
+      <rect x="220" y="21" width="178" height="4" fill="#FF5C1A"/>
+      <!-- windows car 1 -->
+      <rect x="60"  y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <rect x="100" y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <rect x="140" y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <!-- window glare -->
+      <rect x="62"  y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <rect x="102" y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <rect x="142" y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <!-- windows car 2 -->
+      <rect x="238" y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <rect x="278" y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <rect x="318" y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <rect x="358" y="32" width="30" height="26" rx="4" fill="#1E4B7A" opacity="0.85"/>
+      <rect x="240" y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <rect x="280" y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <rect x="320" y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <rect x="360" y="34" width="10" height="22" rx="2" fill="white" opacity="0.15"/>
+      <!-- door lines -->
+      <rect x="126" y="22" width="2" height="50" rx="1" fill="#CCC8C2" opacity="0.5"/>
+      <rect x="308" y="22" width="2" height="50" rx="1" fill="#CCC8C2" opacity="0.5"/>
+      <!-- front nose -->
+      <path d="M42 24 Q20 24 14 46 L14 70 L42 70 Z" fill="#D0CCC8"/>
+      <rect x="14" y="24" width="6" height="46" rx="3" fill="#B0ACA8"/>
+      <!-- headlight -->
+      <circle cx="22" cy="38" r="6" fill="#FFE066" opacity="0.95"/>
+      <circle cx="22" cy="38" r="3" fill="white"/>
+      <circle cx="22" cy="38" r="14" fill="#FFE066" opacity="0.1"/>
+    </svg>
+
+    <!-- Service name revealed as train arrives -->
+    <div class="hero-title-wrap">
+      <span class="service-eyebrow">실시간 지하철 커뮤니티</span>
+      <span class="service-name">이칸<span class="accent">저칸</span></span>
+    </div>
+  </div>
+
+  <!-- Sub text + CTA: fades in after train departs, pinned to bottom -->
+  <div class="hero-text">
+    <p class="hero-sub">매일 타는 지하철, 이제는 더 현명하게.<br>앉을 칸부터 실시간 정보까지 — 승객이 만드는 지하철 경험.</p>
+    <div class="hero-btns">
+      <a href="#feature-seat" class="btn-primary">서비스 알아보기</a>
+      <a href="#cta" class="btn-ghost">출시 알림 받기</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item">앉을 확률 가장 높은 칸 추천</span>
+    <span class="strip-item">실시간 지연·사고 정보</span>
+    <span class="strip-item">같은 노선 승객끼리 소통</span>
+    <span class="strip-item">민원 투표로 철도공사에 즉시 전달</span>
+    <span class="strip-item">지하철 이용 리포트</span>
+    <span class="strip-item">게이미피케이션 배지 시스템</span>
+    <span class="strip-item">앉을 확률 가장 높은 칸 추천</span>
+    <span class="strip-item">실시간 지연·사고 정보</span>
+    <span class="strip-item">같은 노선 승객끼리 소통</span>
+    <span class="strip-item">민원 투표로 철도공사에 즉시 전달</span>
+    <span class="strip-item">지하철 이용 리포트</span>
+    <span class="strip-item">게이미피케이션 배지 시스템</span>
+  </div>
+</div>
+
+<!-- FEATURE 1: SEATING GUIDE -->
+<section style="max-width:1280px; margin:0 auto; padding:120px 48px;">
+  <div id="feature-seat">
+    <div class="feature-copy reveal">
+      <p class="section-label">핵심 기능 01</p>
+      <h2 class="section-title"><em>착석 확률</em><br>가이드</h2>
+      <p>기존 지도앱은 내가 내릴 역의 빠른 환승 칸만 알려줬어요. 이칸저칸은 반대로 생각했습니다. 내 전 역에서 많이 내리는 칸 = 내가 앉을 수 있는 칸.</p>
+      <div class="feature-tags">
+        <span class="tag">🎯 착석 확률 AI 추천</span>
+        <span class="tag">🗓️ 출퇴근 루트 등록</span>
+        <span class="tag">📊 월간 이용 리포트</span>
       </div>
     </div>
-  </nav>
-
-  <section class="hero">
-    <div class="train-scene" aria-hidden="true">
-      <div class="track one"></div>
-      <div class="track two"></div>
-      <div class="convoy-loop">
-        <div class="train">
-          <div class="car engine"><span class="engine-light"></span></div>
-          <div class="car"></div>
-          <div class="car"></div>
-          <div class="feature-pills">
-            <a class="feature-pill active" href="#feature-live" data-feature="live">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>실시간 제보</strong>
-                <span>현장 이슈 공유</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-seat" data-feature="seat">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>혼잡도 공유</strong>
-                <span>칸별 체감 정보</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-complaint" data-feature="complaint">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>착석 확률</strong>
-                <span>앉기 좋은 칸 추천</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-community" data-feature="community">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>커뮤니티</strong>
-                <span>노선별 소통 공간</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-routine" data-feature="routine">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>루틴 관리</strong>
-                <span>배지와 이동 리포트</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-data" data-feature="data">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>데이터 축적</strong>
-                <span>쌓일수록 정교해짐</span>
-              </div>
-            </a>
-          </div>
+    <div class="phone-wrap reveal reveal-delay-2">
+      <div class="phone">
+        <div class="phone-status">
+          <span>9:41</span>
+          <span>●●● 100%</span>
         </div>
-        <div class="train">
-          <div class="car engine"><span class="engine-light"></span></div>
-          <div class="car"></div>
-          <div class="car"></div>
-          <div class="feature-pills">
-            <a class="feature-pill active" href="#feature-live" data-feature="live">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>실시간 제보</strong>
-                <span>현장 이슈 공유</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-seat" data-feature="seat">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>혼잡도 공유</strong>
-                <span>칸별 체감 정보</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-complaint" data-feature="complaint">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>착석 확률</strong>
-                <span>앉기 좋은 칸 추천</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-community" data-feature="community">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>커뮤니티</strong>
-                <span>노선별 소통 공간</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-routine" data-feature="routine">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>루틴 관리</strong>
-                <span>배지와 이동 리포트</span>
-              </div>
-            </a>
-            <a class="feature-pill" href="#feature-data" data-feature="data">
-              <div class="pill-dot"></div>
-              <div class="pill-copy">
-                <strong>데이터 축적</strong>
-                <span>쌓일수록 정교해짐</span>
-              </div>
-            </a>
+        <div class="phone-inner">
+          <div class="ui-header">
+            <div class="ui-logo-sm">이</div>
+            <span class="ui-header-text">이칸저칸</span>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <span class="tag">지하철 실시간 커뮤니티 서비스</span>
-        <h1>
-          더 나은 지하철 이용을 위한<br>
-          <span style="color:var(--primary-dark)">이칸저칸</span>
-        </h1>
-        <p>
-          갑작스러운 지연, 내부 혼잡, 자리 정보, 민원 상황까지.
-          같은 노선 이용자들이 직접 만드는 실시간 정보 네트워크로
-          지하철 안의 불편을 더 빠르게 공유하고 해결합니다.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#solution">핵심 기능 보기</a>
-          <a class="btn btn-ghost" href="#flow">사용 흐름 보기</a>
-        </div>
-
-        <div class="hero-points">
-          <div class="point">
-            <strong>실시간</strong>
-            <span>노선별 현장 정보 공유</span>
-          </div>
-          <div class="point">
-            <strong>커뮤니티</strong>
-            <span>같은 노선 승객 간 소통</span>
-          </div>
-          <div class="point">
-            <strong>민원 연계</strong>
-            <span>투표형 불편 접수 구조</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="phone-area">
-        <div class="glow"></div>
-        <div class="phone">
-          <div class="notch"></div>
-          <div class="screen">
-            <div class="screen-viewport">
-              <div class="screen-slider" id="phoneSlider">
-                <section class="screen-panel">
-                  <div class="mini-title">이칸저칸 홈</div>
-                  <div class="ui-card">
-                    <h4>오늘도 고생하셨어요, 홍길동님</h4>
-                    <div class="muted">반복되는 출퇴근을 가치 있는 정보와 성취로 바꿔보세요.</div>
-                  </div>
-                  <div class="ui-card">
-                    <h4>나의 출근 루트</h4>
-                    <span class="route-pill">1호선 · 창동역</span>
-                    <span class="route-pill">2호선 · 신설동역</span>
-                    <span class="route-pill">AM 08:10</span>
-                  </div>
-                  <div class="ui-card">
-                    <h4>착석 확률 가이드</h4>
-                    <div class="muted">3-3, 7-1 칸에서 탑승하면 석계역에서 앉을 확률이 높아요.</div>
-                  </div>
-                  <div class="ui-card">
-                    <h4>내 배지</h4>
-                    <div class="badge-row">
-                      <div class="badge">2호선 마스터</div>
-                      <div class="badge">환승왕</div>
-                    </div>
-                  </div>
-                </section>
-
-                <section class="screen-panel">
-                  <div class="mini-title">지금 2호선에서는?</div>
-                  <div class="board-list">
-                    <div class="board-item"><span>정보 게시판</span><span>→</span></div>
-                    <div class="board-item"><span>자리나눔 게시판</span><span>→</span></div>
-                    <div class="board-item"><span>자유 게시판</span><span>→</span></div>
-                  </div>
-                  <div class="ui-card" style="margin-top:14px;">
-                    <h4>실시간 인기 피드</h4>
-                    <div class="muted">강남행 4-2칸 여유 · 잠실 방향 혼잡 · 서울대입구역 3분 지연</div>
-                  </div>
-                  <div class="ui-card">
-                    <h4>통학 이용자 모임</h4>
-                    <div class="muted">같은 시간대 이용자와 정보와 팁을 빠르게 나눌 수 있어요.</div>
-                  </div>
-                </section>
-
-                <section class="screen-panel">
-                  <div class="mini-title">민원 투표</div>
-                  <div class="ui-card">
-                    <h4>오늘 우리 칸의 컨디션은?</h4>
-                    <div class="muted">2호선 · 3-2칸 / 온도 · 소리 · 냄새</div>
-                  </div>
-                  <div class="ui-card">
-                    <h4>실시간 불편 접수</h4>
-                    <div class="muted">춥다 70% · 덥다 30%</div>
-                    <div class="vote-bar">
-                      <div class="vote-fill"></div>
-                    </div>
-                  </div>
-                  <div class="ui-card">
-                    <h4>누적 리포트</h4>
-                    <div class="muted">이번 달 지하철 이용 40시간 · 지나온 역 150개</div>
-                  </div>
-                </section>
-              </div>
-
-              <div class="phone-nav">
-                <div class="phone-step" id="phoneStep">1 / 3</div>
-                <button class="phone-arrow" id="phoneArrow" type="button" aria-label="다음 화면 보기">↓</button>
+          <div class="ui-body">
+            <div class="ui-greeting">
+              <div class="g-small">오늘도 고생하셨어요, 홍길동님 👋</div>
+              <div class="g-big">2호선 출근길<br>착석 확률 가이드 ↓</div>
+            </div>
+            <div class="ui-seat-card">
+              <div class="ui-seat-label">🪑 착석 확률 가이드</div>
+              <div class="ui-seat-main"><span>3-3, 7-1칸</span>에 타시면<br><span>석계역</span>에서 앉을 확률이 높아요!</div>
+              <div class="train-diagram">
+                <div class="t-car">1</div>
+                <div class="t-car">2</div>
+                <div class="t-car hot">3-3</div>
+                <div class="t-car">4</div>
+                <div class="t-car">5</div>
+                <div class="t-car warm">6</div>
+                <div class="t-car hot">7-1</div>
+                <div class="t-car">8</div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="problem" class="section">
-    <div class="wrap section-frame">
-      <div class="section-head">
-        <span class="tag">Problem</span>
-        <h2>지하철 내부 상황을 바로 알 수 있는 채널이 없습니다</h2>
-        <p>
-          열차 안에서만 체감되는 불편과 돌발 상황은 공식 앱만으로는 파악하기 어렵습니다.
-          같은 열차를 탄 사람끼리 빠르게 공유할 수 있는 구조가 필요합니다.
-        </p>
-      </div>
-
-      <div class="problem-grid">
-        <div class="problem-card">
-          <div class="icon">⏱️</div>
-          <h3>지연과 돌발 상황</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>실시간 상황 흐름</span>
-              <span class="visual-chip">2호선</span>
-            </div>
-            <div class="problem-track">
-              <div class="problem-step">
-                <div class="problem-time">08:12</div>
-                <div>
-                  <div class="problem-line">열차 정차</div>
-                  <div class="problem-sub">이유를 모른 채 대기하는 상태</div>
+            <div class="ui-route-card">
+              <div class="ui-route-label">나의 출근 루트</div>
+              <div class="route-line">
+                <div class="route-dot start"></div>
+                <span class="route-text">1호선 창동역</span>
+                <span class="route-time">08:10</span>
+              </div>
+              <div class="route-bar"></div>
+              <div class="route-line">
+                <div class="route-dot end"></div>
+                <span class="route-text">2호선 신설동역</span>
+              </div>
+              <div class="ui-badges">
+                <div class="badge-item">
+                  <span class="badge-icon">🏅</span>
+                  <span class="badge-name">2호선 마스터</span>
                 </div>
-              </div>
-              <div class="problem-step">
-                <div class="problem-time">08:14</div>
-                <div>
-                  <div class="problem-line">짧은 안내 방송</div>
-                  <div class="problem-sub">정확한 원인과 재출발 시점 파악 어려움</div>
+                <div class="badge-item">
+                  <span class="badge-icon">♻️</span>
+                  <span class="badge-name">환승왕</span>
                 </div>
               </div>
             </div>
           </div>
-          <p>왜 멈췄는지, 언제 다시 움직이는지 같은 핵심 정보가 늦게 전달됩니다.</p>
-        </div>
-        <div class="problem-card">
-          <div class="icon">🚇</div>
-          <h3>칸 내부 불편</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>같은 칸 이슈</span>
-              <span class="visual-chip">3-2칸</span>
-            </div>
-            <div class="issue-list">
-              <div class="issue-row"><span>냉방이 너무 강함</span><span class="issue-state">불편 다수</span></div>
-              <div class="issue-row"><span>출입문 쪽 소음</span><span class="issue-state">체감 큼</span></div>
-              <div class="issue-row"><span>바닥 오염 발생</span><span class="issue-state">빠른 공유 필요</span></div>
-            </div>
-          </div>
-          <p>혼잡, 소음, 냄새, 냉난방 문제처럼 현장 체감 정보는 별도로 공유되지 않습니다.</p>
-        </div>
-        <div class="problem-card">
-          <div class="icon">💬</div>
-          <h3>실시간 공감과 확인</h3>
-          <div class="visual-card">
-            <div class="visual-title">
-              <span>즉시 묻고 확인</span>
-              <span class="visual-chip">현장 대화</span>
-            </div>
-            <div class="community-bubbles">
-              <div class="bubble-item">지금 2호선 멈춘 이유 아는 분 있나요?</div>
-              <div class="bubble-item right">강남역 앞 신호 대기래요.</div>
-              <div class="bubble-item">4-2칸은 상대적으로 덜 붐빕니다.</div>
-            </div>
-          </div>
-          <p>나만 겪는 문제인지, 다른 승객도 같은 상황인지 즉시 알고 싶어하는 수요가 큽니다.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="solution" class="section">
-    <div class="wrap section-frame">
-      <div class="section-head">
-        <span class="tag">Solution</span>
-        <h2>핵심 기능을 화면처럼 바로 이해할 수 있게 보여줍니다</h2>
-        <p>
-          글로 길게 설명하기보다, 실제 서비스가 어떻게 보일지 바로 떠오르도록
-          피그마 스타일의 미니 화면 카드로 정리했습니다.
-        </p>
+<!-- FEATURE 2: COMMUNITY BOARD -->
+<div style="padding:0 48px; max-width:1280px; margin:0 auto 0; box-sizing:border-box;">
+  <div id="feature-community" class="reveal">
+    <div>
+      <p class="section-label">핵심 기능 02</p>
+      <h2 class="section-title">실시간<br>커뮤니티 게시판</h2>
+      <p>지금 2호선 무슨 일인지 아무도 몰랐던 그 순간. 이칸저칸에선 같은 칸 승객이 이미 올려놨습니다. 정보 게시판, 자리나눔, 스터디, 자유 게시판까지 — 노선별로 운영됩니다.</p>
+    </div>
+    <div class="board-mock reveal reveal-delay-2">
+      <div class="board-top">
+        <span class="board-line-badge">🟢 2호선</span>
+        <span style="font-size:11px;color:#AAA;font-weight:600;">실시간 업데이트 중</span>
       </div>
+      <div class="board-tabs">
+        <span class="btab active" data-tab="info">정보</span>
+        <span class="btab" data-tab="seat">자리나눔</span>
+        <span class="btab" data-tab="study">스터디</span>
+        <span class="btab" data-tab="free">자유</span>
+        <span class="btab" data-tab="suggest">건의</span>
+      </div>
+      <div class="board-posts" id="board-posts-area">
+        <!-- posts injected by JS -->
+      </div>
+    </div>
+  </div>
+</div>
 
-      <div class="feature-showcase">
-        <div class="feature-grid">
-          <div class="feature-card visual active" id="feature-live" data-feature="live" tabindex="0">
-          <div class="feature-frame">
-            <div class="frame-top">
-              <div class="frame-title">실시간 정보 게시판</div>
-              <div class="frame-chip">2호선</div>
-            </div>
-            <div class="mock-list">
-              <div class="mock-item">잠실행 3분 지연<span class="mock-sub">방금 전 · 이용자 18명 반응</span></div>
-              <div class="mock-item">강남역 환승 통로 혼잡<span class="mock-sub">실시간 제보 · 동선 우회 추천</span></div>
-              <div class="mock-item">서울대입구 방향 4-2칸 여유<span class="mock-sub">같은 열차 탑승자 공유</span></div>
-            </div>
+<!-- FEATURE 3: COMPLAINT VOTE -->
+<section style="max-width:1280px; margin:0 auto; padding:120px 48px;">
+  <div id="feature-complaint">
+    <div class="feature-copy reveal">
+      <p class="section-label">핵심 기능 03</p>
+      <h2 class="section-title">민원 투표로<br><em>즉시 전달</em></h2>
+      <p>혼자 민원 넣기 번거롭죠. 같은 칸 승객들과 함께 투표하면 철도공사에 실시간으로 전달됩니다. 온도, 소리, 냄새 — 지금 우리 칸 컨디션을 알려주세요.</p>
+      <div class="feature-tags" style="margin-top:28px;">
+        <span class="tag">🗳️ 실시간 투표</span>
+        <span class="tag">📡 철도공사 직접 연동</span>
+        <span class="tag">✅ 조치 결과 확인</span>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="complaint-mock">
+        <div class="cm-title">오늘 우리 칸의 컨디션은?</div>
+        <div class="cm-sub">민원 유형을 선택해 투표하세요</div>
+        <div class="cm-selector">
+          <div class="cm-sel active">2호선</div>
+          <div class="cm-sel">3-2칸</div>
+        </div>
+        <div class="cm-type-label">민원 유형</div>
+        <div class="cm-types">
+          <span class="cm-type sel">🌡️ 온도</span>
+          <span class="cm-type">🔊 소리</span>
+          <span class="cm-type">💨 냄새</span>
+          <span class="cm-type">🧹 청결</span>
+        </div>
+        <div class="vote-bar-wrap">
+          <div class="vote-label">
+            <span>🥶 추워요</span>
+            <span class="pct">70%</span>
           </div>
-          <h3>실시간 정보 게시판</h3>
-          <p>지연, 사고, 혼잡 같은 현장 상황을 같은 노선 이용자들이 빠르게 공유합니다.</p>
-        </div>
-          <div class="feature-card visual" id="feature-seat" data-feature="seat" tabindex="0">
-          <div class="feature-frame">
-            <div class="frame-top">
-              <div class="frame-title">자리 · 혼잡도 가이드</div>
-              <div class="frame-chip">추천 칸</div>
-            </div>
-            <div class="seat-grid">
-              <div class="seat-box"><strong>3-3</strong><span>착석 높음</span></div>
-              <div class="seat-box"><strong>4-2</strong><span>여유 있음</span></div>
-              <div class="seat-box"><strong>7-1</strong><span>환승 유리</span></div>
-            </div>
-            <div class="mock-item" style="margin-top:12px;">석계역 전 1정거장부터 3-3칸 추천<span class="mock-sub">루틴 데이터 기반 가이드</span></div>
+          <div class="vote-track">
+            <div class="vote-fill" style="width:70%"></div>
           </div>
-          <h3>자리 · 혼잡도 공유</h3>
-          <p>어느 칸이 덜 붐비는지, 어디가 앉기 유리한지 이용자 경험 기반으로 공유합니다.</p>
+          <div class="vote-note">142명이 투표했습니다</div>
         </div>
-          <div class="feature-card visual" id="feature-complaint" data-feature="complaint" tabindex="0">
-          <div class="feature-frame">
-            <div class="frame-top">
-              <div class="frame-title">민원 투표와 개선</div>
-              <div class="frame-chip">3-2칸</div>
-            </div>
-            <div class="poll-card">
-              <div class="poll-label">오늘 우리 칸의 온도는 어떤가요?</div>
-              <div class="muted">춥다 70% · 덥다 30%</div>
-              <div class="poll-bar"><div class="poll-fill" style="width:70%"></div></div>
-            </div>
-            <div class="mock-list" style="margin-top:12px;">
-              <div class="mock-item">소음 민원 12건<span class="mock-sub">출퇴근 시간대 집중</span></div>
-            </div>
+        <div class="vote-bar-wrap" style="background:#F7F2ED;">
+          <div class="vote-label">
+            <span>🥵 더워요</span>
+            <span style="font-size:14px;font-weight:900;color:#AAA;">30%</span>
           </div>
-          <h3>민원 투표와 개선</h3>
-          <p>온도, 소리, 냄새 같은 칸별 불편 요소를 투표형으로 모아 빠르게 드러냅니다.</p>
-        </div>
-          <div class="feature-card visual" id="feature-community" data-feature="community" tabindex="0">
-          <div class="feature-frame">
-            <div class="frame-top">
-              <div class="frame-title">노선 기반 커뮤니티</div>
-              <div class="frame-chip">소통</div>
-            </div>
-            <div class="community-bubbles">
-              <div class="bubble-item">오늘 잠실행 엄청 붐빔. 5-1칸은 상대적으로 괜찮아요.</div>
-              <div class="bubble-item right">강남역 환승 줄 길어요. 뒤쪽 계단 추천!</div>
-              <div class="bubble-item">2호선 통학 루틴 비슷한 분들 정보 공유해요.</div>
-            </div>
-          </div>
-          <h3>노선 기반 커뮤니티</h3>
-          <p>자유 게시판, 스터디 게시판, 건의 게시판으로 사용자 간 연결과 체류 시간을 늘립니다.</p>
-        </div>
-          <div class="feature-card visual" id="feature-routine" data-feature="routine" tabindex="0">
-          <div class="feature-frame">
-            <div class="frame-top">
-              <div class="frame-title">루틴 관리와 배지</div>
-              <div class="frame-chip">MY</div>
-            </div>
-            <div class="mock-item">나의 출근 루트<span class="mock-sub">창동역 → 신설동역 → 08:10</span></div>
-            <div class="stat-strip">
-              <div class="stat-mini"><strong>40h</strong><span>이용 시간</span></div>
-              <div class="stat-mini"><strong>150</strong><span>지나온 역</span></div>
-              <div class="stat-mini"><strong>2</strong><span>획득 배지</span></div>
-            </div>
-          </div>
-          <h3>루틴 관리와 배지</h3>
-          <p>나의 출근 루트, 배지, 월간 리포트로 반복되는 이동을 성취 경험으로 바꿉니다.</p>
-        </div>
-          <div class="feature-card visual" id="feature-data" data-feature="data" tabindex="0">
-          <div class="feature-frame">
-            <div class="frame-top">
-              <div class="frame-title">데이터가 쌓이는 구조</div>
-              <div class="frame-chip">INSIGHT</div>
-            </div>
-            <div class="mock-list">
-              <div class="mock-item">이용자 제보 누적<span class="mock-sub">혼잡도 · 지연 · 불편 요소</span></div>
-              <div class="mock-item">루틴 분석 결과<span class="mock-sub">탑승 패턴과 추천 칸 정교화</span></div>
-              <div class="mock-item">추천 품질 향상<span class="mock-sub">쌓일수록 더 정확해지는 구조</span></div>
-            </div>
-          </div>
-          <h3>데이터가 쌓이는 서비스</h3>
-          <p>이용자가 남긴 정보가 다시 다음 이용자의 편의로 돌아오는 구조를 만듭니다.</p>
-        </div>
-        </div>
-
-        <div class="feature-detail-shell" id="feature-detail">
-        <div class="detail-head">
-          <h3 id="detailTitle">실시간 제보는 이렇게 동작합니다</h3>
-          <p id="detailSummary">눌렀을 때 유저가 어떤 화면을 보고 어떤 행동을 하게 되는지 단계별로 보여줍니다.</p>
-        </div>
-
-        <div class="detail-panel active" data-detail="live">
-          <div class="detail-screen">
-            <div class="detail-screen-top">
-              <div class="detail-screen-title">실시간 정보 게시판</div>
-              <span class="visual-chip">2호선</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row"><strong>지연 제보 글 작성</strong><span>열차 정차 이유, 위치, 체감 상황 입력</span></div>
-              <div class="app-shot-row"><strong>같은 열차 이용자 반응</strong><span>공감, 댓글, 추가 제보로 정보 보강</span></div>
-              <div class="app-shot-row"><strong>상단 고정 노출</strong><span>반응이 많으면 같은 노선 탑승자에게 먼저 표시</span></div>
-            </div>
-          </div>
-          <div class="detail-flow">
-            <div class="detail-step"><div class="detail-step-no">1</div><div><strong>노선을 선택합니다</strong><span>홈에서 `2호선`을 누르면 현재 제보 목록으로 진입합니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">2</div><div><strong>`제보하기`를 누릅니다</strong><span>지연, 혼잡, 사고 중 유형을 고르고 현재 상황을 짧게 입력합니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">3</div><div><strong>같은 노선 이용자가 바로 확인합니다</strong><span>반응 수와 댓글이 붙으면서 정보 신뢰도가 올라갑니다.</span></div></div>
-            <div class="detail-outcome">
-              <h4>유저가 얻는 결과</h4>
-              <div class="detail-outcome-list">
-                <div class="detail-outcome-item">왜 멈췄는지 공식 앱보다 빨리 감을 잡을 수 있습니다.</div>
-                <div class="detail-outcome-item">같은 열차 사람들의 추가 제보로 정보가 계속 갱신됩니다.</div>
-              </div>
-            </div>
+          <div class="vote-track">
+            <div class="vote-fill" style="width:30%;background:linear-gradient(90deg,#DDD,#CCC);box-shadow:none;"></div>
           </div>
         </div>
-
-        <div class="detail-panel" data-detail="seat">
-          <div class="detail-screen">
-            <div class="detail-screen-top">
-              <div class="detail-screen-title">혼잡도 · 착석 가이드</div>
-              <span class="visual-chip">추천 칸</span>
-            </div>
-            <div class="app-shot-row"><strong>내릴 역 입력</strong><span>석계역 하차 기준으로 추천 계산</span></div>
-            <div class="app-shot-bottom">
-              <div class="app-shot-stat"><strong>3-3</strong><span>착석 높음</span></div>
-              <div class="app-shot-stat"><strong>4-2</strong><span>여유 있음</span></div>
-              <div class="app-shot-stat"><strong>7-1</strong><span>환승 유리</span></div>
-            </div>
-            <div class="app-shot-cta">지금 가장 유리한 칸 보기</div>
-          </div>
-          <div class="detail-flow">
-            <div class="detail-step"><div class="detail-step-no">1</div><div><strong>자주 타는 루틴이나 하차역을 고릅니다</strong><span>앱이 시간대와 노선 흐름을 기준으로 먼저 계산합니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">2</div><div><strong>칸별 체감 데이터가 합쳐집니다</strong><span>이용자 제보와 누적 패턴을 같이 반영해 추천 칸을 보여줍니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">3</div><div><strong>지금 이동할 칸을 바로 결정합니다</strong><span>`3-3칸 이동`처럼 실제 행동 가능한 안내를 받습니다.</span></div></div>
-            <div class="detail-outcome">
-              <h4>유저가 얻는 결과</h4>
-              <div class="detail-outcome-list">
-                <div class="detail-outcome-item">막연히 서 있지 않고 덜 붐비는 칸으로 바로 움직일 수 있습니다.</div>
-                <div class="detail-outcome-item">내릴 역 전에 앉기 유리한 위치를 빠르게 판단할 수 있습니다.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-panel" data-detail="complaint">
-          <div class="detail-screen">
-            <div class="detail-screen-top">
-              <div class="detail-screen-title">민원 투표</div>
-              <span class="visual-chip">3-2칸</span>
-            </div>
-            <div class="poll-card">
-              <div class="poll-label">오늘 우리 칸의 온도는 어떤가요?</div>
-              <div class="muted">춥다 70% · 덥다 30%</div>
-              <div class="poll-bar"><div class="poll-fill" style="width:70%"></div></div>
-            </div>
-            <div class="app-shot-row"><strong>현재 선택된 항목</strong><span>온도 · 소음 · 냄새 중 하나를 눌러 투표</span></div>
-          </div>
-          <div class="detail-flow">
-            <div class="detail-step"><div class="detail-step-no">1</div><div><strong>노선과 칸을 고릅니다</strong><span>`2호선 > 3-2칸`처럼 현재 위치 기준으로 빠르게 선택합니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">2</div><div><strong>불편 유형을 한 번 누릅니다</strong><span>춥다, 덥다, 시끄럽다 같은 항목에 바로 반응할 수 있습니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">3</div><div><strong>집계 결과를 실시간으로 봅니다</strong><span>나만 느낀 문제인지, 다수가 겪는 문제인지 바로 확인합니다.</span></div></div>
-            <div class="detail-outcome">
-              <h4>유저가 얻는 결과</h4>
-              <div class="detail-outcome-list">
-                <div class="detail-outcome-item">칸 내부 불편을 혼자 참지 않고 수치로 드러낼 수 있습니다.</div>
-                <div class="detail-outcome-item">같은 칸 이용자의 체감이 모여 문제 상황을 더 빨리 파악합니다.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-panel" data-detail="community">
-          <div class="detail-screen">
-            <div class="detail-screen-top">
-              <div class="detail-screen-title">노선 커뮤니티</div>
-              <span class="visual-chip">소통</span>
-            </div>
-            <div class="community-bubbles">
-              <div class="bubble-item">오늘 잠실행 엄청 붐빔. 5-1칸은 상대적으로 괜찮아요.</div>
-              <div class="bubble-item right">강남역 환승 줄 길어요. 뒤쪽 계단 추천!</div>
-              <div class="bubble-item">같은 통학 루틴인 사람들끼리 정보 공유해요.</div>
-            </div>
-          </div>
-          <div class="detail-flow">
-            <div class="detail-step"><div class="detail-step-no">1</div><div><strong>노선 게시판에 들어갑니다</strong><span>정보, 자유, 스터디 같은 탭 중 목적에 맞는 공간을 선택합니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">2</div><div><strong>글을 읽거나 바로 남깁니다</strong><span>환승 팁, 붐비는 칸, 통학 루틴 같은 체감형 정보를 올립니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">3</div><div><strong>같은 노선 이용자와 연결됩니다</strong><span>반응과 댓글로 같은 시간대 유저와 자연스럽게 소통합니다.</span></div></div>
-            <div class="detail-outcome">
-              <h4>유저가 얻는 결과</h4>
-              <div class="detail-outcome-list">
-                <div class="detail-outcome-item">일회성 정보 조회가 아니라 계속 돌아오게 되는 이유가 생깁니다.</div>
-                <div class="detail-outcome-item">같은 노선을 타는 사람들의 실전 팁을 빠르게 얻을 수 있습니다.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-panel" data-detail="routine">
-          <div class="detail-screen">
-            <div class="detail-screen-top">
-              <div class="detail-screen-title">루틴 관리</div>
-              <span class="visual-chip">MY</span>
-            </div>
-            <div class="app-shot-row"><strong>창동역 → 신설동역 · 08:10</strong><span>출근 루틴 저장 완료</span></div>
-            <div class="app-shot-bottom">
-              <div class="app-shot-stat"><strong>40h</strong><span>이용 시간</span></div>
-              <div class="app-shot-stat"><strong>150</strong><span>지나온 역</span></div>
-              <div class="app-shot-stat"><strong>2</strong><span>획득 배지</span></div>
-            </div>
-          </div>
-          <div class="detail-flow">
-            <div class="detail-step"><div class="detail-step-no">1</div><div><strong>자주 타는 경로를 저장합니다</strong><span>출발역, 환승역, 시간대를 등록하면 나만의 루틴이 만들어집니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">2</div><div><strong>이용 기록이 자동으로 쌓입니다</strong><span>이번 달 이동 시간, 지나온 역, 자주 탄 시간대가 정리됩니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">3</div><div><strong>배지와 리포트를 확인합니다</strong><span>반복되는 이동이 단순 고생이 아니라 성취 경험처럼 보이게 만듭니다.</span></div></div>
-            <div class="detail-outcome">
-              <h4>유저가 얻는 결과</h4>
-              <div class="detail-outcome-list">
-                <div class="detail-outcome-item">자주 타는 시간대에 맞춘 추천이 점점 더 정확해집니다.</div>
-                <div class="detail-outcome-item">출퇴근 루틴을 한눈에 관리하고 성취감도 느낄 수 있습니다.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-panel" data-detail="data">
-          <div class="detail-screen">
-            <div class="detail-screen-top">
-              <div class="detail-screen-title">데이터 축적</div>
-              <span class="visual-chip">INSIGHT</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row"><strong>제보 누적</strong><span>지연, 혼잡, 민원 데이터가 날짜와 시간대별로 쌓임</span></div>
-              <div class="app-shot-row"><strong>패턴 분석</strong><span>어느 칸이 덜 붐비는지 반복 패턴을 계산</span></div>
-              <div class="app-shot-row"><strong>추천 업데이트</strong><span>다음 이용자에게 더 정확한 안내 제공</span></div>
-            </div>
-          </div>
-          <div class="detail-flow">
-            <div class="detail-step"><div class="detail-step-no">1</div><div><strong>유저 행동이 데이터가 됩니다</strong><span>제보, 투표, 루틴 저장 같은 행동이 노선별로 쌓입니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">2</div><div><strong>반복 패턴을 읽어냅니다</strong><span>시간대별 혼잡도와 칸 이동 패턴을 정리해 기준을 만듭니다.</span></div></div>
-            <div class="detail-step"><div class="detail-step-no">3</div><div><strong>추천 품질이 계속 좋아집니다</strong><span>처음보다 나중에 쓸수록 더 정확한 안내를 받게 됩니다.</span></div></div>
-            <div class="detail-outcome">
-              <h4>유저가 얻는 결과</h4>
-              <div class="detail-outcome-list">
-                <div class="detail-outcome-item">서비스가 정적인 정보판이 아니라 계속 학습하는 도구가 됩니다.</div>
-                <div class="detail-outcome-item">반복 이용자일수록 체감 효용이 더 커집니다.</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="cm-status">
+          <div class="cm-status-dot"></div>
+          <span class="cm-status-text">철도공사에 실시간 전달 중 · 3분 전 온도 조치 완료</span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="value" class="section">
-    <div class="wrap section-frame">
-      <div class="section-head">
-        <span class="tag">Core Value</span>
-        <h2>이칸저칸의 강점은 단순합니다</h2>
-        <p>커뮤니티만 있는 것도, 교통 정보만 있는 것도 아니라 둘을 실용적으로 결합했다는 점입니다.</p>
-      </div>
-
-      <div class="value-grid">
-        <div class="value-card">
-          <div class="icon">⚡</div>
-          <h3>빠른 현장성</h3>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">2호선 실시간</div>
-                <div class="app-shot-sub">지금 막 올라온 제보</div>
-              </div>
-              <span class="visual-chip">LIVE</span>
-            </div>
-            <div class="app-shot-tabs">
-              <span class="app-tab active">전체</span>
-              <span class="app-tab">지연</span>
-              <span class="app-tab">혼잡</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row">
-                <strong>잠실행 3분 지연</strong>
-                <span>방금 전 · 강남역 앞 신호 대기</span>
-                <div class="app-shot-meta">
-                  <span class="app-shot-pill">반응 18</span>
-                  <span class="app-shot-pill">같은 열차</span>
-                </div>
-              </div>
-              <div class="app-shot-row">
-                <strong>4-2칸 상대적으로 여유</strong>
-                <span>탑승자 제보 · 뒷문 쪽 이동 추천</span>
-              </div>
-            </div>
-          </div>
-          <p>같은 노선을 타는 이용자끼리 가장 빠른 현장 소식을 주고받습니다.</p>
-        </div>
-        <div class="value-card">
-          <div class="icon">🧭</div>
-          <h3>실질적 편의</h3>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">착석 가이드</div>
-                <div class="app-shot-sub">내 루틴 기준 추천</div>
-              </div>
-              <span class="visual-chip">Utility</span>
-            </div>
-            <div class="app-shot-row">
-              <strong>석계역 전 1정거장부터 3-3칸 추천</strong>
-              <span>앉을 확률 높음 · 환승도 무난</span>
-            </div>
-            <div class="app-shot-bottom">
-              <div class="app-shot-stat"><strong>3-3</strong><span>착석 높음</span></div>
-              <div class="app-shot-stat"><strong>4-2</strong><span>여유 있음</span></div>
-              <div class="app-shot-stat"><strong>7-1</strong><span>환승 유리</span></div>
-            </div>
-            <div class="app-shot-cta">추천 칸으로 바로 확인하기</div>
-          </div>
-          <p>자리, 혼잡도, 루틴 정보처럼 실제 이동 판단에 필요한 정보를 모읍니다.</p>
-        </div>
-        <div class="value-card">
-          <div class="icon">🌱</div>
-          <h3>쌓일수록 강해짐</h3>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">MY 루틴</div>
-                <div class="app-shot-sub">반복 이동이 쌓이는 화면</div>
-              </div>
-              <span class="visual-chip">Loop</span>
-            </div>
-            <div class="app-shot-row">
-              <strong>창동역 → 신설동역 · 08:10</strong>
-              <span>이번 주 5회 탑승 · 패턴 업데이트됨</span>
-            </div>
-            <div class="app-shot-bottom">
-              <div class="app-shot-stat"><strong>40h</strong><span>이동 시간</span></div>
-              <div class="app-shot-stat"><strong>150</strong><span>지나온 역</span></div>
-              <div class="app-shot-stat"><strong>+2</strong><span>새 배지</span></div>
-            </div>
-            <div class="app-shot-cta">이번 주 리포트 보기</div>
-          </div>
-          <p>사용자 경험이 데이터가 되고, 그 데이터가 다시 서비스 경쟁력이 됩니다.</p>
-        </div>
+<!-- FEATURE 4: REPORT + GAMIFICATION -->
+<div style="padding:0 48px; max-width:1280px; margin:0 auto; box-sizing:border-box;">
+  <div class="report-section reveal">
+    <div>
+      <p class="section-label" style="color:var(--orange);">핵심 기능 04</p>
+      <h2 class="section-title">지하철<br>이용 <em>리포트</em></h2>
+      <p style="margin-top:20px;font-size:16px;line-height:1.75;color:var(--light-text);font-weight:300;">
+        매달 내 지하철 생활을 돌아보세요. 보낸 시간, 지나온 역, 모은 배지까지. 지루한 출퇴근이 나만의 데이터로 쌓입니다.
+      </p>
+      <div class="feature-tags" style="margin-top:28px;">
+        <span class="tag">📈 월간 통계</span>
+        <span class="tag">🏅 배지 컬렉션</span>
+        <span class="tag">⏱️ 시간 시각화</span>
       </div>
     </div>
-  </section>
-
-  <section id="flow" class="section">
-    <div class="wrap section-frame">
-      <div class="section-head">
-        <span class="tag">User Flow</span>
-        <h2>사용자는 이렇게 바로 체감합니다</h2>
-        <p>처음 들어와서 정보를 확인하고, 상황에 반응하고, 다시 돌아오게 되는 흐름을 보여줍니다.</p>
+    <div class="report-mock reveal reveal-delay-2">
+      <!-- 헤더 -->
+      <div class="rep-header">
+        <div class="rep-title">🗓️ 3월 지하철 이용 리포트</div>
+        <div class="rep-period">2025.03.01 — 03.31</div>
       </div>
 
-      <div class="roadmap">
-        <div class="road-card">
-          <div class="road-step">1 STEP</div>
-          <h3>지금 내 노선 상황 확인</h3>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">홈 화면</div>
-                <div class="app-shot-sub">들어오자마자 보이는 정보</div>
-              </div>
-              <span class="visual-chip">Home</span>
-            </div>
-            <div class="app-shot-tabs">
-              <span class="app-tab active">2호선</span>
-              <span class="app-tab">1호선</span>
-              <span class="app-tab">9호선</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row">
-                <strong>지금 2호선은 보통</strong>
-                <span>강남역 환승 통로 혼잡 · 4-2칸 여유</span>
-              </div>
-              <div class="app-shot-row">
-                <strong>내 루틴 추천</strong>
-                <span>오늘은 3-3칸 탑승이 유리해요</span>
-              </div>
-            </div>
-          </div>
-          <p>앱을 열자마자 지금 필요한 정보부터 빠르게 확인하는 경험이 핵심입니다.</p>
+      <!-- 핵심 지표: 지하철에서 보낸 시간 -->
+      <div style="margin-bottom:10px;">
+        <div style="background:linear-gradient(135deg,#FF5C1A,#FF8A50);border-radius:12px;padding:14px 16px 12px;">
+          <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">이번달 지하철에서 보낸 시간</div>
+          <div style="font-size:30px;font-weight:900;color:white;line-height:1;margin-bottom:4px;">40<span style="font-size:14px;font-weight:500;margin-left:3px;">시간</span></div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.65);">= 영화 20편 🎬 = 책 4권 📚</div>
         </div>
-        <div class="road-card">
-          <div class="road-step">2 STEP</div>
-          <h3>바로 반응하고 공유</h3>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">제보 작성</div>
-                <div class="app-shot-sub">몇 초 안에 남기는 현장 정보</div>
-              </div>
-              <span class="visual-chip">Action</span>
-            </div>
-            <div class="app-shot-row">
-              <strong>현재 3-2칸 냉방 너무 강해요</strong>
-              <span>2호선 · 을지로입구 방향 · 방금 전</span>
-              <div class="app-shot-meta">
-                <span class="app-shot-pill">온도</span>
-                <span class="app-shot-pill">3-2칸</span>
-              </div>
-            </div>
-            <div class="app-shot-cta">제보 올리기</div>
+        <!-- 스터디 넛지 카드 -->
+        <div onclick="document.querySelector('.btab[data-tab=study]').click();document.getElementById('feature-community').scrollIntoView({behavior:'smooth'})"
+          style="margin-top:8px;background:white;border:1.5px solid rgba(255,92,26,0.2);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;"
+          onmouseover="this.style.background='#FFF5F0';this.style.borderColor='rgba(255,92,26,0.45)'"
+          onmouseout="this.style.background='white';this.style.borderColor='rgba(255,92,26,0.2)'">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:var(--dark);margin-bottom:2px;">💡 이 시간, 스터디로 활용해볼까요?</div>
+            <div style="font-size:10px;color:#AAA;font-weight:400;">같은 노선 스터디원이 기다리고 있어요</div>
           </div>
-          <p>단순 조회에서 끝나는 게 아니라, 바로 공유하고 반응하는 구조를 만듭니다.</p>
-        </div>
-        <div class="road-card">
-          <div class="road-step">3 STEP</div>
-          <h3>다음 이동이 더 편해짐</h3>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">도착 전 가이드</div>
-                <div class="app-shot-sub">반복 사용 후 더 정교해진 추천</div>
-              </div>
-              <span class="visual-chip">Routine</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row">
-                <strong>다음 역에서 3-3칸 이동 추천</strong>
-                <span>지난 2주 패턴 기준 착석 확률 상승</span>
-              </div>
-              <div class="app-shot-row">
-                <strong>출근 루틴 저장됨</strong>
-                <span>08:10 탑승 시 가장 편한 경로 유지</span>
-              </div>
-            </div>
-          </div>
-          <p>쓸수록 내 출퇴근과 통학에 더 맞는 앱이 되는 점이 다시 돌아오게 만듭니다.</p>
+          <div style="font-size:18px;color:var(--orange);font-weight:900;flex-shrink:0;margin-left:8px;">→</div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="wrap section-frame">
-      <div class="summary">
-        <div class="summary-card">
-          <h3>왜 기존 지도앱보다 더 와닿을까</h3>
-          <p>
-            지도앱이 경로를 알려준다면, 이칸저칸은 열차 안에서 실제로 벌어지는 상황까지 보여줍니다.
-            그래서 같은 지하철을 타도 더 덜 당황하고, 더 빨리 판단할 수 있습니다.
-          </p>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">같은 노선 비교</div>
-                <div class="app-shot-sub">경로 정보와 체감 정보의 차이</div>
-              </div>
-              <span class="visual-chip">Compare</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row">
-                <strong>일반 지도앱</strong>
-                <span>빠른 환승, 도착 예정 시간 중심</span>
-              </div>
-              <div class="app-shot-row">
-                <strong>이칸저칸</strong>
-                <span>지연 이유, 칸 혼잡도, 착석 가능성까지 함께 표시</span>
-              </div>
-            </div>
+      <!-- 노선 이용 도넛 차트 + 범례 -->
+      <div style="background:#F7F2ED;border-radius:12px;padding:12px 14px;margin-bottom:12px;">
+        <span class="rc-label">노선별 이용 비율</span>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="72" height="72" viewBox="0 0 72 72">
+            <!-- 2호선 55% → stroke-dasharray: 55 100 on r=18 circle, circumference=113.1 -->
+            <!-- circumference = 2π×18 ≈ 113.1 -->
+            <!-- 2호선 55% = 62.2, 9호선 27% = 30.5, 1호선 18% = 20.4 -->
+            <circle cx="36" cy="36" r="18" fill="none" stroke="#F0EBE5" stroke-width="10"/>
+            <!-- 2호선 green -->
+            <circle cx="36" cy="36" r="18" fill="none" stroke="#FF5C1A" stroke-width="10"
+              stroke-dasharray="62.2 113.1" stroke-dashoffset="28.3" stroke-linecap="butt" transform="rotate(-90 36 36)"/>
+            <!-- 9호선 gold -->
+            <circle cx="36" cy="36" r="18" fill="none" stroke="#FFC043" stroke-width="10"
+              stroke-dasharray="30.5 113.1" stroke-dashoffset="-33.9" stroke-linecap="butt" transform="rotate(-90 36 36)"/>
+            <!-- 1호선 navy -->
+            <circle cx="36" cy="36" r="18" fill="none" stroke="#4A90D9" stroke-width="10"
+              stroke-dasharray="20.4 113.1" stroke-dashoffset="-64.4" stroke-linecap="butt" transform="rotate(-90 36 36)"/>
+            <text x="36" y="39" text-anchor="middle" font-size="9" font-weight="900" fill="#1A1208" font-family="Noto Sans KR">150역</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="dl-item"><span class="dl-dot" style="background:#FF5C1A;"></span><span class="dl-text">2호선</span><span class="dl-pct" style="color:#FF5C1A;">55%</span></div>
+            <div class="dl-item"><span class="dl-dot" style="background:#FFC043;"></span><span class="dl-text">9호선</span><span class="dl-pct" style="color:#FFC043;">27%</span></div>
+            <div class="dl-item"><span class="dl-dot" style="background:#4A90D9;"></span><span class="dl-text">1호선</span><span class="dl-pct" style="color:#4A90D9;">18%</span></div>
           </div>
         </div>
-        <div class="faq-card">
-          <h3>이런 순간에 특히 필요합니다</h3>
-          <p>출근길처럼 의사결정을 빨리 해야 하는 상황에서 체감 효용이 가장 크게 보입니다.</p>
-          <div class="app-shot">
-            <div class="app-shot-top">
-              <div>
-                <div class="app-shot-title">오늘 아침 실제 사용 예시</div>
-                <div class="app-shot-sub">출근길 기준</div>
-              </div>
-              <span class="visual-chip">Scenario</span>
-            </div>
-            <div class="app-shot-list">
-              <div class="app-shot-row">
-                <strong>08:11 열차 정차</strong>
-                <span>앱에서 바로 신호 대기 이슈 확인</span>
-              </div>
-              <div class="app-shot-row">
-                <strong>08:13 혼잡 확인</strong>
-                <span>4-2칸 여유 제보 보고 이동</span>
-              </div>
-              <div class="app-shot-row">
-                <strong>08:25 도착 전 추천</strong>
-                <span>내릴 역 전에 앉기 좋은 칸 안내</span>
-              </div>
-            </div>
+      </div>
+
+      <!-- 배지 -->
+      <div class="rep-badges-clean">
+        <span class="rc-label">이번달 획득 배지</span>
+        <div class="badges-grid">
+          <div class="badge-clean">
+            <span class="badge-new">NEW</span>
+            <div class="badge-emoji">🏅</div>
+            <div class="badge-nm">2호선 마스터</div>
+            <div class="badge-dt">3.8 획득</div>
+          </div>
+          <div class="badge-clean">
+            <span class="badge-new">NEW</span>
+            <div class="badge-emoji">♻️</div>
+            <div class="badge-nm">환승왕</div>
+            <div class="badge-dt">3.15 획득</div>
+          </div>
+          <div class="badge-clean">
+            <span class="badge-new">NEW</span>
+            <div class="badge-emoji">⚡</div>
+            <div class="badge-nm">출근 마스터</div>
+            <div class="badge-dt">3.22 획득</div>
+          </div>
+          <div class="badge-clean badge-locked">
+            <div class="badge-emoji">🌟</div>
+            <div class="badge-nm">지하철 영웅</div>
+            <div class="badge-dt">잠금</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="cta">
-        <span class="tag">Team 썹 타는 중</span>
-        <h2>서비스 오픈 소식을<br>가장 먼저 받아보세요</h2>
-        <p>
-          사전예약 메일을 남겨주시면 베타 오픈 소식과 초기 참여 안내를 먼저 보내드립니다.
-        </p>
-        <form class="cta-form">
-          <div class="cta-form-row">
-            <input class="cta-input" type="email" name="email" placeholder="이메일 주소를 입력하세요" />
-            <button class="cta-submit" type="submit">사전예약 신청</button>
-          </div>
-          <div class="cta-note">사전예약 신청 시 서비스 안내 메일 수신에 동의한 것으로 간주됩니다.</div>
-        </form>
-      </div>
+<!-- STATS -->
+<div style="padding:80px 48px; max-width:1280px; margin:0 auto; box-sizing:border-box;">
+  <div class="stats-row reveal">
+    <div class="stat-card">
+      <div class="stat-num">80<span class="stat-unit">%</span></div>
+      <div class="stat-desc">지하철 돌발 상황 시<br>실시간 정보를 원하는 승객</div>
     </div>
-  </section>
+    <div class="stat-card">
+      <div class="stat-num">668<span class="stat-unit">만</span></div>
+      <div class="stat-desc">서울 지하철 하루 평균<br>이용 승객 수 (2025)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">62<span class="stat-unit">%</span></div>
+      <div class="stat-desc">내가 내릴 역의 빠른 환승칸에<br>탑승하는 승객 비율</div>
+    </div>
+  </div>
+</div>
 
-  <footer>
-    디지털 하나로 9기 데이터분석 및 서비스기획 · Team 썹 타는 중<br>
-    이칸저칸 랜딩페이지 샘플
-  </footer>
+<!-- CTA -->
+<div id="cta" class="cta-section reveal">
+  <p class="cta-label">지금 바로 시작하세요</p>
+  <h2 class="cta-title">지하철이<br>달라집니다</h2>
+  <p class="cta-sub">이칸저칸 출시 소식을 가장 먼저 받아보세요. 얼리버드 혜택도 함께 드립니다.</p>
+  <form class="email-form" onsubmit="return false">
+    <input type="email" placeholder="이메일 주소를 입력하세요">
+    <button type="submit">출시 알림 받기</button>
+  </form>
+</div>
 
-  <script>
-    const slider = document.getElementById("phoneSlider");
-    const stepLabel = document.getElementById("phoneStep");
-    const arrowButton = document.getElementById("phoneArrow");
-    const panels = slider ? Array.from(slider.children) : [];
-    const featureCards = Array.from(document.querySelectorAll(".feature-card.visual"));
-    const featurePills = Array.from(document.querySelectorAll(".feature-pill[data-feature]"));
-    const detailPanels = Array.from(document.querySelectorAll(".detail-panel"));
-    const detailShell = document.getElementById("feature-detail");
-    const detailTitle = document.getElementById("detailTitle");
-    const detailSummary = document.getElementById("detailSummary");
-    let currentSlide = 0;
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🚇 이칸저칸</div>
+  <div class="footer-copy">© 2025 Team 썹 타는 중 · 더 나은 지하철 이용을 위한 서비스</div>
+</footer>
 
-    const detailCopy = {
-      live: {
-        title: "실시간 제보는 이렇게 동작합니다",
-        summary: "유저가 현장 상황을 올리고, 같은 노선 승객이 바로 반응하면서 정보가 실시간으로 보강됩니다."
-      },
-      seat: {
-        title: "혼잡도·착석 가이드는 이렇게 씁니다",
-        summary: "하차역과 시간대를 기준으로 지금 가장 유리한 칸을 추천하고 바로 행동으로 이어지게 만듭니다."
-      },
-      complaint: {
-        title: "민원 투표는 이렇게 반응합니다",
-        summary: "칸 안의 불편을 한 번의 탭으로 남기고, 같은 칸 이용자의 체감이 얼마나 모였는지 바로 확인합니다."
-      },
-      community: {
-        title: "커뮤니티는 이렇게 연결됩니다",
-        summary: "노선별 게시판에서 체감형 정보와 팁을 빠르게 읽고 남기며 같은 루틴의 이용자와 연결됩니다."
-      },
-      routine: {
-        title: "루틴 관리는 이렇게 쌓입니다",
-        summary: "자주 타는 경로와 시간대를 저장하면 반복되는 이동이 기록되고 추천 품질도 더 정교해집니다."
-      },
-      data: {
-        title: "데이터 축적은 이렇게 작동합니다",
-        summary: "유저 행동이 누적될수록 혼잡도, 추천 칸, 체감 정보의 정확도가 계속 올라가는 구조입니다."
-      }
-    };
+<script>
+  // ── Scroll reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
 
-    function updatePhoneSlide() {
-      if (!slider || panels.length === 0) return;
-      const panelHeight = panels[0].offsetHeight;
-      slider.style.transform = `translateY(-${currentSlide * panelHeight}px)`;
-      if (stepLabel) {
-        stepLabel.textContent = `${currentSlide + 1} / ${panels.length}`;
-      }
+  // ── Email CTA ──
+  document.querySelector('.email-form button').addEventListener('click', function() {
+    const input = document.querySelector('.email-form input');
+    if (input.value && input.value.includes('@')) {
+      this.textContent = '✓ 등록 완료!';
+      this.style.background = '#22C55E';
+      input.value = '';
+    } else {
+      input.placeholder = '올바른 이메일을 입력해주세요';
     }
+  });
 
-    function activateFeature(feature) {
-      if (!feature) return;
+  // ── Community board tab data ──
+  const boardData = {
+    info: [
+      { tag: '🚨 지연', time: '방금', title: '건대입구~성수 구간 10분 지연 중', preview: '앞 열차 문 고장으로 지연 중이에요. 대체 경로로 돌아가세요.', likes: 142, comments: 38 },
+      { tag: '📢 시위', time: '3분 전', title: '홍대입구역 출구 시위로 혼잡', preview: '3번 출구 앞 집회 중. 2번 출구로 우회하세요!', likes: 89, comments: 21 },
+      { tag: '🔧 고장', time: '11분 전', title: '잠실역 에스컬레이터 운행 중단', preview: '2호선 잠실역 8번 출구 에스컬레이터 점검 중. 계단 이용 바랍니다.', likes: 54, comments: 9 },
+    ],
+    seat: [
+      { tag: '🪑 자리', time: '방금', title: '3-2칸 합정역에서 자리 납니다', preview: '창가 자리 2개요. 홍대 방향 이용자분들~', likes: 27, comments: 5 },
+      { tag: '🪑 자리', time: '5분 전', title: '7-1칸 신도림 직전 3자리 빔', preview: '신도림 내리는 분들 많아요. 타이밍 맞추시면 바로 앉을 수 있어요.', likes: 61, comments: 12 },
+      { tag: '🚶 혼잡', time: '9분 전', title: '지금 5-3칸 엄청 붐벼요 ㅠ', preview: '강남 출근 시간대라 5칸대 전부 꽉 찼습니다. 앞쪽 칸 추천!', likes: 33, comments: 7 },
+    ],
+    study: [
+      { tag: '📚 모집', time: '2분 전', title: '2호선 토익 스터디원 구해요 👋', preview: '매일 아침 강남~홍대 구간 30분 퀴즈 함께 하실 분! 카톡 오픈채팅 운영 중.', likes: 61, comments: 14 },
+      { tag: '📖 독서', time: '15분 전', title: '출퇴근 독서모임 2호선 멤버 모집', preview: '매주 월·수 책 한 권씩 같이 읽어요. 강남역 출발 기준으로 모입니다.', likes: 44, comments: 18 },
+      { tag: '🎧 어학', time: '22분 전', title: '일본어 회화 스터디 — 9호선 한 정류장', preview: '가양~여의도 구간 딱 10분, 일본어 문장 하루 3개씩 같이 외워요!', likes: 29, comments: 6 },
+    ],
+    free: [
+      { tag: '💬 자유', time: '1분 전', title: '오늘 2호선 에어컨 왜 이렇게 세요?? 🥶', preview: '여름도 아닌데 진짜 너무 춥다... 점퍼 입고 탈 걸 그랬나봐요', likes: 108, comments: 47 },
+      { tag: '😂 유머', time: '7분 전', title: '오늘 3-4칸에서 강아지 목격함 🐶', preview: '가방에서 쏙 내밀고 있는 거 너무 귀여웠는데 역에서 내리셨어요ㅠ', likes: 215, comments: 63 },
+      { tag: '💬 자유', time: '19분 전', title: '출근길 선릉역 커피 추천해주세요', preview: '역 주변 아메리카노 맛있는 곳 아시는 분~ 선릉3번출구 근처요!', likes: 38, comments: 22 },
+    ],
+    suggest: [
+      { tag: '💡 건의', time: '4분 전', title: '노약자석 칸 위치 알림 기능 있으면 좋겠어요', preview: '고령 승객분들이 노약자석 찾기 어려워하시는 거 자주 봅니다. 칸 위치 표시 부탁드려요.', likes: 72, comments: 15 },
+      { tag: '💡 건의', time: '32분 전', title: '혼잡도 그래프 기능 추가 요청', preview: '특정 역 혼잡도를 시간대별 그래프로 보여주면 출발 시간 조절하는 데 도움이 될 것 같아요!', likes: 91, comments: 20 },
+      { tag: '🙏 요청', time: '1시간 전', title: '카풀/동승자 매칭 기능도 넣어주세요', preview: '지하철 넘어서 주변 카풀까지 연결되면 완전 꿀이지 않나요ㅎㅎ 고려해주세요!', likes: 55, comments: 31 },
+    ]
+  };
 
-      featureCards.forEach((card) => {
-        card.classList.toggle("active", card.dataset.feature === feature);
-      });
+  function renderPosts(tabKey) {
+    const posts = boardData[tabKey];
+    const area = document.getElementById('board-posts-area');
+    // fade out
+    area.style.opacity = '0';
+    area.style.transform = 'translateY(6px)';
+    setTimeout(() => {
+      area.innerHTML = posts.map(p => `
+        <div class="post-item">
+          <div class="post-meta">
+            <span class="post-tag">${p.tag}</span>
+            <span class="post-time">${p.time}</span>
+          </div>
+          <div class="post-title">${p.title}</div>
+          <div class="post-preview">${p.preview}</div>
+          <div class="post-stats">
+            <span class="pstat"><span>👍</span> ${p.likes}</span>
+            <span class="pstat"><span>💬</span> ${p.comments}</span>
+            <span class="pstat"><span>🔁</span> 공유</span>
+          </div>
+        </div>
+      `).join('');
+      // fade in
+      area.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+      area.style.opacity = '1';
+      area.style.transform = 'translateY(0)';
+    }, 150);
+  }
 
-      featurePills.forEach((pill) => {
-        pill.classList.toggle("active", pill.dataset.feature === feature);
-      });
+  // Init default tab
+  renderPosts('info');
 
-      detailPanels.forEach((panel) => {
-        panel.classList.toggle("active", panel.dataset.detail === feature);
-      });
-
-      if (detailCopy[feature] && detailTitle && detailSummary) {
-        detailTitle.textContent = detailCopy[feature].title;
-        detailSummary.textContent = detailCopy[feature].summary;
-      }
-    }
-
-    function syncFeatureSelection(feature) {
-      activateFeature(feature);
-
-      if (detailShell) {
-        detailShell.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-
-      const matchedCard = featureCards.find((card) => card.dataset.feature === feature);
-      if (matchedCard && matchedCard.id) {
-        history.replaceState(null, "", `#${matchedCard.id}`);
-      }
-    }
-
-    if (arrowButton) {
-      arrowButton.addEventListener("click", () => {
-        currentSlide = (currentSlide + 1) % panels.length;
-        updatePhoneSlide();
-      });
-    }
-
-    featurePills.forEach((pill) => {
-      pill.addEventListener("click", (event) => {
-        event.preventDefault();
-        syncFeatureSelection(pill.dataset.feature);
-      });
+  // Tab click handler
+  document.querySelectorAll('.btab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.btab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      renderPosts(this.dataset.tab);
     });
-
-    featureCards.forEach((card) => {
-      card.addEventListener("click", () => {
-        syncFeatureSelection(card.dataset.feature);
-      });
-
-      card.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          syncFeatureSelection(card.dataset.feature);
-        }
-      });
-    });
-
-    window.addEventListener("load", () => {
-      requestAnimationFrame(() => document.body.classList.add("page-ready"));
-      updatePhoneSlide();
-    });
-    window.addEventListener("resize", updatePhoneSlide);
-    window.addEventListener("load", () => activateFeature("live"));
-  </script>
+  });
+</script>
 </body>
 </html>

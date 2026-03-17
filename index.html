@@ -2410,6 +2410,7 @@
     const featureCards = Array.from(document.querySelectorAll(".feature-card.visual"));
     const featurePills = Array.from(document.querySelectorAll(".feature-pill[data-feature]"));
     const detailPanels = Array.from(document.querySelectorAll(".detail-panel"));
+    const detailShell = document.getElementById("feature-detail");
     const detailTitle = document.getElementById("detailTitle");
     const detailSummary = document.getElementById("detailSummary");
     let currentSlide = 0;
@@ -2472,14 +2473,15 @@
     }
 
     function syncFeatureSelection(feature) {
-      const matchedCard = featureCards.find((card) => card.dataset.feature === feature);
       activateFeature(feature);
 
-      if (matchedCard) {
-        matchedCard.scrollIntoView({ behavior: "smooth", block: "center" });
-        if (matchedCard.id) {
-          history.replaceState(null, "", `#${matchedCard.id}`);
-        }
+      if (detailShell) {
+        detailShell.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      const matchedCard = featureCards.find((card) => card.dataset.feature === feature);
+      if (matchedCard && matchedCard.id) {
+        history.replaceState(null, "", `#${matchedCard.id}`);
       }
     }
 

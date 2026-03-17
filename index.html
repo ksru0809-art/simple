@@ -30,6 +30,32 @@
       line-height:1.6;
     }
 
+    body:not(.page-ready) .hero-copy,
+    body:not(.page-ready) .phone-area,
+    body:not(.page-ready) .hero-points .point,
+    body:not(.page-ready) .feature-card.visual{
+      opacity:0;
+      transform:translateY(26px);
+    }
+
+    body.page-ready .hero-copy{
+      animation:riseIn .7s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    body.page-ready .phone-area{
+      animation:riseIn .8s cubic-bezier(.22,1,.36,1) .12s both;
+    }
+
+    body.page-ready .hero-points .point:nth-child(1){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .2s both;}
+    body.page-ready .hero-points .point:nth-child(2){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .3s both;}
+    body.page-ready .hero-points .point:nth-child(3){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .4s both;}
+    body.page-ready .feature-card.visual:nth-child(1){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .28s both;}
+    body.page-ready .feature-card.visual:nth-child(2){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .36s both;}
+    body.page-ready .feature-card.visual:nth-child(3){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .44s both;}
+    body.page-ready .feature-card.visual:nth-child(4){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .52s both;}
+    body.page-ready .feature-card.visual:nth-child(5){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .60s both;}
+    body.page-ready .feature-card.visual:nth-child(6){animation:riseIn .55s cubic-bezier(.22,1,.36,1) .68s both;}
+
     a{text-decoration:none;color:inherit}
 
     .wrap{
@@ -1438,6 +1464,17 @@
       to{transform:translateX(-50%)}
     }
 
+    @keyframes riseIn{
+      from{
+        opacity:0;
+        transform:translateY(26px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
     @media (max-width: 1024px){
       .hero-grid,
       .problem-grid,
@@ -1629,7 +1666,7 @@
     </div>
 
     <div class="wrap hero-grid">
-      <div>
+      <div class="hero-copy">
         <span class="tag">지하철 실시간 커뮤니티 서비스</span>
         <h1>
           더 나은 지하철 이용을 위한<br>
@@ -2472,7 +2509,10 @@
       });
     });
 
-    window.addEventListener("load", updatePhoneSlide);
+    window.addEventListener("load", () => {
+      requestAnimationFrame(() => document.body.classList.add("page-ready"));
+      updatePhoneSlide();
+    });
     window.addEventListener("resize", updatePhoneSlide);
     window.addEventListener("load", () => activateFeature("live"));
   </script>
